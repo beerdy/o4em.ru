@@ -1,6 +1,5 @@
 module VolodiyaDriver
 	# Попадают только с MegaController и MegaController::RouteLongPool
-	
 	#=BEGIN !---Router---!
 	def convert(data)
 		#puts "VD - Данные для конвертации: #{data}"
