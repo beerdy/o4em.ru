@@ -12,7 +12,7 @@ var user = {
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/profile", 
+			url: "/profile", 
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(prof_data_tosrv),
 			success: function(data){
@@ -47,7 +47,7 @@ var user = {
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/profile", 
+			url: "/profile", 
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(prof_data_tosrv),
 			success: function(data){
@@ -67,7 +67,7 @@ var user = {
 	},
 	signUserInVkontakte: function(it) {
 		system.loading(1);
-		window.open('http://api.vk.com/oauth/authorize?client_id=5163786&redirect_uri=http://o4em.ru/vkauth/'+window.guid+'/&display=page');
+		window.open('http://api.vk.com/oauth/authorize?client_id=5163786&redirect_uri=/vkauth/'+window.guid+'/&display=page');
 		return false;
 	},
 	signUserInModule: function(data){
@@ -83,7 +83,7 @@ var user = {
 	},
 	signUserIn: function(e){
 		$.ajax( {
-			url: 'http://o4em.ru/auth',
+			url: '/auth',
 			type: 'POST',
 			data: new FormData( e ),
 			processData: false,
@@ -109,7 +109,7 @@ var user = {
 		form.append('password', $('.new .sign .formPswrd').val());
 	
 		$.ajax( {
-			url: 'http://o4em.ru/auth',
+			url: '/auth',
 			type: 'POST',
 			data: form,
 			processData: false,
@@ -137,7 +137,7 @@ var user = {
 	},
 	signUserRestore: function(e){
 		$.ajax( {
-			url: 'http://o4em.ru/auth',
+			url: '/auth',
 			type: 'POST',
 			data: new FormData( e ),
 			processData: false,
@@ -165,7 +165,7 @@ var user = {
 	},
 	signUserRestoreConfirm: function(e){
 		$.ajax( {
-			url: 'http://o4em.ru/auth',
+			url: '/auth',
 			type: 'POST',
 			data: new FormData( e ),
 			processData: false,
@@ -228,7 +228,7 @@ var user = {
     					form.append('the-file1', dataURL);
 						console.log('---');
 						$.ajax( {
-							url: 'http://o4em.ru/profile',
+							url: '/profile',
 							type: 'POST',
 							data: form,
 							processData: false,
@@ -271,7 +271,7 @@ var user = {
 
 			$.ajax({
 				type: "POST",
-				url: "http://o4em.ru/follow",
+				url: "/follow",
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
@@ -308,7 +308,7 @@ var user = {
 
 			$.ajax({
 				type: "POST",
-				url: "http://o4em.ru/follow",
+				url: "/follow",
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
@@ -340,7 +340,7 @@ var user = {
 
 		$.ajax({
 				type: "POST",
-				url: "http://o4em.ru/auth", 
+				url: "/auth", 
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(data_tosrv),
 				success: function(data){

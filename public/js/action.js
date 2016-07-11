@@ -45,7 +45,7 @@
        		form.append('the-file1',  $('#image_preview').attr('src'));
 			// перехват submit
 			$.ajax( {
-				url: 'http://o4em.ru/mind',
+				url: '/mind',
 				type: 'POST',
 				data: form,
 				processData: false,
@@ -162,7 +162,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "http://o4em.ru/mind",
+				url: "/mind",
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
@@ -205,7 +205,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "http://o4em.ru/mind",
+				url: "/mind",
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
@@ -242,7 +242,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/notice",
+			url: "/notice",
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(mind_data_tosrv),
 			success: function(data){
@@ -289,7 +289,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/mind",
+			url: "/mind",
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(mind_data_tosrv),
 			success: function(data){
@@ -340,7 +340,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/mind",
+			url: "/mind",
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(comment_data_tosrv),
 			success: function(data){
@@ -383,7 +383,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/mind",
+			url: "/mind",
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(like_data_tosrv),
 			success: function(data){
@@ -429,7 +429,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/search/people",
+			url: "/search/people",
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(tag_data_tosrv),
 			success: function(data){
@@ -480,7 +480,7 @@
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/follow",
+			url: "/follow",
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(comment_data_tosrv),
 			success: function(data){
@@ -517,7 +517,7 @@
         
         $.ajax({
           type: "POST",
-          url: "http://o4em.ru/agregator",
+          url: "/agregator",
           contentType: "application/json; charset=UTF-8",
           data: JSON.stringify(obj),
           success: function(data){

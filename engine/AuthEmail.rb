@@ -24,7 +24,7 @@ Date: #{Time.now}
 Вы зарегистрировались на сайте O4EM.RU!
 
 Ссылка для подтверждения регистрации:
-http://o4em.ru/confirm/#{@code}
+#{$root_o4em}/confirm/#{@code}
 END_OF_MESSAGE
 send
 end
@@ -38,7 +38,7 @@ Content-type: text/html
 Subject: Edit profile check code
 Date: #{Time.now}
 
-Confirm - http://o4em.ru/confirm/#{@code} for #{@username}
+Confirm - #{$root_o4em}/confirm/#{@code} for #{@username}
 END_OF_MESSAGE
 send
 end
@@ -76,7 +76,7 @@ Date: #{Time.now}
 Мы получили запрос на смену вашего пароля.
 
 Ссылка для смена пароля:
-http://o4em.ru/restore/#{@code}/#{@username}
+#{$root_o4em}/restore/#{@code}/#{@username}
 
 Если вы отклоните это сообщение, ваш пароль не будет изменен.
 

@@ -23,7 +23,7 @@ var lp = {
 
 		$.ajax({
 			type: "POST",
-			url: "http://o4em.ru/lp", 
+			url: "/lp",
 			contentType: "application/json; charset=UTF-8",
 			async: true,
 			data: JSON.stringify(data),
