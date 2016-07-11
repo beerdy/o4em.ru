@@ -7,7 +7,7 @@ engine/convert_users.rb
 engine/Profile.rb
 engine/top.rb
 config.yml
-db.rb
+config.rb
 email.rb
 .run_server
 pool/enjy0.6.rb.pid

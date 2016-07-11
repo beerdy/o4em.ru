@@ -138,8 +138,6 @@ class LPCycler
     attr_accessor :connection
 
     def initialize( client_id, client_data, client_noauth_bool )
-        @host    = '127.0.0.1'
-        @port    = '2111'
         @seconds = 20
 
         @messages = Messages.new()    # Add text to obj   
@@ -150,7 +148,7 @@ class LPCycler
 
     def connect
         begin
-            @connection  = TCPSocket.open(@host,@port)
+            @connection  = TCPSocket.open($host_pool,$port_pool)
             true
         rescue => ex
             @success.error_message = "#{@messages.error_connection} - #{ex}"
