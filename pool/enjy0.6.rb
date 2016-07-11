@@ -3,7 +3,7 @@
 require 'socket'
 require 'json'
 
-if ARGV
+if ARGV[1]
     host, port = ARGV
 else
     host, port = '127.0.0.1', '2111'

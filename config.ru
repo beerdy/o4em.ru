@@ -9,7 +9,7 @@ require 'json'
 #use Rack::Reloader, 0
 use Rack::Static, :urls => ['/public']
 
-require './db.rb'
+require './config.rb'
 require './engine/MegaController.rb'
 
 $log_console = false
