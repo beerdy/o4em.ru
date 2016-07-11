@@ -3,9 +3,7 @@
 require 'socket'
 require 'json'
 
-#host, port = ARGV
-host = '127.0.0.1'
-port = '2111'
+ARGV : host, port = '127.0.0.1', '2111' : host, port = ARGV
 
 $console_log = false
 
