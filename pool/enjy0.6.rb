@@ -3,7 +3,11 @@
 require 'socket'
 require 'json'
 
-host, port = ARGV
+#host, port = ARGV
+host = '127.0.0.1'
+port = '2111'
+
+$console_log = false
 
 class Enjy
   def initialize(host,port)
@@ -46,7 +50,7 @@ class Enjy
       init_server
       loop do
         reads,writes = select(@connections_array,nil,nil)
-        puts  "ENJY(#{@i})===========================================================================" 
+        puts  "ENJY(#{@i})===========================================================================" if $console_log
         unless reads.nil?
           reads.each do |client|
           begin
@@ -61,7 +65,7 @@ class Enjy
               datasend(str,client)
             end
           rescue => ex
-            puts "ENJY(#{@i}): ВНИМАНИЕ!!! ошибка завершения соединения - #{ex}"
+            puts "ENJY(#{@i}): ВНИМАНИЕ!!! ошибка завершения соединения - #{ex}" if $console_log
           end
           end
         end
@@ -74,7 +78,7 @@ class Enjy
     @connections_array << @connection.accept_nonblock
   end
   def terminate(client)
-    #puts "Завершим client: #{client.peeraddr[2]}|#{client.peeraddr[1]}"
+    puts "Завершим client: #{client.peeraddr[2]}|#{client.peeraddr[1]}" if $console_log
     client.close
     @connections_array.delete client
   end
@@ -83,11 +87,11 @@ class Enjy
     begin
       data = JSON.parse(str.chomp!)
     rescue => ex
-      puts "ENJY(#{@i}): ВНИМАНИЕ!!! ошибка парсинга данных со стороны клиента #{client} on port #{client.peeraddr} str - #{str} ex => #{ex}"
+      puts "ENJY(#{@i}): ВНИМАНИЕ!!! ошибка парсинга данных со стороны клиента #{client} on port #{client.peeraddr} str - #{str} ex => #{ex}" if $console_log
       return
     end
 
-    puts "ENJY(#{@i}): Полученны данные от клиента #{data['client_id']} - #{data}"
+    puts "ENJY(#{@i}): Полученны данные от клиента #{data['client_id']} - #{data}" if $console_log
 
     mindid    = data['mindid']
     client_id = data['client_id']
@@ -124,9 +128,8 @@ class Enjy
         :mindid => mindid,
         :users  => @mind_client_id[mindid]
       }}
-      puts "ONLINE: #{data} to client: #{client.peeraddr[2]}|#{client.peeraddr[1]}"
+      puts "ONLINE: #{data} to client: #{client.peeraddr[2]}|#{client.peeraddr[1]}" if $console_log
       client.puts data.to_json.to_s
-      puts "SENDED"
     end
   end
   
@@ -136,7 +139,7 @@ class Enjy
       begin
         socket.puts str
       rescue => ex
-        puts "ENJY(#{@i}): ВНИМАНИЕ!!! ошибка отправки ex => #{ex}"
+        puts "ENJY(#{@i}): ВНИМАНИЕ!!! ошибка отправки ex => #{ex}" if $console_log
       end
     end
     # Удалим отработанный guid

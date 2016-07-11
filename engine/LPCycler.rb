@@ -139,7 +139,7 @@ class LPCycler
 
     def initialize( client_id, client_data, client_noauth_bool )
         @host    = '127.0.0.1'
-        @port    = '2000'
+        @port    = '2111'
         @seconds = 20
 
         @messages = Messages.new()    # Add text to obj   

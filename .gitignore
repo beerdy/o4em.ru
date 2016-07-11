@@ -10,3 +10,4 @@ config.yml
 db.rb
 email.rb
 .run_server
+pool/enjy0.6.rb.pid

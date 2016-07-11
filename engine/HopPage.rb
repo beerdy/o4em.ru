@@ -72,7 +72,7 @@ class Environment
 
 		init_longpool
 		unless @client_request == '/lp'
-			connected_user_info if $log_console
+			connected_user_info #if $log_console
 			update_online_time
 		end
 	end
