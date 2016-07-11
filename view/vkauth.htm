@@ -1,0 +1,41 @@
+<html>
+	<head>
+	<script type="text/javascript" src="/public/js/lib/jquery.js"></script>
+	<meta charset="utf-8">
+	<title>Доступ через ВК</title>
+	<script type="text/javascript">
+		var link = location.href;
+		var link = link.replace('#','/');
+		var link = link.replace('&','/');
+		var link = link.replace('&','/');
+		var link = link.replace('=','/');
+		var link = link.replace('=','/');
+		var link = link.replace('=','/');
+		var link = link.replace('?','/');
+		var link = link.split("/");
+	
+		var guid = link[4];
+		var code = link[7];
+
+		$(document).ready(function(){
+			var data = new Object();
+
+			data['action'] = 'vkauth';
+			data['guid']   = code;
+			data['to']     = guid;
+
+			$.ajax({
+				type: "POST",
+				url: "http://o4em.ru/lp", 
+				contentType: "application/json; charset=UTF-8",
+				data: JSON.stringify(data),
+					success: function(data){
+						window.close();
+					}
+			});
+		});
+		</script>
+	</head>
+<body>
+</body>
+</html>
