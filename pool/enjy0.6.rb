@@ -50,7 +50,7 @@ class Enjy
       init_server
       loop do
         reads,writes = select(@connections_array,nil,nil)
-        puts  "ENJY(#{@i})===========================================================================" if $console_log
+        puts  "ENJY(#{@i})==========================================================================" if $console_log
         unless reads.nil?
           reads.each do |client|
           begin
