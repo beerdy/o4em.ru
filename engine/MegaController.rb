@@ -224,7 +224,7 @@ class MegaController
 				@env.client_data['endcount'])
 		when 'mind_add'
 			mind_data = Mind.new( @env.client_cookie_id, @env.client_data ).add
-			return render_page({ :data => mind_data   }) unless mind_data[:bool]
+			return render_page({ :data => mind_data }) unless mind_data[:bool]
 
 			data = UploadMindBackground.new().upload( @env.client_data["the-file1"], @env.client_cookie_id, mind_data[:notice]['m_id']  )
 =begin

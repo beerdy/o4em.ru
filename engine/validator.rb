@@ -87,16 +87,24 @@ class Validator
 		email(@data['email'],'Неверный формат email')
 	end
 	def agregate_mind_liks_disliks
-		id(@data['id']) if !@data['id'].nil?
+		r = { :bool => true }
+		r = id(@data['id']) if !@data['id'].nil?
+		r
 	end
 	def agregate_comments
-		id(@data['id']) if !@data['id'].nil?
+		r = { :bool => true }
+		r = id(@data['id']) if !@data['id'].nil?
+		r
 	end
 	def agregate_minds
-		id(@data['id']) if !@data['id'].nil?
+		r = { :bool => true }
+		r = id(@data['id']) unless @data['id'] == '' unless @data['id'].nil?
+		r
 	end
 	def agregate_follows
-		id(@data['id']) if !@data['id'].nil?
+		r = { :bool => true }
+		r = id(@data['id']) if !@data['id'].nil?
+		r
 	end
 
 	def mind_read

@@ -36,6 +36,9 @@ class MetaController
 	end
 
 	def mind_add(data)
+		#counter
+		$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
+
 		follows = $db_o4em['howFollow'].find({ :anchor => 1, :key => @env.client_cookie_id }).first
 		return { :bool => false, :code => 0, :info => "MetaController (mind_data) -> Нет подписчиков для извещения о добовление пользователем #{@env.client_cookie_id} нового мнения" } if follows.nil?
 
@@ -49,8 +52,6 @@ class MetaController
 		}).read
 
 		return { :bool => false, :code => 0, :info => "MetaController (mind_data) -> Ошибка подписчиков для извещения о добовление пользователем #{@env.client_cookie_id} нового мнения" } if array_follows[:bool] == false
-		
-		$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
 
 		1.upto(array_follows[:array_data][:counter]) do |count|
 			element = array_follows[:array_data]["#{count}"]

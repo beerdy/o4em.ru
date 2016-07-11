@@ -159,6 +159,7 @@ protected
 	end
 
 	def online_get(idmind,type=false)
+		return {} if @pool.nil?
 		return {} unless idmind
 		@pool.control.mindid = idmind
 		return {} unless @pool.online
