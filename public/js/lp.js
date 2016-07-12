@@ -59,15 +59,18 @@ var lp = {
 										opacity: 1
 									});
 								// Если мы находимся на любой странице
-								}else{ 
-									if($(".navBarIteam.notice .count").length) {
-										var value = parseFloat($(".navBarIteam.notice .count").text())+1;
-										$(".navBarIteam.notice .count").text(value);
-									}else{
-										$(".navBarIteam.notice").append('<div class="count">1</div>');
+								}else{
+									if(data['content']['action'] != 'online'){ 
+										if($(".navBarIteam.notice .count").length) {
+											var value = parseFloat($(".navBarIteam.notice .count").text())+1;
+											$(".navBarIteam.notice .count").text(value);
+										}else{
+											$(".navBarIteam.notice").append('<div class="count">1</div>');
+										}
 									}
 								}
 
+								//Отдельно считаем пользователей онлайн
 								if(page = 'mind' && data['content']['m_online']){
 									    var html_online = '';
 									    var online_count = 0;

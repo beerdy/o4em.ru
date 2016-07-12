@@ -88,14 +88,14 @@ module VolodiyaDriver
 				converted_data[:content][:m_online] = online( data[:m_online] )
 				converted_data[:content][:m_online_c] = data[:m_online][:counter]
 				converted_data[:content][:m_id] = data[:m_id]
-				converted_data[:content][:action_slave] = 'online'
+				#converted_data[:content][:action_slave] = 'online'
 			end end end
 		when 'online'
 			converted_data = {
 				:bool => true,
 				:code => 850,
 				:content => {
-					:action_slave => 'online',
+					:action => 'online',
 					:m_online => online( data[:m_online] ),
 					:m_online_c => data[:m_online][:counter],
 					:m_id => data[:m_id]
