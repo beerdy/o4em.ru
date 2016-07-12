@@ -58,7 +58,10 @@ module RouteLongPool
         :action => 'online',
       }
     end
-    data[:m_online] = NewUser.get_online( success.received_message_online['users'] ) unless mindid == 'all'
+    unless mindid == 'all'
+      data[:m_online] = NewUser.get_online( success.received_message_online['users'] )
+      data[:m_id] = mindid
+    end
     return data
   end
 end

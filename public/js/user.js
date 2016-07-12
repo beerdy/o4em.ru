@@ -67,7 +67,7 @@ var user = {
 	},
 	signUserInVkontakte: function(it) {
 		system.loading(1);
-		window.open('http://api.vk.com/oauth/authorize?client_id=5163786&redirect_uri=/vkauth/'+window.guid+'/&display=page');
+		window.open('http://api.vk.com/oauth/authorize?client_id=5163786&redirect_uri=http://'+window.location.hostname+'/vkauth/'+window.guid+'/&display=page');
 		return false;
 	},
 	signUserInModule: function(data){

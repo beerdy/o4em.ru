@@ -87,16 +87,16 @@ module VolodiyaDriver
 			if converted_data.has_key?(:content) then
 				converted_data[:content][:m_online] = online( data[:m_online] )
 				converted_data[:content][:m_online_c] = data[:m_online][:counter]
-				converted_data[:content][:action_slave] = 'online'
+				converted_data[:content][:m_id] = data[:m_id]
 			end end end
 		when 'online'
 			converted_data = {
 				:bool => true,
 				:code => 850,
 				:content => {
-					:action_slave => 'online',
 					:m_online => online( data[:m_online] ),
-					:m_online_c => data[:m_online][:counter]
+					:m_online_c => data[:m_online][:counter],
+					:m_id => data[:m_id]
 				}
 			}
 		end if data.has_key?(:m_online)
