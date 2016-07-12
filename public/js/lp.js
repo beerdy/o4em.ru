@@ -45,18 +45,21 @@ var lp = {
 								user.signUserInModule(data_r);
 								break;
 							default:
+								// Если мы находимся на страничке мнения и ЛП относится к этому мнению
 								if(data['content']['m_id'] == mind && data['content']['action'] == 'comment_add'){
 									var html_comment = constructor.listComments(data['content']['m_id'], data['content']); 
 	         
 									$(html_comment).css("opacity","0.1").prependTo(".new .mindComments").animate({
 										opacity: 1
 									});
+								// Если мы находимся на cтранице уведомлений
 								}else if(page == "notice"){
 									var html_notice = constructor.listNotice(data['content']);
 						            $(html_notice).css("opacity","0.1").prependTo(".page.new").animate({
 										opacity: 1
 									});
-								}else{ // Если мы находимся на любой странице
+								// Если мы находимся на любой странице
+								}else{ 
 									if($(".navBarIteam.notice .count").length) {
 										var value = parseFloat($(".navBarIteam.notice .count").text())+1;
 										$(".navBarIteam.notice .count").text(value);
@@ -64,6 +67,26 @@ var lp = {
 										$(".navBarIteam.notice").append('<div class="count">1</div>');
 									}
 								}
+
+								if(page = 'mind' && data['content']['m_online']){
+									    var html_online = '';
+									    var online_count = 0;
+									    if(data['content']['m_online']){
+										    $.each(data['content']['m_online'], function(i, online) {
+										     	var ava ="";
+											   	if(online['u_photo']){
+											   		ava = "<img src='/"+online['u_photo']+"_r40x40.jpg' width='25' title='' alt=''/>";
+											   	}else{
+											   		ava = "<img src='/public/img/ico-online.png' width='25' title='' alt=''/>";
+											   	}
+										      html_online += '<a href="/'+online['u_nickname']+'" onclick="return nav.go(this)" class="mindOnlineIteam">'+ava+'<span>@'+online['u_nickname']+'</span></a>';
+										      online_count++;
+										    });
+										    $(".mindOnlineBox").html(html_online);
+										    $(".mindOnlineH b").html(online_count);
+									    }
+								}
+
 								break;
 						}
 					}
