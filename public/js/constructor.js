@@ -23,7 +23,7 @@
 	var html = '<div class="indexPage">'
 				+'<div class="indexPageBox">'
 					+'<a class="logoBig"></a>'
-					+'<h1>Выражай свое мнение,<br> каким бы оно ни было.</h1>'
+					+'<h1>Вырази свое мнение</h1>'
 					+'<div class="icoAll"></div>'
 					+'<a href="/signup" class="indexBtn" onclick="return nav.go(this)" style="margin-top:20px;">Зарегистрироваться</a>'
 					+'Уже есть аккаунт? <a href="/login" onclick="return nav.go(this)">Войти</a>'
