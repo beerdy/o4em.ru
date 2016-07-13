@@ -8,6 +8,7 @@ require './engine/HopPage.rb'
 require './engine/MindLike.rb'
 require './engine/MindReading.rb'
 require './engine/MindAdd.rb'
+require './engine/MindRemove.rb'
 require './engine/UploadSimpleB64.rb'
 require './engine/BlockData.rb'
 require './engine/HashBlock.rb'
@@ -53,6 +54,7 @@ class MegaController
 	
 	include RenderPage
 	include Comment
+	include MindRemove
 
 	def initialize(env)
 		@env  = Environment.new(env)
@@ -269,21 +271,7 @@ class MegaController
 			data = like.send
 			@meta.mind_plus(data) if data[:bool]
 		when 'mind_remove'
-			result = $comment.find_and_modify({
-				:query => {
-					:_id => { :_id => BSON::ObjectId( @env.client_data['m_id'] ) },
-					:i => @env.client_cookie_id
-				},
-				:update => {
-					:$set => { :m => true }
-				},
-				:new => true
-			})
-			data = {
-				:bool => ( result.nil? ? false : true ),
-				:code => 0,
-				:info => 'Попытка удаление мнения'
-			}
+			data = mind_remove
 			@meta.mind_remove( data ) if data[:bool]
 		when 'comment_add'
 			data = comment_add
