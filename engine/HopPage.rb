@@ -2,7 +2,7 @@
 
 require './engine/validator.rb'
 require './engine/AuthHyb.rb'
-require './engine/LPCycler.rb'
+require './pool/LPCycler.rb'
 
 class Environment
 #	ACTIONS_FOR_INIT_LONGPOOL  = ['comment_add','follow','follow_remove','mind_add','mind_random','mind_one','mind_plus','mind_minus']
