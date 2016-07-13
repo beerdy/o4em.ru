@@ -216,7 +216,7 @@ class Validator
 		end
 	end
 	def username(u,data=nil)
-		if u =~ /^[a-z0-9]{4,32}$/ then
+		if u =~ /^[A-Za-z0-9]{4,32}$/ then
 			{ :bool => true, :code => 552, :info => "username ok" }
 		else
 			{ :bool => false, :code => 452, :info => "username error", :data => data}

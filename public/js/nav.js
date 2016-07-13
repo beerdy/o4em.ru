@@ -44,7 +44,7 @@ var nav = {
                  break;
               default:
                     link = '/';
-                    title = "Так O4EM это вы?"; 
+                    title = "o4em Вы?"; 
                     html = constructor.indexPage();
                  break;
           }
