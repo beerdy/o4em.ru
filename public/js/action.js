@@ -73,6 +73,44 @@
 		return false;
 
 	},
+	//Удаление мнения
+	delMind: function(m_id, u_nickname){
+	        // Отправляем уменьшенное изображение на сервер
+			var form = new FormData();
+
+		    form.append('m_id', m_id);
+		    form.append('action', 'mind_remove');
+
+			// перехват submit
+			$.ajax( {
+				url: '/mind',
+				type: 'POST',
+				data: form,
+				processData: false,
+				contentType: false,
+				success: function(data){
+					data = JSON.parse(data);
+					console.log(data);
+					system.loading(0);
+					if(data['bool']){
+						system.message('Мнение успешно удалено','ok',1);
+						nav.goto('/'+u_nickname);
+					}else{
+						system.message('Это мнение невозможно удалить','error',1);
+					}
+				},
+				beforeSend: function(){
+					system.loading(1);
+				},
+				error: function(){
+					system.loading(0);
+	            	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
+				}
+			});
+				
+		return false;
+
+	},
 	addMindImgPreview: function(it){
 	var input = $(it)[0];
 		if (input.files && input.files[0]) {

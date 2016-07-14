@@ -10,8 +10,6 @@ use Rack::Static, :urls => ['/public']
 require './config.rb'
 require './engine/MegaController.rb'
 
-$log_console = false
-
 class Router
 	def call(env)
 		$time_now    = Time.now.to_i

@@ -270,6 +270,12 @@ var system = {
     );
     return replacedText;
   },
+  textLink: function(text){
+  var re = /([^\"=]{2}|^)((https?|ftp):\/\/\S+[^\s.,> )\];'\"!?])/; 
+  var subst = '$1<a href="$2" target="_blank">$2</a>'; 
+  var withlink = text.replace(re, subst);
+  return withlink;
+  },
   textFilter: function(inputText, num){
    var replacedText, reg;
    if(inputText == null || inputText == '' || inputText == "null"){

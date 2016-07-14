@@ -47,6 +47,8 @@ var lp = {
 							default:
 								// Если мы находимся на страничке мнения и ЛП относится к этому мнению
 								if(data['content']['m_id'] == mind && data['content']['action'] == 'comment_add'){
+									var canDel = false;
+
 									var html_comment = constructor.listComments(data['content']['m_id'], data['content']); 
 	         
 									$(html_comment).css("opacity","0.1").prependTo(".new .mindComments").animate({

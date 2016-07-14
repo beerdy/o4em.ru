@@ -219,9 +219,11 @@ var user = {
 				        canvas = document.createElement('canvas');
 				        canvas.width = 800;
 				        canvas.height = 800;
-				        var ctx = canvas.getContext("2d");
-				        ctx.drawImage(this, 0, 0, tempW, tempH);
+				        ctx = canvas.getContext("2d");
+
+					    ctx.drawImage(this, 0, 0, tempW, tempH);
 				        dataURL = canvas.toDataURL('image/jpeg', 0.8);
+
 				        var form = new FormData();
 				        form.append('action', 'photo_change');
 				        form.append('current_id', 'id_name_img');
@@ -239,7 +241,7 @@ var user = {
 								console.log(data);
 								if(data['bool']){
 									system.message('Фото успешно загружено', 'ok', 1);
-									var img = "/"+data['data']['0']+"_r200x200.jpg";
+									var img = "/"+data['filename']+"_r100x100.jpg";
 									$(".new #profphoto").attr({src: img});
 								}else{
 									system.message('Ошибка при загрузки фото', ' error', 1);
