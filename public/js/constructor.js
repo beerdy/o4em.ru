@@ -51,6 +51,7 @@
 	restorePswrd: function(){
 	var html = 	'<div class="indexPage">'
 				+'<div class="indexPageBox">'
+					+'<a class="logoBig"></a>'
 					+'<form action="authn" method="POST" enctype="multipart/form-data" onsubmit="return user.signUserRestore(this)">'
 						+'<input type="hidden" name="action" value="auth_restore" style="display:none;"/>'
 						+'<div class="inputBox"><input type="text" name="name" placeholder="Логин/E-mail"/>'
@@ -163,6 +164,7 @@
 				+'<div class="userPageNickname">@'+content['u_nickname']+'</div>'
 				+'<div class="userPageDescription">'+system.textFilter(content['u_about'], 0)+'</div>'
 				+'<div class="userPageLocation">'+system.textFilter(content['u_country'], 0)+location+system.textFilter(content['u_city'], 0)+'</div>'
+				+'<div class="userPageLastTime">'+system.onlineText(content['u_last_time'])+"</div>"
 				+'<div class="userPageButtons">'+follow+'</div>'
 			+'</div>'
 			+'<div class="userMinds">'
@@ -418,6 +420,10 @@
 	    });
     }
 
+    var canDel="";
+   	if(content['m_user']['u_im']){
+   		canDel = "<div class='delMind' onclick='return actions.delMind(\""+content['m_id']+"\", \""+content['m_user']['u_nickname']+"\")'>x</div>";
+   	}
 
 	var mind = '<div class="mindLeftBox">'
 					+"<div class='mindUser'>"
@@ -433,7 +439,7 @@
 					+'<div class="mindPhoto">'
 						+'<img src="/public/img/upload/'+content['m_u_id']+'/mind/'+content['m_id']+'_0_r450x450.jpg"/>'
 						+'<div class="mindText">'
-							+'<span>'+content['m_text']+'</span>'
+							+'<span>'+system.textLink(content['m_text'])+'</span>'
 							+'<div class="mindTags">'+hashes+'</div>'
 						+'</div>'
 						+'<div class="mindAgree">'
@@ -441,23 +447,24 @@
 				 			+"<div class='no "+minus+"' onclick='return actions.agree(this, \"mind_minus\",\""+content['m_id']+"\")'><div class='ico'></div><span>"+content['m_no_count']+"</span><small></small></div>"
 				 		+'</div>'	
 					+'</div>'
-						+'<div class="mindOnline">'
-							+'<div class="mindOnlineH" onclick="return system.show(this);">Просматривает <b>'+online_count+'</b> юз.:</div>'
-							+'<div class="mindOnlineBox">'+html_online+'</div>'
-						+'</div>'
-						+'<div class="mindStatus st'+content['m_status']+'"></div>'	
+					+'<div class="mindOnline">'
+						+'<div class="mindOnlineH" onclick="return system.show(this);">Просматривает <b>'+online_count+'</b> юз.:</div>'
+						+'<div class="mindOnlineBox">'+html_online+'</div>'
 					+'</div>'
-					+'<div class="mindRightBox">'
-					+'<div class="mindCommentInput">'
-					+'<form action="" onsubmit="return actions.addComment(this, \''+content['m_id']+'\')">'
-				  		+'<input type="text" class="mindCommentInputText" onfocus="" onblur="" value="" placeholder="Ваш комментарий?"/>'
-				   		+'<input type="submit" id="commentsend" class="mindCommentInputBtn" value="Отправить" />'
-				    +'</form>'
-			 		+'</div>'
-						+'<div class="mindComments">'
-							+html_comments
-							+more
-						+'</div>'
+					+canDel
+					+'<div class="mindStatus st'+content['m_status']+'"></div>'	
+				+'</div>'
+				+'<div class="mindRightBox">'
+				+'<div class="mindCommentInput">'
+				+'<form action="" onsubmit="return actions.addComment(this, \''+content['m_id']+'\')">'
+			  		+'<input type="text" class="mindCommentInputText" onfocus="" onblur="" value="" placeholder="Ваш комментарий?"/>'
+			   		+'<input type="submit" id="commentsend" class="mindCommentInputBtn" value="Отправить" />'
+			    +'</form>'
+		 		+'</div>'
+					+'<div class="mindComments">'
+						+html_comments
+						+more
+					+'</div>'
 				+'</div>';
 		return mind;
 	},
