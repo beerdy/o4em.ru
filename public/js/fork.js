@@ -126,7 +126,7 @@ $(document).ajaxSuccess(function( event, xhr, settings ) {
       var content = data['content'];
       console.log('content:',content);
       if(content['action_slave']){
-        if(content['action_slave'] == 'mind_add'){
+        if(content['action_slave'] == 'mind_add' && window.first_mind == true ){
           window.location.href = '/';
         }
       }
