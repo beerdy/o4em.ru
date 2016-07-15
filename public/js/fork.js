@@ -113,26 +113,44 @@
 
 }));
 
-var message = '<div class="addMind" style="text-align:center"><span class="firstMindMessage">Для завершения регистрации добавте свое первое мнение!</span></div>';
+var message = '<div class="addMind .addMindPhotoText" style="text-align:center; padding:5px 0 5px 0"><span class="firstMindMessage">Для завершения регистрации, добавте свое первое мнение!</span></div>';
 
 $(document).ready(function(){
   addFirstMind();
 });
 
-$( document ).ajaxSuccess(function( event, xhr, settings ) {
+$(document).ajaxSuccess(function( event, xhr, settings ) {
+  try {
+    var data = JSON.parse(xhr.responseText);
+    if(data['content']){
+      var content = data['content'];
+      console.log('content:',content);
+      if(content['action_slave']){
+        if(content['action_slave'] == 'mind_add'){
+          window.location.href = '/';
+        }
+      }
+    }
+  } catch (err) {
+    // burumburum
+  };
   addFirstMind();
 });
 
 function addFirstMind(){
-  var cookie = $.cookie("token");  
+  var cookie = $.cookie("token");
+  if( cookie == 'false' ) cookie = undefined;  
   var text   = $('.firstMindMessage').text();
 
-  $('.navBar').hide();
-  $('.brandBar').hide();
+  if( window.client_noauth == true && cookie != undefined) window.location.href = '/';
+  if(window.first_mind){
+    $('.navBar').hide();
+    $('.brandBar').hide();
 
-  if(window.location.pathname != '/addmind' && cookie != undefined ){
-    window.location.href = '/addmind';
+    if(window.location.pathname != '/addmind' && cookie != undefined ){
+      window.location.href = '/addmind';
+    }
+
+    if( cookie != undefined && text == '' ) $('.page').before(message);
   }
-
-  if( cookie != undefined && text == '' ) $('.page').before(message);
 }

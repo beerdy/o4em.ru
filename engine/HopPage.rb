@@ -31,6 +31,7 @@ class Environment
 	attr_reader :client_novalid_bool
 	attr_reader :client_noauth_bool
 	attr_reader :client_noauth
+	attr_reader :client_firstmind_bool
 
 	attr_reader :client_input
 	def initialize(env) 
@@ -69,6 +70,7 @@ class Environment
 				:token     => @client_cookie_token
 		})
 		@client_noauth_bool = check_auth
+		@client_firstmind_bool = check_firstmind
 
 		init_longpool
 		unless @client_request == '/lp'
@@ -133,6 +135,9 @@ class Environment
 			@client_noauth = user_data
 			true
 		end 
+	end
+	def check_firstmind
+		@client_noauth_bool ? false : @client_current_profile[:u_chown]!=1000
 	end
 	def init_longpool
 			@pool = LPCycler.new( @client_cookie_id, @client_data, @client_noauth_bool )

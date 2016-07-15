@@ -33,6 +33,8 @@ module VolodiyaDriver
 			converted_data = master_info( data[:code] )
 			converted_data[:content] = mind_add( data[:notice] )
 			converted_data[:content].merge! user( data[:user] ) if data[:user]
+			converted_data[:content][:action_slave] = 'mind_add'
+
 		when 'mind_one'
 			converted_data = master_info(data[:code])
 			converted_data[:content] = { 

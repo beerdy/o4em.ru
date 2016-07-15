@@ -24,6 +24,7 @@ require './engine/People.rb'
 require './engine/MetaController.rb'
 
 require 'securerandom'
+require 'erb'
 
 ###########################################################################################################################################
 module RenderPage
@@ -41,7 +42,7 @@ module RenderPage
 		static   = (options[:static].nil?)?false:options[:static]
 		headers  = HEADERS_DEFAULT_STATIC if options[:headers].nil? if static
 
-		return [status, headers, [ IO.read( page_htm ) ]] if static
+		return [status, headers, [ ERB.new(IO.read( page_htm )).result(binding) ]] if static
 		return [status, headers, [ VolodiyaDriver.convert( options[:data] ).to_json ]] if (options[:tojson].nil?)?true:options[:tojson]
 		return [status, headers, [ '{"bool":"false","code":"0","info":"no render options"}' ]]
 	end
@@ -280,6 +281,7 @@ class MegaController
 		when 'comment_remove'
 			data = comment_remove
 		end
+		
 		render_page({ :data => data	})
 	end
 	def tags
