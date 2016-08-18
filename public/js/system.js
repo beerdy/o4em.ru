@@ -33,14 +33,14 @@
                       data: jjj,
                       url: location.pathname,
                       success: function(data){
-                        system.loading(0);
+                        system.loading(false);
                         nav.page(data, location.pathname, true);
                               $('.refresh').animate({
                                 'height':0
                               });       
                       },
                       beforeSend: function(){
-                        system.loading(1);
+                        system.loading(true);
                         $('.refresh').text('Идет обновление...');
                       },
                       error: function(data){
@@ -79,14 +79,14 @@ $(document).ready(function(){
           data: jjj,
           url: location.pathname,
           success: function(data){
-            system.loading(0);
+            system.loading(false);
             nav.page(data, location.pathname, true);
           },
           beforeSend: function(){
-            system.loading(1);
+            system.loading(true);
           },
           error: function(data){
-            system.loading(0);
+            system.loading(false);
             system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
           }
         });
@@ -292,14 +292,17 @@ var system = {
    }
    return replacedText;
   },
-  loading: function(ornot){
-    if(ornot==1){
-       text = $('.h1Box h1').text();
-       $('body').prepend('<div class="loading"></div>');
-      $('.navBarIteam.aboutwhat .ico').addClass("sleep");
+  loading: function(evt){
+    if(evt){
+        $('.aboutwhat .ico').addClass('sleep');
+        $('#progressBar').show().stop().animate({'width':'50%'},2000,function(){
+            $(this).stop().animate({'width':'98%'},15000);
+        });
     }else{
-      $('.loading').remove();
-      $('.navBarIteam.aboutwhat .ico').removeClass("sleep");
+        $('.aboutwhat .ico').removeClass('sleep');
+        $('#progressBar').stop().animate({'width':'100%'},200,function(){
+            $(this).hide().css({'width':'0%'});
+        });
     }
   },
   textNumbers: function(number, titles){  

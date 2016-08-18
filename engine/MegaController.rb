@@ -103,7 +103,23 @@ class MegaController
 			@env.client_auth.username = @env.client_data['username']
 			@env.client_auth.email    = @env.client_data['email']
 			@env.client_auth.password = @env.client_data['password']
-			return render_page({ :data => @env.client_auth.sign })
+
+			return render_page({ :data => @env.client_auth.sign }) unless $simple_auth
+
+			user_data, headers = @env.client_auth.sign
+			return render_page({ :data => user_data }) if !user_data[:bool]
+			mind_data = MindReading.new({ :usercookie_id => user_data[:user_data][:u_id] },@env.pool).read
+			return render_page({ 
+				:data => { 
+					:bool   => true, 
+					:code   => 0,
+					:info   => 'Успешная авторизация "Вход"',
+					:action => 'auth_login',
+					:user   => user_data[:user_data],
+					:minds  => mind_data[:minds]
+				},
+				:headers => headers
+			}) 
 		when 'auth_login'
 			@env.client_auth.name     = @env.client_data['name']
 			@env.client_auth.password = @env.client_data['password']

@@ -57,7 +57,7 @@
 				success: function(data){
 					data = JSON.parse(data);
 					console.log(data);
-					system.loading(0);
+					system.loading(false);
 							if(data['bool'] === false){
 								system.message(data['info'], 'error', 1);	
 								return false;
@@ -66,10 +66,10 @@
 							}
 				},
 				beforeSend: function(){
-					system.loading(1);
+					system.loading(true);
 				},
 				error: function(){
-					system.loading(0);
+					system.loading(false);
 	            	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 				}
 			});
@@ -95,7 +95,7 @@
 				success: function(data){
 					data = JSON.parse(data);
 					console.log(data);
-					system.loading(0);
+					system.loading(false);
 					if(data['bool']){
 						system.message('Мнение успешно удалено','ok',1);
 						nav.goto('/'+u_nickname);
@@ -104,10 +104,10 @@
 					}
 				},
 				beforeSend: function(){
-					system.loading(1);
+					system.loading(true);
 				},
 				error: function(){
-					system.loading(0);
+					system.loading(false);
 	            	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 				}
 			});
@@ -183,7 +183,7 @@
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
 					data = JSON.parse(data);
-					system.loading(0);
+					system.loading(false);
 					console.log(data);
 					if(data['bool'] === false){
 							system.message(data['info'], 'error', 1);	
@@ -200,11 +200,11 @@
 
 				},
 				beforeSend: function(){
-					system.loading(1);
+					system.loading(true);
 					$(it).closest("mindbox").children("textarea").val("");
 				},
 				error: function(data){
-					system.loading(0);
+					system.loading(false);
             		system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 				}
 			});
@@ -226,7 +226,7 @@
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
 					data = JSON.parse(data);
-					system.loading(0);
+					system.loading(false);
 					console.log(data);
 					if(data['bool'] === false){
 							system.message(data['info'], 'error', 1);	
@@ -236,10 +236,10 @@
 
 				},
 				beforeSend: function(){
-					system.loading(1);
+					system.loading(true);
 				},
 				error: function(data){
-					system.loading(0);
+					system.loading(false);
             		system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 				}
 			});
@@ -262,7 +262,7 @@
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(mind_data_tosrv),
 			success: function(data){
-				system.loading(0);
+				system.loading(false);
 				data = JSON.parse(data);
 				console.log(data);
 				var html_minds = "";
@@ -285,10 +285,10 @@
 			
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(data){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -309,7 +309,7 @@
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(mind_data_tosrv),
 			success: function(data){
-				system.loading(0);
+				system.loading(false);
 				data = JSON.parse(data);
 				console.log(data);
 				var html_minds = "";
@@ -331,10 +331,10 @@
 			
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(data){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -360,7 +360,7 @@
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(comment_data_tosrv),
 			success: function(data){
-				system.loading(0);
+				system.loading(false);
 				data = JSON.parse(data);
 				console.log(data);
 				var html_comments = "";
@@ -382,10 +382,10 @@
 
   	  		},
   	  		beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(data){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -403,7 +403,7 @@
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(like_data_tosrv),
 			success: function(data){
-				system.loading(0);
+				system.loading(false);
 				data = JSON.parse(data);
 				console.log(data);
 				$('.new .yes span').text(data['content']['m_like']);
@@ -413,10 +413,10 @@
 				$('.new .yes').removeClass("my");
 				$('.new .no').removeClass("my");
 				$(it).addClass("my");
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(data){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}		
 		});
@@ -449,7 +449,7 @@
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(tag_data_tosrv),
 			success: function(data){
-				system.loading(0);
+				system.loading(false);
 				data = JSON.parse(data);
 				console.log(data); 
 				var users = '';
@@ -471,10 +471,10 @@
 
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -500,7 +500,7 @@
 			contentType: "application/json; charset=UTF-8",
 			data: JSON.stringify(comment_data_tosrv),
 			success: function(data){
-				system.loading(0);
+				system.loading(false);
 				data = JSON.parse(data);
 				console.log(data);
 
@@ -518,10 +518,10 @@
 
   	  		},
   	  		beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(data){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -537,7 +537,7 @@
           contentType: "application/json; charset=UTF-8",
           data: JSON.stringify(obj),
           success: function(data){
-          	system.loading(0);
+          	system.loading(false);
           	data = JSON.parse(data);
 			console.log(data); 
 			if(data['bool']){
@@ -548,10 +548,10 @@
             system.message('Данные усешно пересчитаны','ok',1);
           },
           beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(data){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
         });

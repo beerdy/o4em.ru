@@ -159,11 +159,11 @@ var nav = {
     if(back && $('#pages').html() != ''){
         var top = $(window).scrollTop();
         $('.page').removeClass('new').addClass('old');
-        $('h1').removeClass('new').addClass('old');
-        $('.back').removeClass('new').addClass('old');
-        $('.backBtn').prepend('<div class="back new" onclick="actions.back(\''+location.pathname+'\', \''+$("title").text()+'\', '+top+');"></div>');
+
+        $('.navBarBack').removeClass('new').addClass('old');
+        $('.navBar').prepend('<div class="navBarBack new" onclick="actions.back(\''+location.pathname+'\', \''+$("title").text()+'\', '+top+');"></div>');
+
         $('#pages').append('<section class="page new">'+html+'</section>');
-        $('.h1Box').prepend("<h1 class='new'>"+title+"</h1>");
     }else{
         $('#pages').html('<section class="page new">'+html+'</section>');
         $('.h1Box').html("<h1 class='new'>"+title+"</h1>");
@@ -203,14 +203,14 @@ var nav = {
           data: jjj,
           url: link,
           success: function(data){
-            system.loading(0);
+            system.loading(false);
             nav.page(data, link, true);
           },
           beforeSend: function(){
-            system.loading(1);
+            system.loading(true);
           },
           error: function(data){
-            system.loading(0);
+            system.loading(false);
             system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
           }
         });
@@ -227,14 +227,14 @@ var nav = {
           data: jjj,
           url: link,
           success: function(data){
-            system.loading(0);
+            system.loading(false);
             nav.page(data, link, false);
           },
           beforeSend: function(){
-            system.loading(1);
+            system.loading(true);
           },
           error: function(data){
-            system.loading(0);
+            system.loading(false);
             system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
           }
         });

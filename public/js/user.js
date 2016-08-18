@@ -17,7 +17,7 @@ var user = {
 			data: JSON.stringify(prof_data_tosrv),
 			success: function(data){
 				data = JSON.parse(data);
-				system.loading(0);
+				system.loading(false);
 				if(data['bool']){
 					system.message("Ваши данные успешно сохранены", "ok", 1);
 				} else {
@@ -25,9 +25,10 @@ var user = {
 				}
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(){
+				system.loading(false);
 				system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -52,7 +53,7 @@ var user = {
 			data: JSON.stringify(prof_data_tosrv),
 			success: function(data){
 				data = JSON.parse(data);
-				system.loading(0);
+				system.loading(false);
 				if(data['bool']){
 					system.message("Ваши данные успешно сохранены", "ok", 1);
 				} else {
@@ -60,13 +61,13 @@ var user = {
 				}
 			},
 			beforeSend: function(){
-				system.loading(0);
+				system.loading(true);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
 	},
 	signUserInVkontakte: function(it) {
-		system.loading(1);
+		system.loading(true);
 		window.open('http://api.vk.com/oauth/authorize?client_id=5163786&redirect_uri=http://'+window.location.hostname+'/vkauth/'+window.guid+'/&display=page');
 		return false;
 	},
@@ -74,10 +75,10 @@ var user = {
 		console.log(data);
 		data_r = JSON.parse(data);
 		if(data_r['bool']==true){
-				system.loading(0);
+				system.loading(false);
 				nav.page(data, "/"+data_r['content']['u_nickname'], true);
 		} else {
-			system.loading(0);
+			system.loading(false);
 			system.message('Ошибка авторизации. Неверный логин или пароль', 'error', 1);
 		}
 	},
@@ -92,10 +93,10 @@ var user = {
 				user.signUserInModule(data);
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(data){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -104,9 +105,9 @@ var user = {
 	signUserReg: function(e){
 		var form = new FormData();
 		form.append('action', 'auth_sign');
-		form.append('username', $('.new .sign .formName').val());
-		form.append('email', $('.new .sign .formEmail').val());
-		form.append('password', $('.new .sign .formPswrd').val());
+		form.append('username', $('.new .formName').val());
+		form.append('email', $('.new .formEmail').val());
+		form.append('password', $('.new .formPswrd').val());
 	
 		$.ajax( {
 			url: '/auth',
@@ -115,21 +116,21 @@ var user = {
 			processData: false,
 			contentType: false,
 			success: function(data){
-				system.loading(0);
+				system.loading(false);
 				data = JSON.parse(data);
 				console.log(data);
 				var errorText = 'Что-то пошло не так...';
 				if(data['bool']==true){
-					system.message('Регистрация прошла успешно! На Ваш E-mail было выслано письмо с ключем подтверждения.', 'ok', 1);
+					$('.indexPageBox').html('<h2>Регистрация прошла успешно! На Ваш E-mail было выслано письмо с ключем подтверждения.</h2><a href="/login" class="submitBtn" onclick="return nav.go(this)">Войти</a>');
 				} else {
 					system.message('Ошибка '+data['code']+': '+system.errorType(data['code']), 'error', 1);
 				}
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(){
-				system.loading(0);
+				system.loading(false);
             	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -145,19 +146,19 @@ var user = {
 			success: function(data){
 				data = JSON.parse(data);
 				console.log(data);
-				system.loading(0);
+				system.loading(false);
 				if(data['bool']==true){
 					//system.message('На Ваш E-mail было выслано письмо с кодом подтверждения', 'ok', 1);
-					$('.page.new').html('<div class="systemMessageBody">На Ваш E-mail было выслано письмо с кодом подтверждения</div>');
+					$('.indexPageBox').html('<h2>На Ваш E-mail было выслано письмо с кодом подтверждения</h2><a href="/login" class="submitBtn" onclick="return nav.go(this)">Войти</a>');
 				} else {
 					system.message('Ошибка '+data['code']+': '+system.errorType(data['code']), 'error', 1);
 				}
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(){
-				system.loading(0);
+				system.loading(false);
            		system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -173,19 +174,19 @@ var user = {
 			success: function(data){
 				data = JSON.parse(data);
 				console.log(data);
-				system.loading(0);
+				system.loading(false);
 				if(data['bool']==true){
-					system.message('На Ваш E-mail было выслано письмо с регистрационными данными', 'ok', 1);
+					$('.indexPageBox').html('<h2>Вы успешно сменили пароль. Новый пароль был выслан на Вашу почту</h2><a href="/login" class="submitBtn" onclick="return nav.go(this)">Войти</a>');
 				} else {
 					console.log(data);
-					system.message('Ошибка '+data_r['code']+': '+system.errorType(data_r['code']), 'error', 1);
+					system.message('Ошибка '+data['code']+': '+system.errorType(data['code']), 'error', 1);
 				}
 			},
 			beforeSend: function(){
-				system.loading(1);
+				system.loading(true);
 			},
 			error: function(){
-				system.loading(0);
+				system.loading(false);
            		system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
@@ -236,7 +237,7 @@ var user = {
 							processData: false,
 							contentType: false,
 							success: function(data){
-								system.loading(0);
+								system.loading(false);
 								data = JSON.parse(data);
 								console.log(data);
 								if(data['bool']){
@@ -248,10 +249,10 @@ var user = {
 								}
 							},
 							beforeSend: function(){
-								system.loading(1);
+								system.loading(true);
 							},
 							error: function(){
-								system.loading(0);
+								system.loading(false);
 				            	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 							}
 						});
@@ -277,7 +278,7 @@ var user = {
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
-					system.loading(0);
+					system.loading(false);
 					data = JSON.parse(data);
 					if(data['bool']){
 						follow = '<a class="unfollow" onclick="return user.unfollow(this, \''+u_id+'\')"></a>';
@@ -291,10 +292,10 @@ var user = {
 
 				},
 				beforeSend: function(){
-					system.loading(1);
+					system.loading(true);
 				},
 				error: function(){
-					system.loading(0);
+					system.loading(false);
 		            system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 				}
 			});
@@ -314,7 +315,7 @@ var user = {
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(mind_data_tosrv),
 				success: function(data){
-					system.loading(0);
+					system.loading(false);
 					data = JSON.parse(data);
 					if(data['bool']){
 						follow = '<a class="follow" onclick="return user.follow(this, \''+u_id+'\')"></a>';
@@ -327,10 +328,10 @@ var user = {
 					}
 				},
 				beforeSend: function(){
-					system.loading(1);
+					system.loading(true);
 				},
 				error: function(){
-					system.loading(0);
+					system.loading(false);
             		system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 				}
 			});
@@ -350,7 +351,7 @@ var user = {
 					window.guid = lp.guid_();
 				},
 				error: function(data){
-					system.loading(0);
+					system.loading(false);
             		system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 				}
 		});
