@@ -59,7 +59,6 @@
     //event.preventDefault();
 });
 $(document).ready(function(){
-
         //Генерируем айди вкладки
         window.guid = lp.guid_();
 
@@ -321,5 +320,8 @@ var system = {
   checkit: function(it){
        $('.mindval div').removeClass("active");
        $(it).addClass("active");
+  },
+  touchDistance: function (p1, p2) {
+  return (Math.sqrt(Math.pow((p1.clientX - p2.clientX), 2) + Math.pow((p1.clientY - p2.clientY), 2)));
   }
 }

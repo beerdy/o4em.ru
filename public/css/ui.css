@@ -20,10 +20,10 @@
     font-style: normal;
 }
 @font-face {
-    font-family: 'PT Sans';
+    font-family:'PT Sans';
     src: local('PT Sans Bold Italic'), local('PTSans-BoldItalic'), url('../fonts/ptsansbolditalic.woff2') format('woff2'), url('../fonts/ptsansbolditalic.woff') format('woff'), url('../fonts/ptsansbolditalic.ttf') format('truetype');
-    font-weight: 700;
-    font-style: italic;
+    font-weight:700;
+    font-style:italic;
 }
 
 /* - Основные теги - */
@@ -53,12 +53,38 @@ a, a:visited{
 	text-decoration:none;
 }
 a:hover, a:active{
-	color:#545554;
+	color:#00C6A0;
 	text-decoration:underline;
 }
 b{
 	font-weight:bold;
 }
+input {outline: none;}
+input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0 50px #C7FFF4 !important; /* Цвет фона */
+    -webkit-text-fill-color: #999 !important; /* цвет текста */
+    color: #999 !important; /* цвет текста */
+}
+input[type="submit"], a.submitBtn{
+	display:block;
+	width:100%;
+	height:40px;
+	line-height: 40px;
+	border-radius:3px;
+	background: #00B294;
+	color:#fff;
+	font-weight:bold;
+	text-decoration: none;
+	border-bottom:3px solid #009679;
+	cursor: pointer;
+}
+input[type="submit"]:hover, a.submitBtn:hover{
+	background:#00C6A0;
+}
+input[type="submit"]:active, a.submitBtn:active{
+	background:#009679;
+}
+
 .loading{
 	position:fixed;
 	top:0;
@@ -71,72 +97,75 @@ b{
 	z-index: 10;
 }
 .indexPage{
-	width:100%;
-	height:100%;
-	display:block;
-	text-align:center;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top:0;
+	left:0;
+	z-index: 99;
+	text-align: center;
+	background:url('../img/index_bg.jpg') no-repeat center;
+	background-size: cover;
 }
-.indexPageBox{
-	max-width: 310px;
-	margin:auto;
-}
-.logoBig{
-	display:block;
-	width:200px;
-	height:200px;
-	margin:0 auto 10px;
-	background:url('../img/logo_big.png') no-repeat center;
-    background-size: cover;
-}
-.indexPage h1{
-	position:relative;
-	font-size:1.3em;
-	font-weight: bold;
-}
-.indexPage .icoAll{
-	width:129px;
-	height:32px;
-	background:url('../img/ico-all.png') no-repeat;
-	background-size: 128px 31px;
-	margin:5px auto 0;
-}
-.indexPage .indexBtn{
-	position: relative;
-	display:block;
-	width:310px;
-	margin:5px auto;
-	padding:10px;
-	color:#fff;
-	font-weight: bold;
-	font-size:1.1em;
-	background:#00B294;
-	border-radius:3px;
-	cursor:pointer;
-	text-decoration:none;
-}
-.indexBtn:hover, .indexBtn:active{
-	background:#545554;
-}
-
-/* - РЕФРЕШ - */
-.refresh{
-	overflow:hidden;
-	width:100%;
-	height:0px;
-	text-align:center;
-	border-radius:0 0 100% 100%;
-	background: url('../img/dec.png') no-repeat center;
-}
+	.indexPage:before {
+		content: '';
+		display: inline-block;
+		height: 100%; 
+		vertical-align: middle;
+		margin-right: -0.25em; /* Adjusts for spacing */
+	 }
+		.indexPage .indexPageBox{
+			position: relative;
+		    width: 100%;
+		    max-width: 350px;
+		    height:100%;
+		    max-height: 400px;
+			display: inline-block;
+			vertical-align: middle;
+			margin: auto;
+			padding: 10px;
+		}
+			.indexPage .indexPageBox .indexPageBoxCenter{
+				position: absolute;
+				top:10%;
+				width: 100%;
+				padding:0 0 0px 0;
+			 }
+				.indexPage .indexPageBox .indexPageLogo{
+					display:block;
+					width:130px;
+					height:130px;
+					margin:auto;
+					background:url('../img/logo_130@2.png') no-repeat center;
+				    background-size: cover;
+				}
+				.indexPage .indexPageBox h1{
+					position:relative;
+					font-size:1.3em;
+					font-weight: bold;
+					color:#E8E8E8;
+					margin:10px 0 10px 0;
+				}
+				.indexPage .indexPageBox .icoAll{
+					width:129px;
+					height:32px;
+					background:url('../img/ico-all.png') no-repeat;
+					background-size: 128px 31px;
+					margin:5px auto 0;
+				}
+			.indexPage .indexPageBox .indexPageBoxBottom{
+				position: absolute;
+				bottom: 10px;
+				left: 0;
+				width: 100%;
+				padding: 0 10px 0 10px;
+				color:#E8E8E8;
+		 	}
 
 /* - ШАПКА - */
 #header{
 	width:100vw;
 	z-index: 9;
-}
-#header .headerMargin{
-	width:100vw;
-	z-index: 9;
-	height:80px;
 }
 #header .brandBar{
 	position:fixed;
@@ -279,13 +308,11 @@ b{
     width:100%;
     min-height: 100%;
 	margin:auto;
-	padding:0px 5px 36px 5px;
+	padding:80px 5px 36px 5px;
 }
 #pages .page{
 	width:100%;
 	max-width: 900px;
-	min-height: 100% !important;
-	height: 100% !important;
 	margin:auto;
 	z-index: 1;
 	padding:0px 0 5px 0;
@@ -329,18 +356,20 @@ b{
 	padding:5px 0 0 5px;
 }
 .page .mindLeftBox .delMind{
-	width:20px;
-	height:20px;
-	background: #F15A29;
-	position: absolute;
-	top:50px;
-	left:5px;
-	z-index: 9;
-	cursor:pointer;
-	text-align: center;
-	font-weight: bold;
-	color:#fff;
-	border-radius: 3px;
+	width: 30px;
+    height: 30px;
+    background: #F15A29 url(../img/ico-close.png) no-repeat center;
+    background-size: 20px;
+    position: absolute;
+    top: 50px;
+    left: 5px;
+    z-index: 9;
+    cursor: pointer;
+    text-align: center;
+    line-height: 25px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 3px;
 }
 .page .mindLeftBox .mindUser{
 	font-size:0.8em;
@@ -439,18 +468,11 @@ b{
 	resize: none;
 	border-radius: 3px 3px 0 0;
 }
-.mindCommentInputBtn{
+input[type="submit"].mindCommentInputBtn{
 	position: absolute;
 	width:80px;
 	top:0;
 	right:0;
-	height:35px;
-	background:#00B294;
-	border-radius:0 3px 3px 0;
-	color:#fff;
-	font-size: 14px;
-	font-weight: bold;
-	cursor: pointer;
 }
 .mindCommentInputBtn:hover{
 	background:#545554;
@@ -834,7 +856,7 @@ b{
     display: block;
     overflow: hidden;
     border-radius: 3px;
-	margin:5px auto 0;
+	margin:0 auto 10px;
 	font-size:13px;
 	color:#999;
 }
@@ -1274,22 +1296,17 @@ b{
 	resize: none;
 	border-radius: 3px;
 }
-.searchInputBtn{
+input[type="submit"].searchInputBtn{
 	position: absolute;
 	width:80px;
 	top:0;
 	right: 0;
-	height:35px;
-	border-radius: 0 3px 3px 0;
-	color:#fff;
-	font-size: 14px;
-	font-weight: bold;
-	background: #00B294;
-	cursor: pointer;
 }
 .searchInputBtn:hover{
 	background: #545554;
 }
+
+/*Добавление мнения*/
 .addMind{
 	width: 100%;
     max-width: 450px;
@@ -1309,29 +1326,12 @@ b{
 	background-position: center;
 	margin:auto;
 	overflow:hidden;
-	border:6px #999 dashed;
+	border:5px dashed #999;
 }
 .addMind .addMindPhoto:before {
   content: "";
   padding-top: 100%;
   float: left;
-}
-.addMind .addMindPhoto #image_preview{
-	z-index: 2;
-	width:100%;
-}
-.addMind .addMindPhoto .addMindPhotoBtn{
-	width:100%;
-	height:100%;
-	position:absolute;
-	top:0;
-	left:0;
-	cursor:pointer;
-	z-index: 3;
-	text-align: center;
-	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-  	filter: alpha(opacity=0);
-  	opacity: 0;
 }
 .addMind .addMindPhoto .addMindPhotoText{
 	z-index: 1;
@@ -1372,46 +1372,76 @@ b{
     font-size: 12px;
     padding:0 0 0 5px;
 }
-.addMind .addMindBtn{
+.addMind .addMindPhotoBtn{
+	position: absolute;
+	top:0;
+	left:0;
 	width:100%;
+	height:100%;
     max-width: 450px;
-    height: 35px;
-    padding: 2px;
     border-radius: 3px;
     color: #fff;
     font-size: 14px;
     font-weight: bold;
-    margin:5px 0 0 0;
+    margin:0;
     background: #00B294;
     cursor: pointer;
+    background-color: #353535;
+    background-image: url('../img/ico-add.png');
+    background-repeat: no-repeat;
+    z-index: 99;
 }
-.addMind .addMindBtn:hover{
-	background:#545554;
-}
-.mindbox .mindbuttons{
+.addMind .addMindPhoto input{
+	width:100%;
+	height:100%;
 	position:absolute;
-	width:78px;
-	bottom:10px;
-	right:10px;
-	overflow:hidden;
-	z-index:3;
+	top:0;
+	left:0;
+	cursor:pointer;
+	z-index: 3;
+	text-align: center;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  	filter: alpha(opacity=0);
+  	opacity: 0;
+}
+.addMindPhotoPreview{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: #545554;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    cursor:move;
+}
+.addMindPhotoPreview:before {
+    content: "";
+    padding-top: 100%;
+    float: left;
+}
+.addMind .addMindBtn{
+	width: 100%;
+	height:36px;
+	background: #00B294;
+	color:#fff;
+	border-radius: 3px;
 }
 .mindval{
 	width:100%;
-	height:55px;
+	height:45px;
+	z-index: 2;
 }
 .mindval div{
 	width:20%;
-	height:55px;
+	height:50px;
 	float:left;
 	border-radius:3px;
-	background-size: 50px 50px;
+	background-size: 40px 40px;
 	background-position: center;
 	background-repeat: no-repeat;
 	cursor:pointer;
 }
 .mindval div.active{
-	background-color: #D3D3D3;
+	background-color: #fff;
 }
 .f_ck, .st1{
 	background-image:url('../img/ico-f_ck.png');
@@ -1516,6 +1546,106 @@ a.vk{
 	border-radius: 3px;
 	margin:5px auto;
 }
+
+/*Фоторедактор*/
+.photoEditor:before {
+	content: '';
+	display: inline-block;
+	height: 100%; 
+	vertical-align: middle;
+	margin-right: -0.25em; /* Adjusts for spacing */
+ }
+.photoEditor{
+	display:none;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top:0;
+	left:0;
+	background: #000;
+	z-index: 99;
+	text-align: center;
+}
+.photoEditorCropper{
+	position: relative;
+    width: 100%;
+    max-width: 450px;
+	display: inline-block;
+	vertical-align: middle;
+    border: 1px solid rgb(102, 102, 102);
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+    background: none repeat scroll 0% 0% transparent;
+	margin:auto;
+}
+.photoEditorCropper:before {
+    content: "";
+    padding-top: 100%;
+    float: left;
+}
+.photoEditorActions{
+	position: absolute;
+	bottom:0;
+	left:0;
+	z-index: 9;
+}
+.photoEditorActions .actionsButton{
+	float:left;
+	background: rgba(0, 0, 0, 0.5);
+	width:30px;
+	height:30px;
+	margin:0 0 5px 5px;
+	color:#000;
+	overflow: hidden;
+	border-radius:3px;
+	border: 1px solid rgb(102, 102, 102);
+	background-size: 20px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.photoEditorActions .actionsButton.zoomIn{
+	background-image:url('../img/ico-add.png');
+}
+.photoEditorActions .actionsButton.zoomOut{
+	background-image:url('../img/ico-remove.png');
+}
+.photoEditorActions .actionsButton.left{
+	background-image:url('../img/ico-rotateleft.png');
+}
+.photoEditorActions .actionsButton.right{
+	background-image:url('../img/ico-rotateright.png');
+}
+.photoEditorCropper .close{    
+	width: 30px;
+    height: 30px;
+    background: #F15A29 url(../img/ico-close.png) no-repeat center;
+    background-size: 20px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 9;
+    cursor: pointer;
+    text-align: center;
+    line-height: 25px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 3px;
+}
+.photoEditorCropper .add{    
+	width: 30px;
+    height: 30px;
+    background: #F15A29;
+    background-size: 20px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    z-index: 9;
+    cursor: pointer;
+    text-align: center;
+    line-height: 25px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 3px;
+}
 @media (max-width: 720px) {
 	.page .mindLeftBox .mindOnlineBox{
 		display:none;
@@ -1543,6 +1673,9 @@ a.vk{
 	}
 }
 @media (max-width: 520px) { 
+	.indexPage .indexPageBox{
+	    max-height: 100%;
+	}
 	.iteamsBlock{
 		max-width:400px;
 	}

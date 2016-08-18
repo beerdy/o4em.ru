@@ -42,7 +42,11 @@
 		    form.append('action', 'mind_add');
 
        		// Добавляем наше обработанное изображение
-       		form.append('the-file1',  $('#image_preview').attr('src'));
+       		var img = false;
+       		if($('.addMindPhotoPreview').attr('src')){
+       			img = $('.addMindPhotoPreview').attr('src');
+       		}
+       		form.append('the-file1',  img);
 			// перехват submit
 			$.ajax( {
 				url: '/mind',
@@ -112,6 +116,15 @@
 
 	},
 	addMindImgPreview: function(it){
+	var reader = new FileReader();
+        reader.onload = function(e) {
+        	var options = {};
+            options.imgSrc = e.target.result;
+            cropper = $('.photoEditor').imgEditor(options);
+        }
+        reader.readAsDataURL(it.files[0]);
+	},
+	addMindImagePreview: function(data_this){
 	var input = $(it)[0];
 		if (input.files && input.files[0]) {
 			$.each(it.files, function(i, file) {
@@ -149,41 +162,6 @@
 		    }
 			});
 		}
-	},
-	addMindImagePreview: function(data_this){
-      var input = $(data_this)[0];
-      if ( input.files && input.files[0] ) {
-        if ( input.files[0].type.match('image.*') ) {
-        	$('.addMindPhotoText').text("Загрузка...");
-            var reader = new FileReader();
-            reader.onload = function(e) {
-            	$('#image_preview').attr('style', '');
-                $('#image_preview').attr('src', e.target.result);
-                max_size = $('.addMindPhoto').width();
-                width = $('#image_preview').width(); // Current image width
-                height = $('#image_preview').height(); // Current image height
-                    if (width >= height ) {
-                        ratio = width / height; // get ratio for scaling image
-                        newWidth = max_size * ratio;
-                        margin = '-' + (newWidth - max_size) /2 + 'px';
-                        $('img#image_preview').css("width", newWidth + 'px'); // Set new width
-                        $('img#image_preview').css("height", max_size+'px'); // Scale height based on ratio
-                        $('#image_preview').css("margin-left", margin);
-                    }
-                    if (height > width) {
-                       	ratio = height / width; // get ratio for scaling image
-                        newHeight = max_size * ratio;
-                        margin = '-' + (newHeight - max_size) /2 + 'px';
-                        $('img#image_preview').css("height", newHeight + 'px'); // Set new width
-                        $('img#image_preview').css("width", max_size+'px'); // Scale height based on ratio
-                        $('#image_preview').css("margin-top", margin);
-                    }
-                    $('#image_preview').show();
-                    $('.addPhototext').hide();
-            }
-            reader.readAsDataURL(input.files[0]);
-        } else console.log('is not image mime type');
-      } else console.log('not isset files data or files API not supordet');
 	},
 	//Добавление комментария
 	addComment: function(it, m_id){	
@@ -233,7 +211,7 @@
 
 		return false;
 	},
-	//Добавление комментария
+	//Удаление комментария
 	delComment: function(it, m_id, c_id){	
 		var mind_data_tosrv = new Object();
 

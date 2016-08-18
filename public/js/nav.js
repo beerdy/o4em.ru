@@ -72,9 +72,15 @@ var nav = {
                   back = false;
                   active = 'aboutwhat';
                 }else{
-                  title = content['u_m']['m_1']['m_text'];
-                  html = constructor.pageMind(content['u_m']['m_1'], true);
-                  back = true;
+                  if(content){
+                    title = content['u_m']['m_1']['m_text'];
+                    html = constructor.pageMind(content['u_m']['m_1'], true);
+                    back = true;
+                  }else{
+                    title = "Мнение удалено";
+                    html = '<div class="nothing">Мнение удалено</div>';
+                    back = true;
+                  }
                 }
               }
               break;
