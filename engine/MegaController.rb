@@ -55,10 +55,11 @@ class MegaController
 	include RenderPage
 	include Comment
 	include MindRemove
+	include MindAdd
 
 	def initialize(env)
 		@env  = Environment.new(env)
-		@meta = MetaController.new( @env ) 
+		@meta = MetaController.new( @env )
 	end
 
 	def agregator
@@ -102,7 +103,23 @@ class MegaController
 			@env.client_auth.username = @env.client_data['username']
 			@env.client_auth.email    = @env.client_data['email']
 			@env.client_auth.password = @env.client_data['password']
-			return render_page({ :data => @env.client_auth.sign })
+
+			return render_page({ :data => @env.client_auth.sign }) unless $simple_auth
+
+			user_data, headers = @env.client_auth.sign
+			return render_page({ :data => user_data }) if !user_data[:bool]
+			mind_data = MindReading.new({ :usercookie_id => user_data[:user_data][:u_id] },@env.pool).read
+			return render_page({ 
+				:data => { 
+					:bool   => true, 
+					:code   => 0,
+					:info   => 'Успешная авторизация "Вход"',
+					:action => 'auth_login',
+					:user   => user_data[:user_data],
+					:minds  => mind_data[:minds]
+				},
+				:headers => headers
+			}) 
 		when 'auth_login'
 			@env.client_auth.name     = @env.client_data['name']
 			@env.client_auth.password = @env.client_data['password']
@@ -111,6 +128,7 @@ class MegaController
 			return render_page({ :data => user_data }) if !user_data[:bool]
 
 			mind_data = MindReading.new({ :usercookie_id => user_data[:user_data][:u_id] },@env.pool).read
+
 			return render_page({ 
 				:data => { 
 					:bool   => true, 
@@ -174,7 +192,7 @@ class MegaController
 			puts "Учетные данные после аторизации контакта msg:#{msg}, headers:#{headers}" if $log_console
 
 			mind_data = MindReading.new({ :usercookie_id => msg[:user_data][:u_id] },@env.pool).read
-
+			
 			return render_page( { 
 				:data => { 
 					:bool   => true, 
@@ -197,7 +215,7 @@ class MegaController
 	def index
 		render_page({:static => true})
 	end
-	
+
 	def mind(action=nil, word=nil)
 		@env.client_action = action if not action.nil?
 
@@ -225,11 +243,7 @@ class MegaController
 				@env.client_data['endpart'],
 				@env.client_data['endcount'])
 		when 'mind_add'
-			mind_data = Mind.new( @env.client_cookie_id, @env.client_data ).add
-			return render_page({ :data => mind_data }) unless mind_data[:bool]
-
-			data = UploadMindBackground.new().upload( @env.client_data["the-file1"], @env.client_cookie_id, mind_data[:notice]['m_id']  )
-=begin
+=begin without base64
 			mind_upload = UploadMind.new( 
 				@env.client_env,
 				{ :usercookie_id => @env.client_cookie_id },
@@ -244,12 +258,7 @@ class MegaController
 				data = { :bool => false, :code => 0, :info => "Мнение помечено на удаление т.к. не удалось загрузить изображение" }
 			end
 =end
-			if data[:bool]
-				@meta.mind_add(mind_data)
-				data = mind_data
-			else
-				$mind.update({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ :$set => {:m=>true}} )
-			end
+			data = mind_add
 		when 'mind_minus'
 			like = LikeUser.new( 'likeUser', # Счетчики изменяются внутри 258-273
 			{ 
@@ -398,10 +407,14 @@ class MegaController
 	def route_user(nickname)
 		nickname[0] = ''
 		user_data=nickname==(@env.client_cookie_nickname)?(@env.client_current_profile):NewUser.get_user( @env.client_cookie_id, nil, nil, nickname )
+
+		return render_page({ :data => user_data }) if !user_data[:bool]
+
 		mind_data = MindReading.new({
 			:usercookie_id       => @env.client_cookie_id,
 			:usercookie_id_other => user_data[:u_id]
 		},@env.pool).read
+
 		render_page({
 			:data   => { 
 				:bool   => true, 
