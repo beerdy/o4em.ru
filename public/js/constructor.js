@@ -238,7 +238,7 @@ var constructor = {
 	},
 	pageUsers: function(content){
 		var users = '';
-		if(content['u_top_minder']){
+		if(content){
 			$.each(content['u_top_minder'], function(i, user) {
 				users += constructor.listUsers(user);
 			});
