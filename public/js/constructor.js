@@ -1,13 +1,6 @@
 var constructor = {
 	headerBar: function(){
-	var html =  //'<div class="brandBar">'
-				//	+'<div class="brandBarBox">'
-				//		+'<div class="backBtn"></div>'
-				//		+'<div class="h1Box"></div>'
-				//		+'<div class="someBtn"></div>'
-				//	+'</div>'
-				//+'</div>'
-				'<nav class="navBar">'
+	var html = '<nav class="navBar">'
 						+'<div class="navBarBox">'
 							+'<a class="navBarIteam im" href="/'+user.getCookie('u_nik')+'" onclick="return nav.go(this)"><div class="ico"></div></a>'
 							+'<a class="navBarIteam notice" href="/notice" onclick="return nav.go(this)"><div class="ico"></div></a>'
@@ -15,6 +8,7 @@ var constructor = {
 							+'<a class="navBarIteam users" href="/people" onclick="return nav.go(this)"><div class="ico"></div></a>'
 							+'<a class="navBarIteam addmind" href="/addmind" onclick="return nav.go(this)"><div class="ico"></div></a>'
 						+'</div>'
+						+'<div class="navBarBorder"></div>'
 			   +'</nav>'
 	return html;
 	},
@@ -113,6 +107,7 @@ var constructor = {
 	var location = '';
 	var follow = '';
 	var avatar = '';
+	var need_last = '';
 
 	if(content['u_m']){
 		$.each(content['u_m'], function(i, mind) {
@@ -155,7 +150,6 @@ var constructor = {
 	}else{
 		avatar = '<img src="/public/img/ico-online.png" width="100" height="100" title="нет фото" alt="нет фото" class="avatar"/>';
 	}
-
 	var html='<div class="userPageInfo">'
 			//+'<div class="userPageBg" style="background-image:url(\''+content['u_photo']+'_o800.jpg\');"></div>'
 				+'<div class="userPageStatistic">'
@@ -202,10 +196,11 @@ var constructor = {
 	var html='<div class="userPageInfo">'
 		+'<div class="inputHeader">Загрузить фото:</div>'
 		+'<div class="userPagePhoto">'
-    		+'<input type="file" class="userPageUpload" name="the-file1" onchange="return user.uploadUserAva(this)">'
+    		+'<input type="file" class="userPageUpload" name="the-file1" onchange="return user.uploadUserAvaPreview(this)">'
 			//+'<iframe name="upload_img" style="display: none"></iframe>'
-			+'<img src="'+ava+'" width="100" title="'+content['u_name']+'" alt="'+content['u_name']+'" id="profphoto"/>'
+			+'<img src="'+ava+'" width="100" title="'+content['u_name']+'" alt="'+content['u_name']+'" class="userPhotoPreview"/>'
 		+'</div>'
+		+'<input class="editBtn" type="submit" value="Cохранить" onclick="return user.uploadUserAva(this)">'
 		+'<div class="inputHeader">Основная информация:</div>'
 		+'<div class="inputBox">Название странички:<input class="userPageName" id="namemy_ed" type="text" value="'+content['u_name']+'"></div>'
 		+'<div class="inputBox">Описание:<textarea class="userPageDescription" id="aboutmy_ed" type="text">'+content['u_about']+'</textarea></div>'
@@ -226,6 +221,18 @@ var constructor = {
 		+'<div class="inputBox">Оставьте пустым, <input type="text" id="agregateId" placeholder="ID мнения"/></div>'
 		+'<input type="button" value="Подсчитать" id="agregatebBtn" class="editBtn" onclick="return actions.agregate()"/>'
 	+'</div>'
+	+'</div>'
+	+'<div class="photoEditor">'
+		+'<div class="photoEditorCropper">'
+			+'<div class="close" onclick="return cropper.close();"></div>'
+			+'<div class="add" onclick="return cropper.imgCrop();">ок</div>'
+				+'<div class="photoEditorActions">'
+        		+'<div class="actionsButton zoomIn" onclick="return cropper.zoomIn();"></div>'
+        		+'<div class="actionsButton zoomOut" onclick="return cropper.zoomOut();"></div>'
+        		+'<div class="actionsButton left" onclick="return cropper.rotate(\'left\');"></div>'
+        		+'<div class="actionsButton right" onclick="return cropper.rotate(\'right\');"></div>'
+        	+'</div>'
+		+'</div>'	
 	+'</div>';
 	return html;
 	},

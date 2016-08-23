@@ -3,8 +3,7 @@
 		$("title").text(title);
 		$('.new').remove();
 		$('#pages .page:last-child').removeClass('old').addClass('new');
-		$('h1:first-child').removeClass('old').addClass('new');
-		$('.back:first-child').removeClass('old').addClass('new');
+		$('.navBarBack:first-child').removeClass('old').addClass('new');
 		$(window).scrollTop(top);
 		window.history.replaceState(title, title, link);
 	},	
@@ -120,6 +119,7 @@
         reader.onload = function(e) {
         	var options = {};
             options.imgSrc = e.target.result;
+            options.previewBox = $('.addMindPhotoPreview');
             cropper = $('.photoEditor').imgEditor(options);
         }
         reader.readAsDataURL(it.files[0]);

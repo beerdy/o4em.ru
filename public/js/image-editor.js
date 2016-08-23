@@ -15,8 +15,7 @@
                 options : options,
                 imageBox : el,
                 thumbBox : el.find('.photoEditorCropper'),
-                previewBox : $('.addMindPhotoPreview'),
-                inputBox : $('.addMindPhoto input'),
+                previewBox : options.previewBox,
                 image : new Image(),
                 getDataURL: function ()
                 {
@@ -117,7 +116,6 @@
                 },
                 close: function(){
                     el.hide();
-                    obj.inputBox.attr({'value':''});
                 }
             },
             setBackground = function()

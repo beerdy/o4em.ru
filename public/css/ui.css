@@ -59,7 +59,30 @@ a:hover, a:active{
 b{
 	font-weight:bold;
 }
-input {outline: none;}
+h2{
+	font-size: 18px;
+	margin:0 0 10px 0;
+}
+p{
+	margin:5px 0 10px 0;
+}
+input[type=text], input[type=password], textarea, select{
+	outline: none;
+    width: 100%;
+    height: 40px;
+    font-size: 18px;
+    padding: 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: block;
+    border:0px;
+    border-bottom: 3px solid #dfdfdf;
+    border-radius: 3px;
+    color:#999;
+    font-weight: normal;
+    text-align: center;
+    resize: 0;
+}
 input:-webkit-autofill {
     -webkit-box-shadow: inset 0 0 0 50px #C7FFF4 !important; /* Цвет фона */
     -webkit-text-fill-color: #999 !important; /* цвет текста */
@@ -77,6 +100,7 @@ input[type="submit"], a.submitBtn{
 	text-decoration: none;
 	border-bottom:3px solid #009679;
 	cursor: pointer;
+	text-align: center;
 }
 input[type="submit"]:hover, a.submitBtn:hover{
 	background:#00C6A0;
@@ -172,149 +196,119 @@ input[type="submit"]:active, a.submitBtn:active{
 	width:100vw;
 	z-index: 9;
 }
-#header .brandBar{
-	position:fixed;
-	top:0;
-	width:100vw;
-	height:36px;
-	background:#00B294;
-	overflow:hidden;
-	z-index: 9;
-}
-#header .brandBarBox{
-	width:100%;
-	max-width:900px;
-	margin:auto;
-	height:36px;
-}
-#header .brandBar .backBtn{
-	float:left;
-	width:20%;
-	height:36px;
-}
-#header .brandBar .someBtn{   
-	float:left;
-	width:20%;
-	height:36px;
-}
-#header .brandBar .h1Box{
-	position:relative;
-	width:60%;
-	float:left;
-	height:36px;
-}
-#header .brandBar .h1Box h1{
-	display:block;
-	width:100%;
-	font-size:18px;
-	color:#353535;
-	text-align: center;
-	line-height:36px;
-	height:36px;
-	font-weight: bold;
-	overflow:hidden;
-}
-#header .brandBar .backBtn .back{
-	display:block;
-	width:100%;
-	height:36px;   
-	text-align:center;
-	color:#fff;
-	text-decoration:none;
-	background-image:url('../img/ico-back.png');
-    background-size: 20px auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-}
-#header .brandBar .backBtn .back:hover, #header .brandBar .backBtn .back:active{
-	background-color:#027C64;
-}
-#header .navBarBack{
-	position:fixed;
-	top:0px;
-	width:100vw;
-	height:46px;
-	background:#4c4c4c;
-	z-index: 9;
-}
-#header .navBar{
-	position:fixed;
-	top:0px;
-	width:100vw;
-	height:46px;
-	background:#4c4c4c;
-	z-index: 9;
-}
-#header .navBar .navBarBox{  
-	position:relative;
-	width:100%;
-	max-width:900px;
-	margin:auto;
-	overflow: hidden;
-}
-#header .navBar .navBarIteam{   
-	float:left;
-	width:20%;
-	text-align:center;
-	font-size:0.65em;
-	color:#fff;
-	text-decoration: none;
-	padding:3px 0 3px 0;
-	height:46px;
-	position: relative;
-}
-#header .navBar .navBarIteam .ico{   
-	width:30px;
-	height:30px;
-	margin:5px auto 5px;
-	 -webkit-background-size: cover;
-     -moz-background-size: cover;
-     -o-background-size: cover;
-    background-size: cover;
-}
-#header .navBar .navBarIteam.active{
-	background:#545554;
-}
-#header .navBar .navBarIteam.im .ico{
-	background-image:url('../img/ico-im.png');
-}
-#header .navBar .navBarIteam.notice .ico{
-	background-image:url('../img/ico-notice.png');
-}
-#header .navBar .navBarIteam.tags .ico{
-	background-image:url('../img/ico-tag.png');
-}
-#header .navBar .navBarIteam.users .ico{
-	background-image:url('../img/ico-people.png');
-}
-#header .navBar .navBarIteam.addmind{
-	background-color: #00B294;
-}
-#header .navBar .navBarIteam.addmind .ico{
-	background-image:url('../img/ico-add.png');
-}
-#header .navBar .navBarIteam.aboutwhat .ico{
-	margin:0px auto 0px;
-	width:40px;
-	height:40px;
-	background: url('../img/logo_80@2.png') no-repeat center right;
-	background-size: 80px 40px;
-}
-#header .navBar .navBarIteam.aboutwhat .ico.sleep, #header .navBar .navBarIteam.aboutwhat .ico:active{
-	background: url('../img/logo_80@2.png') no-repeat center left;
-	background-size: 80px 40px;
-}
-#header .navBar .navBarIteam.notice .count{
-	position:absolute;
-	top:5px;
-	right:5px;
-	background: #F15A29;
-	color:#fff;
-	font-weight: bold;
-	padding:3px;
-	border-radius:3px;
-}
+	#header .navBar{
+		position:fixed;
+		top:0px;
+		width:100vw;
+		height:46px;
+		background:#4c4c4c;
+		z-index: 9;
+		overflow: hidden;
+	}
+		#header .navBar .navBarBorder{
+			position:absolute;
+			bottom:0px;
+			width:100vw;
+			height:3px;
+			background:#373737;
+			z-index: 1;
+		}
+		#header .navBar .navBarBox, #header .navBar .navBarBack{  
+			position:relative;
+			width:100%;
+			max-width:900px;
+			margin:auto;
+			overflow: hidden;
+		}
+			#header .navBar .navBarIteam{   
+				float:left;
+				width:20%;
+				text-align:center;
+				font-size:0.65em;
+				color:#fff;
+				text-decoration: none;
+				padding:3px 0 3px 0;
+				height:46px;
+				position: relative;
+				cursor: pointer;
+				z-index: 2;
+			}
+				#header .navBar .navBarIteam .count{
+					position:absolute;
+					top:5px;
+					right:5px;
+					background: #F15A29;
+					color:#fff;
+					font-weight: bold;
+					padding:3px;
+					border-radius:3px;
+				}
+				#header .navBar .navBarIteam .ico{
+					width:30px;
+					height:30px;
+					margin:4px auto 6px;
+					 -webkit-background-size: cover;
+				     -moz-background-size: cover;
+				     -o-background-size: cover;
+				    background-size: cover;
+				}
+				#header .navBar .navBarIteam.im .ico{
+					background-image:url('../img/nav_im_30@2.png');
+				}
+				#header .navBar .navBarIteam.notice .ico{
+					background-image:url('../img/nav_notice_30@2.png');
+				}
+				#header .navBar .navBarIteam.tags .ico{
+					background-image:url('../img/ico-tag.png');
+				}
+				#header .navBar .navBarIteam.users .ico{
+					background-image:url('../img/nav_search_30@2.png');
+				}
+				#header .navBar .navBarIteam.back .ico{
+					background-image:url('../img/nav_back_30@2.png');
+					float:left;
+				}
+
+			#header .navBar .navBarIteam.active{
+				background:#373737;
+			}
+			#header .navBar .navBarIteam.back{   
+				float:left;
+				width:40%;
+				text-align:center;
+				font-size:0.65em;
+				color:#fff;
+				text-decoration: none;
+				padding:3px 0 3px 0;
+				height:46px;
+				position: relative;
+			}
+
+			#header .navBar .navBarIteam.addmind{
+				background-color: #00B294;
+				border-bottom:3px solid #009679;
+			}
+			#header .navBar .navBarIteam.addmind.active{
+				background-color: #009679;
+			}
+				#header .navBar .navBarIteam.addmind .ico{
+					background-image:url('../img/nav_add_30@2.png');
+				}
+
+			#header .navBar .navBarIteam.aboutwhat{
+				padding:2px 0 4px 0;
+			}
+				#header .navBar .navBarIteam.aboutwhat .ico{
+					margin:0px auto 0px;
+					width:40px;
+					height:40px;
+					background: url('../img/logo_80@2.png') no-repeat center right;
+					background-size: 80px 40px;
+				}
+				#header .navBar .navBarIteam.aboutwhat .ico.sleep, #header .navBar .navBarIteam.aboutwhat .ico:active{
+					background: url('../img/logo_80@2.png') no-repeat center left;
+					background-size: 80px 40px;
+				}
 
 /* - СТРАНИЦЫ - */
 #pages{
@@ -475,21 +469,13 @@ input[type="submit"]:active, a.submitBtn:active{
 	border-radius: 3px;
 }
 .mindCommentInput .mindCommentInputText{
-	width:100%;
-	height:35px;
 	padding:5px 85px 5px 5px;
-	margin:0;
-	resize: none;
-	border-radius: 3px 3px 0 0;
 }
 input[type="submit"].mindCommentInputBtn{
 	position: absolute;
 	width:80px;
 	top:0;
 	right:0;
-}
-.mindCommentInputBtn:hover{
-	background:#545554;
 }
 .page .mindLeftBox .mindPhoto:before {
 	content: "";
@@ -664,7 +650,7 @@ input[type="submit"].mindCommentInputBtn{
 .userPageStatistic a.active{
 	border-radius:3px;
 	text-decoration:none;
-	border-bottom: 3px solid #00b294;
+	border-bottom: 3px solid #dfdfdf;
 	background:#f7f7f7;
 }
 .userPagePhoto{
@@ -800,9 +786,10 @@ input[type="submit"].mindCommentInputBtn{
 	text-decoration: none;
 	z-index: 2;
 	cursor: pointer;
+	border-bottom: 3px solid #c9461e;
 }
 .userPageInfo .userPageButtons .logout:hover, .logout:active{
-	background-color: #545554;
+	background-color: #c9461e;
 }
 .userPageInfo .userPageButtons .settings{
 	position: relative;
@@ -816,16 +803,15 @@ input[type="submit"].mindCommentInputBtn{
 	float:left;
 	border-radius: 3px;
 	color:#fff;
-	font-size:13px;
 	line-height: 30px;
-	text-align: center;
 	text-decoration: none;
 	z-index: 2;
+	border-bottom: 3px solid #009679;
 }
 .userPageInfo .userPageButtons .settings:hover, .settings:active{
-	background-color: #545554;
+	background-color: #009679;
 }
-.userPageInfo .userPageButtons .follow, .follow:visited, .follow:hover{
+.userPageInfo .userPageButtons .follow, .follow:visited{
 	position: relative;
 	display:block;
 	width:30px;
@@ -837,14 +823,16 @@ input[type="submit"].mindCommentInputBtn{
 	float:left;
 	border-radius: 3px;
 	color:#fff;
-	font-size:13px;
 	line-height: 30px;
-	text-align: center;
 	text-decoration: none;
 	z-index: 2;
 	cursor:pointer;
+	border-bottom: 3px solid #009679;
 }
-.userPageInfo .userPageButtons .unfollow, .unfollow:visited, .unfollow:hover{
+.userPageInfo .userPageButtons .follow:hover{
+	background-color: #009679;
+}
+.userPageInfo .userPageButtons .unfollow, .unfollow:visited{
 	position: relative;
 	display:block;
 	width:30px;
@@ -856,12 +844,14 @@ input[type="submit"].mindCommentInputBtn{
 	float:left;
 	border-radius: 3px;
 	color:#fff;
-	font-size:13px;
 	line-height: 30px;
-	text-align: center;
 	text-decoration: none;
 	z-index: 2;
 	cursor:pointer;
+	border-bottom: 3px solid #c9461e;
+}
+.userPageInfo .userPageButtons .unfollow:hover{
+	background-color:#c9461e;
 }
 .inputBox{
 	width: 100%;
@@ -874,43 +864,6 @@ input[type="submit"].mindCommentInputBtn{
 	font-size:13px;
 	color:#999;
 	text-align: left;
-}
-.inputBox input, .inputBox textarea{
-    max-width: 450px;
-    width: 100%;
-    height: 40px;
-    font-size: 18px;
-    margin: 0 0 2px 0;
-    padding: 5px;
-    box-sizing: border-box;
-    resize: none;
-    z-index: 2;
-    overflow: hidden;
-    display: block;
-    border: 1px solid #e8e8e8;
-    border-radius: 3px;
-    color:#999;
-    font-weight: normal;
-    text-align: center;
-}
-.inputBox select{
-    max-width: 450px;
-    width: 100%;
-    height: 40px;
-    font-size: 18px;
-    margin: 0;
-    padding: 5px;
-    box-sizing: border-box;
-    resize: none;
-    z-index: 2;
-    overflow: hidden;
-    display: block;
-    border: 1px solid #e8e8e8;
-    border-radius: 3px;
-    color:#999;
-    font-weight: normal;
-    text-align: center;
-    cursor: pointer;
 }
 .inputHeader{
 	font-size:18px;
@@ -1063,8 +1016,9 @@ input[type="submit"].mindCommentInputBtn{
 	height:40px;
 	z-index: 4;
 	overflow:hidden;
-	border-top:4px solid #00b294;
+	border-top:3px solid #00b294;
 	background: #f7f7f7;
+	border-bottom: 3px solid #dfdfdf;
 }
 .iteamsBlock .iteamBox .iteamBoxStatistic li{
 	position:relative;
@@ -1300,16 +1254,11 @@ input[type="submit"].mindCommentInputBtn{
 	position: relative;
 	display:block;
 	overflow: hidden;
-	margin:5px 0 0 0;
+	margin:5px 0 10px 0;
 	border-radius: 3px;
 }
-.searchInputText{
-	width:100%;
-	height:35px;
+input[type=text].searchInputText{
 	padding:5px 85px 5px 5px;
-	margin:0;
-	resize: none;
-	border-radius: 3px;
 }
 input[type="submit"].searchInputBtn{
 	position: absolute;
@@ -1365,21 +1314,6 @@ input[type="submit"].searchInputBtn{
     display: block;
     overflow: hidden;
     margin: 5px 0 0 0;
-    border-radius: 3px;
-}
-.addMind .addMindBox textarea{
-	max-width:450px;
-	width:100%;
-	height:35px;
-	font-size:18px;
-	margin:0;
-	padding:5px 5px 5px 5px;
-	box-sizing: border-box;
-	resize:none;
-	z-index:2;
-	overflow:hidden;
-	display:block;
-    border: 1px solid #e8e8e8;
     border-radius: 3px;
 }
 .addMind .addMindBox small{
@@ -1484,13 +1418,13 @@ input[type="submit"].searchInputBtn{
 	width:100%;
 	position:relative;
 	overflow:hidden;
-	padding:10px;
+	padding:15px;
 	border:3px;
 	color:#f0f0f0;
-	font-size:0.75em;
+	font-size:14px;
 	z-index: 1;
 	text-align:center;
-	min-height: 36px;
+	min-height: 46px;
 	background-image:url('../img/ico-close.png');
 	background-repeat: no-repeat;
 	background-position: right 10px center;
@@ -1500,7 +1434,7 @@ input[type="submit"].searchInputBtn{
 	background-color:rgba(182, 40, 40, 0.9);
 }
 #systemMessage .smsg.ok{
-	background-color:rgba(76, 76, 76, 0.9);
+	background-color:rgba(0, 178, 148, 0.9);
 }
 #systemMessage .smsg a{
 	margin:0 15px 0 0;
@@ -1528,7 +1462,7 @@ input[type="submit"].searchInputBtn{
 	left:0;
 	width:100%;
 	height:100%;
-	background:rgba(0,0,0,0.9);
+	background:rgba(0,0,0,0.7);
 	z-index: 999999;
 	overflow:auto;
 }
@@ -1540,6 +1474,18 @@ input[type="submit"].searchInputBtn{
 	border-radius:3px;
 	height:auto;
 	margin:70px auto;
+}
+#overlay .warning{
+	position:absolute;
+	top:50%;
+	left:50%;
+	width:300px;
+	height:200px;
+	z-index: 999999;
+	overflow:auto;
+	margin:-100px 0 0 -150px;
+	text-align: center;
+	color:#fff;
 }
 #footer{
 	height:36px;
@@ -1656,11 +1602,12 @@ a.vk:active{
     font-weight: bold;
     color: #fff;
     border-radius: 3px;
+    border-bottom: 3px solid #c9461e;
 }
 .photoEditorCropper .add{    
 	width: 30px;
     height: 30px;
-    background: #F15A29;
+    background: #00b294;
     background-size: 20px;
     position: absolute;
     bottom: 5px;
@@ -1672,6 +1619,11 @@ a.vk:active{
     font-weight: bold;
     color: #fff;
     border-radius: 3px;
+    border-bottom: 3px solid #009679;
+}
+.error404{
+	text-align: center;
+	padding:10px 0 10px 0;
 }
 @media (max-width: 720px) {
 	.page .mindLeftBox .mindOnlineBox{

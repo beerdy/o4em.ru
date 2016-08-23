@@ -145,12 +145,12 @@ var nav = {
                   html = constructor.pageUser(content, 'minds');
                   subactive = 'minds';
                 }else{
-                  $('.page.new').html("<div class='error404'>Вы свернули не туда... Страница не найдена!</div>");
+                  html = "<div class='error404'>Вы свернули не туда... Страница не найдена!</div>";
                   title = "Ошибка";
                   back = false;
                 }
               }else{
-                $('.page.new').html("<div class='error404'>Вы свернули не туда... Страница не найдена!</div>");
+                html = "<div class='error404'>Вы свернули не туда... Страница не найдена!</div>";
                 title = "Ошибка";
                 back = false;
               }
@@ -161,16 +161,20 @@ var nav = {
         $('.page').removeClass('new').addClass('old');
 
         $('.navBarBack').removeClass('new').addClass('old');
-        $('.navBar').prepend('<div class="navBarBack new" onclick="actions.back(\''+location.pathname+'\', \''+$("title").text()+'\', '+top+');"></div>');
+        $('.navBar').prepend('<div class="navBarBack new">'
+                              +'<a class="navBarIteam back" onclick="actions.back(\''+location.pathname+'\', \''+$("title").text()+'\', '+top+');"><div class="ico"></div></a>'
+                              +'<a class="navBarIteam aboutwhat" href="/mind/random" onclick="return nav.go(this)"><div class="ico"></div></a>'
+                           +'</div>');
 
         $('#pages').append('<section class="page new">'+html+'</section>');
     }else{
         $('#pages').html('<section class="page new">'+html+'</section>');
-        $('.h1Box').html("<h1 class='new'>"+title+"</h1>");
-        if(back){
-          $('.backBtn').prepend('<div class="back new" onclick="nav.goto(\'/\');"></div>');
-        }else{
-          $('.backBtn').html('');
+        $('.navBarBack').remove();
+        if(back){     
+           $('.navBar').prepend('<div class="navBarBack new">'
+                              +'<a class="navBarIteam back" onclick="nav.goto(\'/\');"><div class="ico"></div></a>'
+                              +'<a class="navBarIteam aboutwhat" href="/mind/random" onclick="return nav.go(this)"><div class="ico"></div></a>'
+                           +'</div>');
         }
     }
 

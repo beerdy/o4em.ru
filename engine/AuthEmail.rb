@@ -17,17 +17,21 @@ From: O4EM.RU <service@o4em.ru>
 To: #{@email}
 MIME-Version: 1.0
 Content-type: text/html
-Subject: Подтверждение регистрации
+Subject: Регистрация на сайте
 Date: #{Time.now}
 
 Здравствуйте, <b>#{@username}!</b><br>
-Вы зарегистрировались на сайте O4EM.RU!<br><br>
+Вы успешно зарегистрировались на сайте O4EM.RU!<br><br>
 
-Ссылка для подтверждения регистрации:<br>
-#{$root_o4em}/confirm/#{@code}
+Ваши авторизационные данные:<br>
+Логин: <b>#{@email}</b> или <b>#{@username}</b><br>
+Пароль: <b>#{@code}</b>
+
 END_OF_MESSAGE
 send
 end
+
+#{$root_o4em}/confirm/#{@code}
 
 def edit
 @msgstr = <<END_OF_MESSAGE
@@ -49,11 +53,11 @@ From: O4EM.RU <service@o4em.ru>
 To: #{@email}
 MIME-Version: 1.0
 Content-type: text/html
-Subject: Регистрация на сайте
+Subject: Изменение учетных данных
 Date: #{Time.now}
 
 Здравствуйте, <b>#{@username}!</b><br>
-Вы успешно зарегистрировались на сайте O4EM.RU!<br><br>
+Вы успешно сменили пароль сайте O4EM.RU!<br><br>
 
 Ваши авторизационные данные:<br>
 Логин: <b>#{@email}</b> или <b>#{@username}</b><br>

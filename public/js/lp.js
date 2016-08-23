@@ -56,10 +56,12 @@ var lp = {
 									});
 								// Если мы находимся на cтранице уведомлений
 								}else if(page == "notice"){
-									var html_notice = constructor.listNotice(data['content']);
-						            $(html_notice).css("opacity","0.1").prependTo(".page.new").animate({
-										opacity: 1
-									});
+									if(data['content']['action'] != 'online'){ 
+										var html_notice = constructor.listNotice(data['content']);
+							            $(html_notice).css("opacity","0.1").prependTo(".page.new").animate({
+											opacity: 1
+										});
+						        	}
 								// Если мы находимся на любой странице
 								}else{
 									if(data['content']['action'] != 'online'){ 
