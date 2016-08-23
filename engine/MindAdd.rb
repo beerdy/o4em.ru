@@ -3,6 +3,23 @@
 require 'cgi'
 require './engine/Tags.rb'
 
+module MindAdd
+	def mind_add
+		mind_data = Mind.new( @env.client_cookie_id, @env.client_data ).add
+		return render_page({ :data => mind_data }) unless mind_data[:bool]
+
+		data = UploadMindBackground.new().upload( @env.client_data["the-file1"], @env.client_cookie_id, mind_data[:notice]['m_id']  )
+
+		if data[:bool]
+			@meta.mind_add(mind_data)
+			data = mind_data
+		else
+			$mind.update({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ :$set => {:m=>true}} )
+		end
+		return data
+	end
+end
+
 class Mind
 	def initialize(usercookie_id,data)
 		@usercookie_id = usercookie_id

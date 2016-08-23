@@ -312,6 +312,7 @@ module VolodiyaDriver
 	end
 	def user(data)
 		{
+			:u_first_mind  => data[:u_first_mind],
 			:u_id          => data[:u_id],
 			:u_nickname    => data[:u_nickname],
 			:u_name        => (data[:u_name].nil? ? data[:u_nickname] : data[:u_name]),
