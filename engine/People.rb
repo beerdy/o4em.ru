@@ -11,8 +11,9 @@ class People
     data[:counter] = 0
 
     File.readlines(@tom_minder_file).map do |user|
-      data[:counter] += 1
       users = user.split('_')
+      next unless users[0] =~ /^[0-9a-fA-F]{24}$/
+      data[:counter] += 1
       data["u_#{data[:counter]}"] = NewUser.get_user(@env.client_cookie_id,users[0])
     end
 
