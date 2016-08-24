@@ -17,17 +17,21 @@ From: O4EM.RU <service@o4em.ru>
 To: #{@email}
 MIME-Version: 1.0
 Content-type: text/html
-Subject: Подтверждение регистрации
+Subject: Регистрация на сайте
 Date: #{Time.now}
 
-Здравствуйте, #{@username}!
-Вы зарегистрировались на сайте O4EM.RU!
+Здравствуйте, <b>#{@username}!</b><br>
+Вы успешно зарегистрировались на сайте O4EM.RU!<br><br>
 
-Ссылка для подтверждения регистрации:
-#{$root_o4em}/confirm/#{@code}
+Ваши авторизационные данные:<br>
+Логин: <b>#{@email}</b> или <b>#{@username}</b><br>
+Пароль: <b>#{@code}</b>
+
 END_OF_MESSAGE
 send
 end
+
+#{$root_o4em}/confirm/#{@code}
 
 def edit
 @msgstr = <<END_OF_MESSAGE
@@ -49,15 +53,15 @@ From: O4EM.RU <service@o4em.ru>
 To: #{@email}
 MIME-Version: 1.0
 Content-type: text/html
-Subject: Регистрация на сайте
+Subject: Изменение учетных данных
 Date: #{Time.now}
 
-Здравствуйте, #{@username}!
-Вы успешно зарегистрировались на сайте O4EM.RU!
+Здравствуйте, <b>#{@username}!</b><br>
+Вы успешно сменили пароль сайте O4EM.RU!<br><br>
 
-Ваши авторизационные данные:
-Логин: #{@email} или #{@username}
-Пароль: #{@code}
+Ваши авторизационные данные:<br>
+Логин: <b>#{@email}</b> или <b>#{@username}</b><br>
+Пароль: <b>#{@code}</b>
 
 END_OF_MESSAGE
 send
@@ -73,10 +77,10 @@ Subject: Восстановление пароля
 Date: #{Time.now}
 
 Здравствуйте, <b>#{@username}!</b><br>
-Мы получили запрос на смену вашего пароля.
+Мы получили запрос на смену вашего пароля.<br><br>
 
-Ссылка для смена пароля:
-#{$root_o4em}/restore/#{@code}/#{@username}
+Ссылка для смена пароля:<br>
+#{$root_o4em}/restore/#{@code}/#{@username}<br><br>
 
 Если вы отклоните это сообщение, ваш пароль не будет изменен.
 

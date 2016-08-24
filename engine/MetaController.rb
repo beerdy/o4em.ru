@@ -37,7 +37,12 @@ class MetaController
 
 	def mind_add(data)
 		#counter
-		$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
+		if @env.client_current_profile[:u_first_mind]
+				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1}, :$set => { 'а' => 1000 } })
+		else
+				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
+		end
+
 
 		follows = $db_o4em['howFollow'].find({ :anchor => 1, :key => @env.client_cookie_id }).first
 		return { :bool => false, :code => 0, :info => "MetaController (mind_data) -> Нет подписчиков для извещения о добовление пользователем #{@env.client_cookie_id} нового мнения" } if follows.nil?

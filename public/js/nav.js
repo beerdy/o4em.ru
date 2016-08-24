@@ -72,9 +72,15 @@ var nav = {
                   back = false;
                   active = 'aboutwhat';
                 }else{
-                  title = content['u_m']['m_1']['m_text'];
-                  html = constructor.pageMind(content['u_m']['m_1'], true);
-                  back = true;
+                  if(content){
+                    title = content['u_m']['m_1']['m_text'];
+                    html = constructor.pageMind(content['u_m']['m_1'], true);
+                    back = true;
+                  }else{
+                    title = "Мнение удалено";
+                    html = '<div class="nothing">Мнение удалено</div>';
+                    back = true;
+                  }
                 }
               }
               break;
@@ -139,12 +145,12 @@ var nav = {
                   html = constructor.pageUser(content, 'minds');
                   subactive = 'minds';
                 }else{
-                  $('.page.new').html("<div class='error404'>Вы свернули не туда... Страница не найдена!</div>");
+                  html = "<div class='error404'>Вы свернули не туда... Страница не найдена!</div>";
                   title = "Ошибка";
                   back = false;
                 }
               }else{
-                $('.page.new').html("<div class='error404'>Вы свернули не туда... Страница не найдена!</div>");
+                html = "<div class='error404'>Вы свернули не туда... Страница не найдена!</div>";
                 title = "Ошибка";
                 back = false;
               }
@@ -153,18 +159,22 @@ var nav = {
     if(back && $('#pages').html() != ''){
         var top = $(window).scrollTop();
         $('.page').removeClass('new').addClass('old');
-        $('h1').removeClass('new').addClass('old');
-        $('.back').removeClass('new').addClass('old');
-        $('.backBtn').prepend('<div class="back new" onclick="actions.back(\''+location.pathname+'\', \''+$("title").text()+'\', '+top+');"></div>');
+
+        $('.navBarBack').removeClass('new').addClass('old');
+        $('.navBar').prepend('<div class="navBarBack new">'
+                              +'<a class="navBarIteam back" onclick="actions.back(\''+location.pathname+'\', \''+$("title").text()+'\', '+top+');"><div class="ico"></div></a>'
+                              +'<a class="navBarIteam aboutwhat" href="/mind/random" onclick="return nav.go(this)"><div class="ico"></div></a>'
+                           +'</div>');
+
         $('#pages').append('<section class="page new">'+html+'</section>');
-        $('.h1Box').prepend("<h1 class='new'>"+title+"</h1>");
     }else{
         $('#pages').html('<section class="page new">'+html+'</section>');
-        $('.h1Box').html("<h1 class='new'>"+title+"</h1>");
-        if(back){
-          $('.backBtn').prepend('<div class="back new" onclick="nav.goto(\'/\');"></div>');
-        }else{
-          $('.backBtn').html('');
+        $('.navBarBack').remove();
+        if(back){     
+           $('.navBar').prepend('<div class="navBarBack new">'
+                              +'<a class="navBarIteam back" onclick="nav.goto(\'/\');"><div class="ico"></div></a>'
+                              +'<a class="navBarIteam aboutwhat" href="/mind/random" onclick="return nav.go(this)"><div class="ico"></div></a>'
+                           +'</div>');
         }
     }
 
@@ -197,14 +207,14 @@ var nav = {
           data: jjj,
           url: link,
           success: function(data){
-            system.loading(0);
+            system.loading(false);
             nav.page(data, link, true);
           },
           beforeSend: function(){
-            system.loading(1);
+            system.loading(true);
           },
           error: function(data){
-            system.loading(0);
+            system.loading(false);
             system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
           }
         });
@@ -221,14 +231,14 @@ var nav = {
           data: jjj,
           url: link,
           success: function(data){
-            system.loading(0);
+            system.loading(false);
             nav.page(data, link, false);
           },
           beforeSend: function(){
-            system.loading(1);
+            system.loading(true);
           },
           error: function(data){
-            system.loading(0);
+            system.loading(false);
             system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
           }
         });

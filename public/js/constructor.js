@@ -1,13 +1,6 @@
-﻿var constructor = {
+var constructor = {
 	headerBar: function(){
-	var html =  '<div class="brandBar">'
-					+'<div class="brandBarBox">'
-						+'<div class="backBtn"></div>'
-						+'<div class="h1Box"></div>'
-						+'<div class="someBtn"></div>'
-					+'</div>'
-				+'</div>'
-				+'<nav class="navBar">'
+	var html = '<nav class="navBar">'
 						+'<div class="navBarBox">'
 							+'<a class="navBarIteam im" href="/'+user.getCookie('u_nik')+'" onclick="return nav.go(this)"><div class="ico"></div></a>'
 							+'<a class="navBarIteam notice" href="/notice" onclick="return nav.go(this)"><div class="ico"></div></a>'
@@ -15,18 +8,22 @@
 							+'<a class="navBarIteam users" href="/people" onclick="return nav.go(this)"><div class="ico"></div></a>'
 							+'<a class="navBarIteam addmind" href="/addmind" onclick="return nav.go(this)"><div class="ico"></div></a>'
 						+'</div>'
+						+'<div class="navBarBorder"></div>'
 			   +'</nav>'
-			   +'<div class="headerMargin"></div>';
 	return html;
 	},
 	indexPage: function(){
 	var html = '<div class="indexPage">'
 				+'<div class="indexPageBox">'
-					+'<a class="logoBig"></a>'
-					+'<h1>Вырази свое мнение</h1>'
-					+'<div class="icoAll"></div>'
-					+'<a href="/signup" class="indexBtn" onclick="return nav.go(this)" style="margin-top:20px;">Зарегистрироваться</a>'
-					+'Уже есть аккаунт? <a href="/login" onclick="return nav.go(this)">Войти</a>'
+					+'<div class="indexPageBoxCenter">'
+						+'<a class="indexPageLogo" href="/" onclick="return nav.go(this)"></a>'
+						+'<h1>Выражай свое мнение,<br> каким бы оно ни было</h1>'
+						+'<div class="icoAll"></div>'
+					+'</div>'
+					+'<div class="indexPageBoxBottom">'
+						+'<a href="/signup" class="submitBtn" onclick="return nav.go(this)">Зарегистрироваться</a>'
+						+'Уже есть аккаунт? <a href="/login" onclick="return nav.go(this)">Войти</a>'
+					+'</div>'
 				+'</div>'
 			+'</div>';
 	return html;
@@ -34,16 +31,17 @@
 	loginPage: function(){
 	var html = '<div class="indexPage">'
 				+'<div class="indexPageBox">'
-					+'<a class="logoBig"></a>'
-					+'<form action="authn" method="POST" enctype="multipart/form-data" onsubmit="return user.signUserIn(this)">'
+					+'<form action="loginPage" method="POST" enctype="multipart/form-data" onsubmit="return user.signUserIn(this)">'
 						+'<input type="hidden" name="action" value="auth_login" style="display:none;"/>'
 						+'<div class="inputBox"><input type="text" name="name" placeholder="E-mail/Логин" autocomplete="off"/></div>'
 						+'<div class="inputBox"><input type="password" name="password" placeholder="Пароль" autocomplete="off"/></div>'
 						+'<input type="submit" class="indexBtn" value="Войти" />'
-						+'<a href="/signup" onclick="return nav.go(this)">Регистрация</a> / <a href="/restore" onclick="return nav.go(this)">Забыли пароль?</a>'
 					+'</form>'
 					+'<h2 class="line"><span>или через</span></h2>'
 					+'<a href="/" value="Войти через ВКонтакте" onclick="return user.signUserInVkontakte()" class="social vk">ВКОНТАКТЕ</a>'
+					+'<div class="indexPageBoxBottom">'
+						+'<a href="/signup" onclick="return nav.go(this)">Регистрация</a> / <a href="/restore" onclick="return nav.go(this)">Забыли пароль?</a>'
+					+'</div>'
 				+'</div>';
 				+'</div>';
 	return html;
@@ -58,6 +56,9 @@
 						+'Для восстановления пароля укажите ваш Логин или E-mail</div>'
 						+'<input type="submit" class="indexBtn" value="Отправить" />'
 					+'</form>'
+					+'<div class="indexPageBoxBottom">'
+						+'<a href="login" onclick="return nav.go(this)">Вход</a> / <a href="/signup" onclick="return nav.go(this)">Регистрация</a>'
+					+'</div>'
 				+'</div>'
 				+'</div>';
 	return html;
@@ -81,17 +82,18 @@
 	var html = '<div class="indexPage">'
 				+'<div class="indexPageBox">'
 					+'<a class="logoBig"></a>'
-					+'<div class="form sign">'
-						+'<form method="POST" enctype="multipart/form-data" onsubmit="return user.signUserReg(this)">'
-							+'<div class="inputBox"><input type="text" name="regname" placeholder="Никнейм" class="formName" autocomplete="off"/>'
-							+'Латинские буквы и цифры</div>'
-							+'<div class="inputBox"><input type="text" name="regemail" placeholder="E-mail" class="formEmail" autocomplete="off"/>'
-							+'Ваш E-mail</div>'
-							+'<div class="inputBox"><input type="password" name="regpswrd" placeholder="Пароль" class="formPswrd" autocomplete="off"/>'
-							+'Латинские буквы и цифры</div>'
-							+'<input type="submit" class="indexBtn" value="Зарегистрироваться"/>'
-							+'Уже есть аккаунт? <a href="/login" onclick="return nav.go(this)">Войти</a>'
-						+'</form>'
+					+'<form action="sugnup" method="POST" enctype="multipart/form-data" onsubmit="return user.signUserReg(this)" autocomplete="off">'
+						+'<div class="inputBox"><input type="text" name="regname" placeholder="Никнейм" class="formName" autocomplete="off"/>'
+						+'Латинские буквы и цифры</div>'
+						+'<div class="inputBox"><input type="text" name="regemail" placeholder="E-mail" class="formEmail" autocomplete="off"/>'
+						+'Ваш E-mail</div>'
+						+'<div class="inputBox"><input type="password" name="regpswrd" placeholder="Пароль" class="formPswrd" autocomplete="new-password"/>'
+						+'Латинские буквы и цифры</div>'
+						+'<input type="submit" class="indexBtn" value="Зарегистрироваться"/>'
+						+'<div class="inputBox"><br>Регистрируясь, вы соглашаетесь с Условиями предоставления услуг и Политикой конфиденциальности, а также с Правилами использования файлов Cookie.</div>'
+					+'</form>'
+					+'<div class="indexPageBoxBottom">'
+						+'Уже есть аккаунт? <a href="/login" onclick="return nav.go(this)">Войти</a>'
 					+'</div>'
 				+'</div>'
 			+'</div>';
@@ -105,6 +107,7 @@
 	var location = '';
 	var follow = '';
 	var avatar = '';
+	var need_last = '';
 
 	if(content['u_m']){
 		$.each(content['u_m'], function(i, mind) {
@@ -147,7 +150,6 @@
 	}else{
 		avatar = '<img src="/public/img/ico-online.png" width="100" height="100" title="нет фото" alt="нет фото" class="avatar"/>';
 	}
-
 	var html='<div class="userPageInfo">'
 			//+'<div class="userPageBg" style="background-image:url(\''+content['u_photo']+'_o800.jpg\');"></div>'
 				+'<div class="userPageStatistic">'
@@ -194,10 +196,11 @@
 	var html='<div class="userPageInfo">'
 		+'<div class="inputHeader">Загрузить фото:</div>'
 		+'<div class="userPagePhoto">'
-    		+'<input type="file" class="userPageUpload" name="the-file1" onchange="return user.uploadUserAva(this)">'
+    		+'<input type="file" class="userPageUpload" name="the-file1" onchange="return user.uploadUserAvaPreview(this)">'
 			//+'<iframe name="upload_img" style="display: none"></iframe>'
-			+'<img src="'+ava+'" width="100" title="'+content['u_name']+'" alt="'+content['u_name']+'" id="profphoto"/>'
+			+'<img src="'+ava+'" width="100" title="'+content['u_name']+'" alt="'+content['u_name']+'" class="userPhotoPreview"/>'
 		+'</div>'
+		+'<input class="editBtn" type="submit" value="Cохранить" onclick="return user.uploadUserAva(this)">'
 		+'<div class="inputHeader">Основная информация:</div>'
 		+'<div class="inputBox">Название странички:<input class="userPageName" id="namemy_ed" type="text" value="'+content['u_name']+'"></div>'
 		+'<div class="inputBox">Описание:<textarea class="userPageDescription" id="aboutmy_ed" type="text">'+content['u_about']+'</textarea></div>'
@@ -218,12 +221,24 @@
 		+'<div class="inputBox">Оставьте пустым, <input type="text" id="agregateId" placeholder="ID мнения"/></div>'
 		+'<input type="button" value="Подсчитать" id="agregatebBtn" class="editBtn" onclick="return actions.agregate()"/>'
 	+'</div>'
+	+'</div>'
+	+'<div class="photoEditor">'
+		+'<div class="photoEditorCropper">'
+			+'<div class="close" onclick="return cropper.close();"></div>'
+			+'<div class="add" onclick="return cropper.imgCrop();">ок</div>'
+				+'<div class="photoEditorActions">'
+        		+'<div class="actionsButton zoomIn" onclick="return cropper.zoomIn();"></div>'
+        		+'<div class="actionsButton zoomOut" onclick="return cropper.zoomOut();"></div>'
+        		+'<div class="actionsButton left" onclick="return cropper.rotate(\'left\');"></div>'
+        		+'<div class="actionsButton right" onclick="return cropper.rotate(\'right\');"></div>'
+        	+'</div>'
+		+'</div>'	
 	+'</div>';
 	return html;
 	},
 	pageUsers: function(content){
 		var users = '';
-		if(content['u_top_minder']){
+		if(content){
 			$.each(content['u_top_minder'], function(i, user) {
 				users += constructor.listUsers(user);
 			});
@@ -422,7 +437,7 @@
 
     var canDel="";
    	if(content['m_user']['u_im']){
-   		canDel = "<div class='delMind' onclick='return actions.delMind(\""+content['m_id']+"\", \""+content['m_user']['u_nickname']+"\")'>x</div>";
+   		canDel = "<div class='delMind' onclick='return actions.delMind(\""+content['m_id']+"\", \""+content['m_user']['u_nickname']+"\")'></div>";
    	}
 
 	var mind = '<div class="mindLeftBox">'
@@ -503,28 +518,37 @@
 	},
 	pageAddMind: function(){
 	var html = '<form class="addMind" action="upload" target="upload_mind_img" method="POST" enctype="multipart/form-data" id="id_form_mind" onsubmit="return actions.addMind()">'
-			+'<div class="addMindPhoto">'
-				+'<div class="addMindPhotoText">Добавить фон</div>'
-				+'<img alt="" id="image_preview" src=""/>'
-   				+'<input type="file" class="addMindPhotoBtn" onchange="actions.addMindImgPreview(this)">'
-			+'</div>'		
-					+'<div class="addMindBox">'
-					+'<div class="mindval">'
-						+'<div class="f_ck" value="1" onclick="return system.checkit(this)"></div>'
-						+'<div class="dislike" value="2" onclick="return system.checkit(this)"></div>'
-						+'<div class="like" value="3" onclick="return system.checkit(this)"></div>'
-						+'<div class="peace" value="4" onclick="return system.checkit(this)"></div>'
-						+'<div class="rock" value="5" onclick="return system.checkit(this)"></div>'
-					+'</div>'
-			+'</div>'	
-			+'<div class="addMindBox">'
-					+'<textarea id="mindtext" name="text" type="text" placeholder="Текст мнения"></textarea>'
-					+'<small>Вы можете указать от 1 до 5 тегов</small>'
+			+'<div class="mindval">'
+				+'<div class="f_ck" value="1" onclick="return system.checkit(this)"></div>'
+				+'<div class="dislike" value="2" onclick="return system.checkit(this)"></div>'
+				+'<div class="like" value="3" onclick="return system.checkit(this)"></div>'
+				+'<div class="peace" value="4" onclick="return system.checkit(this)"></div>'
+				+'<div class="rock" value="5" onclick="return system.checkit(this)"></div>'
 			+'</div>'
-			+'<input class="addMindBtn" id="questionbtn" type="submit" value="Добавить"/>'
-	+'</form>'
-	+'<div style="clear:both;"></div>'
-	
+			+'<div class="addMindPhoto">'
+				+'<img class="addMindPhotoPreview"/>'
+					+'<input type="file" onchange="actions.addMindImgPreview(this)">'	
+			+'</div>'
+				
+				+'<div class="addMindBox">'
+						+'<textarea id="mindtext" name="text" type="text" placeholder="Текст мнения"></textarea>'
+						+'<small>Вы можете указать от 1 до 5 тегов</small>'
+				+'</div>'
+				+'<input class="addMindBtn" id="questionbtn" type="submit" value="Добавить"/>'
+			+'<div style="clear:both;"></div>'
+		+'</form>'
+		+'<div class="photoEditor">'
+			+'<div class="photoEditorCropper">'
+				+'<div class="close" onclick="return cropper.close();"></div>'
+				+'<div class="add" onclick="return cropper.imgCrop();">ок</div>'
+   				+'<div class="photoEditorActions">'
+	        		+'<div class="actionsButton zoomIn" onclick="return cropper.zoomIn();"></div>'
+	        		+'<div class="actionsButton zoomOut" onclick="return cropper.zoomOut();"></div>'
+	        		+'<div class="actionsButton left" onclick="return cropper.rotate(\'left\');"></div>'
+	        		+'<div class="actionsButton right" onclick="return cropper.rotate(\'right\');"></div>'
+	        	+'</div>'
+			+'</div>'	
+		+'</div>'
 	return html;
 
 	},
