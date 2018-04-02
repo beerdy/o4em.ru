@@ -13,7 +13,7 @@ class HashWrite
   end
   def add
     bson = BSON::ObjectId.new()
-    data = $db_o4em[@table].find_and_modify({
+    data = $db_o4em[@table].find_one_and_update({
       :query  => {
         :anchor => 1,
         :key => @key 

@@ -28,7 +28,7 @@ end
 
 module Comment
 	def comment_add
-		mind = $mind.find_and_modify({
+		mind = $mind.find_one_and_update({
 			:query  => {
 				:_id => BSON::ObjectId(@env.client_data['m_id'])
 			},
@@ -80,7 +80,7 @@ module Comment
 	end
 	def comment_remove
 		key_c_id = "hash.#{@env.client_data['c_id']}"
-		result = $comment.find_and_modify({
+		result = $comment.find_one_and_update({
 			:query => {
 				'key' => @env.client_data['m_id'],
 				"hash.#{@env.client_data['c_id']}" => { :$exists => true },

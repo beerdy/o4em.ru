@@ -10,7 +10,7 @@ class ArrayWrite
 		@inserted = options[:inserted]
 	end
 	def add
-		data = $db_o4em[@table_array].find_and_modify({
+		data = $db_o4em[@table_array].find_one_and_update({
 			:query  => {
 				:anchor => 1,
 				:key => @key 
