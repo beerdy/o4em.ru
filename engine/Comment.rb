@@ -78,20 +78,18 @@ module Comment
 	end
 	def comment_remove
 		key_c_id = "hash.#{@env.client_data['c_id']}"
-		result = $comment.find_one_and_update({
-			:query => {
+		result = $comment.find_one_and_update(
+			{
 				'key' => @env.client_data['m_id'],
 				"hash.#{@env.client_data['c_id']}" => { :$exists => true },
-				:$or => [
+				"$or" => [
 					{ "#{key_c_id}.u_id"   => @env.client_cookie_id },
 					{ "#{key_c_id}.m_u_id" => @env.client_cookie_id }
 				]
 			},
-			:update => {
-				:$set => { "#{key_c_id}.c_deleted" => true }
-			},
-			:new => true
-		})
+			{
+				"$set" => { "#{key_c_id}.c_deleted" => true }
+			},:new => true)
 		
 
 		notice = {
