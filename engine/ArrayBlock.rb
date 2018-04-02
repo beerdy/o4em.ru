@@ -10,17 +10,15 @@ class ArrayWrite
 		@inserted = options[:inserted]
 	end
 	def add
-		data = $db_o4em[@table_array].find_one_and_update({
-			:query  => {
+		data = $db_o4em[@table_array].find_one_and_update(
+			{
 				:anchor => 1,
 				:key => @key 
 			},
-			:update => { 
-				:$push => {	'array'  => @inserted },
-				:$inc  => { :counter => 1}
-			},
-			:upsert => true
-		})
+			{ 
+				"$push" => { 'array'  => @inserted },
+				"$inc"  => { :counter => 1}
+			}, :upsert => true)
 		if data
 			data[:inserted] = @inserted 
 			data[:table] = @table_array

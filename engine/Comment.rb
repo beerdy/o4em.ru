@@ -28,15 +28,13 @@ end
 
 module Comment
 	def comment_add
-		mind = $mind.find_one_and_update({
-			:query  => {
+		mind = $mind.find_one_and_update(
+			{
 				:_id => BSON::ObjectId(@env.client_data['m_id'])
 			},
-			:update => { 
-				:$inc => { :c => 1}
-			},
-			:upsert => true
-		})
+			{ 
+				"$inc" => { :c => 1}
+			}, :upsert => true )
 
 		return { :bool => false, :code => 0, :info => 'Ошибка получения инормации о мнение'} if mind.nil?
 

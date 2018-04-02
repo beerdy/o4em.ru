@@ -10,24 +10,22 @@ class Follow
 	end
 
 	def remove
-		result = $db_o4em['imFollow'].find_one_and_update({
-			:query => {
+		result = $db_o4em['imFollow'].find_one_and_update(
+			{
 				:key    => @options[:key],
 				:array  => @options[:removed]
 			}, 
-			:update => {
-				:$pull => { :array => @options[:removed] }
-			},
-			:new => true })
-		result = $db_o4em['howFollow'].find_one_and_update({
-		:query => {
+			{
+				"$pull" => { :array => @options[:removed] }
+			}, :new => true )
+		result = $db_o4em['howFollow'].find_one_and_update(
+		{
 			:key    => @options[:removed],
 			:array  => @options[:key]
 		}, 
-		:update => {
-			:$pull => { :array => @options[:key] }
-		},
-		:new => true })
+		{
+			"$pull" => { :array => @options[:key] }
+		}, :new => true )
 
 		return {
 			:bool   => true,

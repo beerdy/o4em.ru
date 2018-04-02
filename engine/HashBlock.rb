@@ -13,17 +13,15 @@ class HashWrite
   end
   def add
     bson = BSON::ObjectId.new()
-    data = $db_o4em[@table].find_one_and_update({
-      :query  => {
+    data = $db_o4em[@table].find_one_and_update(
+      {
         :anchor => 1,
         :key => @key 
       },
-      :update => {
-        :$set => { "hash.#{bson}" => @inserted },
-        :$inc => { :counter => 1}
-      },
-      :upsert => true
-    })
+      {
+        "$set" => { "hash.#{bson}" => @inserted },
+        "$inc" => { :counter => 1}
+      }, :upsert => true)
 
     if data['counter'] >= @table_write_limit
       data[:inserted] = @inserted 

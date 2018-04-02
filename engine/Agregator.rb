@@ -74,16 +74,16 @@ class Agregator
 
     info = "Количество комментариев для '#{mindid}': #{counter}"
 
-    $mind.find_one_and_update({
-      :query  => {
+    $mind.find_one_and_update(
+      {
         :i => userid,
         :_id => BSON::ObjectId( mindid )
       },
-      :update => { 
-        :$set  => { :c => counter }
+      { 
+        "$set"  => { :c => counter }
       },
       :upsert => false
-    })
+    )
 
     { :bool => true, :code => 0, :info => info, :counter => counter}
   end
