@@ -139,7 +139,7 @@ class Environment
 	end
 	def update_online_time
 		return if @client_cookie_id.nil?
-		$authn.update({ :_id => BSON::ObjectId(@client_cookie_id)}, { :$set =>{ 'х'=>Time.now.to_i }}) if @client_cookie_id.match(%r{^[0-9a-fA-F]{24}})
+		$authn.update_one({ :_id => BSON::ObjectId(@client_cookie_id)}, { :$set =>{ 'х'=>Time.now.to_i }}) if @client_cookie_id.match(%r{^[0-9a-fA-F]{24}})
 	end
 	def connected_user_info
 		puts "###################################"

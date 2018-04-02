@@ -92,7 +92,7 @@ class UploadAva
     obj.upload(base64_code)
     @data = obj.success
 
-    $authn.update({ :_id => BSON::ObjectId(usercookie_id) },{:$set => {'ф' => @data[:filename] }}) if @data[:bool]
+    $authn.update_one({ :_id => BSON::ObjectId(usercookie_id) },{:$set => {'ф' => @data[:filename] }}) if @data[:bool]
 
     return @data
   end

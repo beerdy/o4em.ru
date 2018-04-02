@@ -32,7 +32,7 @@ class Agregator
 
     info = "С мнением '#{mindid}' пользователя #{userid} cогласны: #{counter[:liks]}, несогласны #{counter[:disliks]}, в итоге воздержалось #{counter[:none]} человек."
     
-    $mind.update({ 'i' => userid, :_id => BSON::ObjectId( mindid ) }, { :$set  => { :l => counter[:liks], :d => counter[:disliks] } })
+    $mind.update_one({ 'i' => userid, :_id => BSON::ObjectId( mindid ) }, { :$set  => { :l => counter[:liks], :d => counter[:disliks] } })
     
     { :bool => true, :code => 0, :info => info, :counter => counter}
   end
@@ -52,7 +52,7 @@ class Agregator
     end
     info = "КОЛИЧЕСТВО МНЕНИЙ для #{userid}: #{counter}"
     
-    $authn.update({ :_id => BSON::ObjectId(userid) },{ '$set' => { 'м' => counter } })
+    $authn.update_one({ :_id => BSON::ObjectId(userid) },{ '$set' => { 'м' => counter } })
 
     { :bool => true, :code => 0, :info => info, :counter => counter}
   end
@@ -109,7 +109,7 @@ class Agregator
     end
     info = "Количество подписок: #{counter['imFollow']}, подписчиков: #{counter['howFollow']}"
     
-    $authn.update({ :_id => BSON::ObjectId(userid)},{ '$set' => { 'н' => counter['imFollow'], 'п' => counter['howFollow'] } })
+    $authn.update_one({ :_id => BSON::ObjectId(userid)},{ '$set' => { 'н' => counter['imFollow'], 'п' => counter['howFollow'] } })
 
     { :bool => true, :code => 0, :info => info, :counter => counter}
   end

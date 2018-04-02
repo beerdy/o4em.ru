@@ -24,7 +24,7 @@ class QuantumSearch
 		data = symbols_hash
 
 		# Дальше ищем по рейтингу
-		r = @table_.find(marker(data),:sort => [:r,-1]).limit(@limit)
+		r = @table_.find(marker(data),:sort => {:r=>-1}).limit(@limit)
 		if r.nil? then
 			send
 		else
@@ -48,10 +48,10 @@ class QuantumSearch
 		if r.nil?
 			data[:r] = 0
 			# Встави с нулевым рейтингом слово
-			@table_.insert(data)
+			@table_.insert_one(data)
 		else
 			# Обновим рейтинг слова
-			@table_.update(data,{:$inc => {:r => 1}})
+			@table_.update_one(data,{:$inc => {:r => 1}})
 		end
 	end
 	def symbols_hash

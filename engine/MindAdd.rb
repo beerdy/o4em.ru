@@ -14,7 +14,7 @@ module MindAdd
 			@meta.mind_add(mind_data)
 			data = mind_data
 		else
-			$mind.update({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ :$set => {:m=>true}} )
+			$mind.update_one({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ :$set => {:m=>true}} )
 		end
 		return data
 	end
@@ -31,7 +31,7 @@ class Mind
 	end
 	# Добавить мнение
 	def add
-		id_mind = $mind.insert( insertmind )
+		id_mind = $mind.insert_one( insertmind )
 		return { :bool => false, :code => 0, :info => 'Ошибка добавления мнения.' } if id_mind.nil?
 		return { 
 			:bool   => true,

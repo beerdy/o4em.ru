@@ -51,12 +51,12 @@ class HashTransfer
   end
 
   def rewrite
-    $db_o4em[@table].insert({
+    $db_o4em[@table].insert_one({
       :key   => @key, 
       :part  => @part,
       :hash  => @hash  # старый hash в новый part
     })
-    $db_o4em[@table].update({
+    $db_o4em[@table].update_one({
       :key     => @key,
       :anchor  => 1,
     },{

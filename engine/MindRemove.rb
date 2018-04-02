@@ -11,7 +11,7 @@ module MindRemove
     elsif result['l']+result['d'] > 1
       return { :bool => false, :code => 0, :info => 'Невозможно удалить мнение - больше двух проголосовавших' }
     else
-      $mind.update( { :_id => bson }, {:$set => { :m => true }})
+      $mind.update_one( { :_id => bson }, {:$set => { :m => true }})
       return { :bool => true, :code => 0, :info => 'Мнение успешно удалено' }
     end
   end

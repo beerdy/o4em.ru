@@ -32,15 +32,15 @@ class MetaController
 	end
 	
 	def comment_remove(data)
-		$mind.update( { :_id => BSON::ObjectId(@env.client_data['m_id']) }, { :$inc => { :c => -1} })
+		$mind.update_one( { :_id => BSON::ObjectId(@env.client_data['m_id']) }, { :$inc => { :c => -1} })
 	end
 
 	def mind_add(data)
 		#counter
 		if @env.client_current_profile[:u_first_mind]
-				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1}, :$set => { 'а' => 1000 } })
+				$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1}, :$set => { 'а' => 1000 } })
 		else
-				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
+				$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
 		end
 
 
@@ -76,7 +76,7 @@ class MetaController
 		end
 	end
 	def mind_remove(data)
-		$authn.update({ :_id => BSON::ObjectId( @env.client_cookie_id ) },{ :$inc => { 'м' => -1} })
+		$authn.update_one({ :_id => BSON::ObjectId( @env.client_cookie_id ) },{ :$inc => { 'м' => -1} })
 	end
 	def follow(data)
 		puts "Мета информация для #{__method__}: #{data}" if $log_console
@@ -90,8 +90,8 @@ class MetaController
 			:write_limit => @limit_notice
 		}).add unless data[:notice][:key] == @env.client_cookie_id
 
-		$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id)},{ '$inc' => {'н' => 1} })
-		$authn.update({ :_id => BSON::ObjectId(data[:notice][:key])  },{ '$inc' => {'п' => 1,'б' => 1 } }) # Увеличиваем "п" подписчиков и "б" информацию для пула
+		$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id)},{ '$inc' => {'н' => 1} })
+		$authn.update_one({ :_id => BSON::ObjectId(data[:notice][:key])  },{ '$inc' => {'п' => 1,'б' => 1 } }) # Увеличиваем "п" подписчиков и "б" информацию для пула
 
 		@env.pool.control.destination = data[:notice][:key]
 		@env.pool.control.msg = data[:notice]
@@ -107,8 +107,8 @@ class MetaController
 			:write_limit => @limit_notice
 		}).add
 
-		$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id)  },{ '$inc' => {'н' => -1} })
-		$authn.update({ :_id => BSON::ObjectId(data[:notice][:removed])},{ '$inc' => {'п' => -1,'б' => 1} })
+		$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id)  },{ '$inc' => {'н' => -1} })
+		$authn.update_one({ :_id => BSON::ObjectId(data[:notice][:removed])},{ '$inc' => {'п' => -1,'б' => 1} })
 
 		@env.pool.control.destination = data[:notice][:removed]
 		@env.pool.control.msg = data[:notice]

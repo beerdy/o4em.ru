@@ -48,13 +48,13 @@ class Like_
 
 				@part_= @lm.part_
 				@position_= @lm.position_
-				@table_.insert({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
+				@table_.insert_one({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
 			else
 				#=> Вычисляем перекресные значения позиций из соседней коллекции
 				# Иначе это второй проход и данные уже подготовленны, так запишем
 				#P.S. :part => 1 так как это первая запись и данный блок для первой записи
 				# @part_ и @position_ при втором проходе уже установленны поэтому просто вставим
-				@table_.insert({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
+				@table_.insert_one({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
 				@part_ = part
 				@position_ = position
 			end
@@ -87,9 +87,9 @@ class Like_
 
 						@part_= @lm.part_
 						@position_= @lm.position_
-						@table_.update({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
+						@table_.update_one({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
 					else
-						@table_.update({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
+						@table_.update_one({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
 						@part_ = part
 						@position_ = position
 					end
@@ -104,7 +104,7 @@ class Like_
 					# Если информационной таблицы для данного ключа нет, то создадим ее с part => 2
 					if info.nil? then
 
-						@tableInfo_.insert({:k => @key,:p => 2, :c => 1})
+						@tableInfo_.insert_one({:k => @key,:p => 2, :c => 1})
 						
 						# Передадим втор таблице данные о нашем part и position в случае первого прохода
 						#И запишем полученные позиции
@@ -119,9 +119,9 @@ class Like_
 
 							@part_= @lm.part_
 							@position_= @lm.position_
-							@table_.insert({ :k => @key, :p => 2, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
+							@table_.insert_one({ :k => @key, :p => 2, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
 						else
-							@table_.insert({ :k => @key, :p => 2, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
+							@table_.insert_one({ :k => @key, :p => 2, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
 							@part_ = part
 							@position_ = position
 						end
@@ -158,14 +158,14 @@ class Like_
 							if @one then
 								check_status(r[@finded],false)
 								@lm.only_update(part_,@status)
-								@table_.update({ :k => @key, :p => part },{'$set' => {"#{@finded}.s" => @status}})
+								@table_.update_one({ :k => @key, :p => part },{'$set' => {"#{@finded}.s" => @status}})
 							end
 						else
 							# Расчитываем здесь для того чтобы снизить нагрузку. Т.е. расчет по мере необходимости (мелоч но приятно)
 							# 48 получается из: 45 - размер одного статуса + 3 - резервные байты
 							# Если часть заполнена то нужно начать новую
 							if info['c'] >= (@max_doc_size/48).to_i then
-								@tableInfo_.update({:k => @key}, {'$set' => {:c => 1}, '$inc' => {:p => 1}} )
+								@tableInfo_.update_one({:k => @key}, {'$set' => {:c => 1}, '$inc' => {:p => 1}} )
 								
 								part = info['p']+1
 								position = 1
@@ -180,15 +180,15 @@ class Like_
 									@part_= @lm.part_
 									@position_= @lm.position_
 
-									@table_.insert({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
+									@table_.insert_one({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
 								else
-									@table_.insert({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
+									@table_.insert_one({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :m => 1} })
 									@part_ = part
 									@position_ = position
 								end
 							else
 								# Иначе просто увеличиваем позицию так как вставка будет идти в туже часть документа
-								@tableInfo_.update({:k => @key}, {'$inc' => {:c => 1}} )
+								@tableInfo_.update_one({:k => @key}, {'$inc' => {:c => 1}} )
 								
 								part = info['p']
 								position = info['c']+1
@@ -202,9 +202,9 @@ class Like_
 
 									@part_= @lm.part_
 									@position_= @lm.position_
-									@table_.update({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
+									@table_.update_one({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
 								else
-									@table_.update({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
+									@table_.update_one({ :k => @key, :p => part },{'$set' => { :n => position, @finded => {:s => @status,:p => @part_,:c => @position_,:m => position} }})
 									@part_ = part
 									@position_ = position
 								end
@@ -219,7 +219,7 @@ class Like_
 				if @one then
 					check_status(r[@finded],false)
 					@lm.only_update(part_,@status)
-					@table_.update({ :k => @key, :p => part },{'$set' => {"#{@finded}.s" => @status}})
+					@table_.update_one({ :k => @key, :p => part },{'$set' => {"#{@finded}.s" => @status}})
 				end
 			end
 		end
@@ -235,10 +235,10 @@ class Like_
 		@position_= @lm.position_
 	end
 	def upd(part)
-		@table_.update({ :k => @key, :p => part },{'$set' => { :n => @count, @finded => {:s => @status, :p => @part_, :c => @position_, :t => @time} }})
+		@table_.update_one({ :k => @key, :p => part },{'$set' => { :n => @count, @finded => {:s => @status, :p => @part_, :c => @position_, :t => @time} }})
 	end
 	def ins(part)
-		@table_.insert({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :t => @time} })
+		@table_.insert_one({ :k => @key, :p => part, :n => 1, @finded => {:s => @status, :p => @part_, :c => @position_, :t => @time} })
 	end
 end
 
@@ -257,18 +257,18 @@ class LikeUser < Like_
 		@new_like = bool
 		if !finded.nil? then
 			if finded['s'] == 0 and @status == 1 then
-				$mind.update( req_mind, { :$inc => { :l => 1}})
+				$mind.update_one( req_mind, { :$inc => { :l => 1}})
 			elsif finded['s'] == 0 and @status == 2 then
-				$mind.update( req_mind, { :$inc => { :d => 1}})
+				$mind.update_one( req_mind, { :$inc => { :d => 1}})
 			elsif finded['s'] == 2 and @status == 1 then
-				$mind.update( req_mind, { :$inc => { :l => 1, :d => -1} })
+				$mind.update_one( req_mind, { :$inc => { :l => 1, :d => -1} })
 			elsif finded['s'] == 1 and @status == 2 then
-				$mind.update( req_mind, { :$inc => { :l => -1, :d => 1} })
+				$mind.update_one( req_mind, { :$inc => { :l => -1, :d => 1} })
 			elsif finded['s'] == 1 and @status == 1 then
-				$mind.update( req_mind, { :$inc => { :l => -1}})
+				$mind.update_one( req_mind, { :$inc => { :l => -1}})
 				@status = 0
 			elsif finded['s'] == 2 and @status == 2 then
-				$mind.update( req_mind, { :$inc => { :d => -1}})
+				$mind.update_one( req_mind, { :$inc => { :d => -1}})
 				@status = 0
 			end
 		end
@@ -317,7 +317,7 @@ class LikeMind < Like_
 	end
 	def only_update(part,status)
 		init
-		@table_.update({ :k => @key, :p => part },{'$set' => {"#{@finded}.s" =>status}})
+		@table_.update_one({ :k => @key, :p => part },{'$set' => {"#{@finded}.s" =>status}})
 	end
 end
 

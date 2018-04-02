@@ -253,7 +253,7 @@ class MegaController
 				data = mind_data
 			else
 				# Удалим мнение если неудачная загрузка
-				$mind.update({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ :$set => {:m=>true}} )
+				$mind.update_one({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ :$set => {:m=>true}} )
 				#$mind.remove({ :_id => BSON::ObjectId( mind[:idmind]) })
 				data = { :bool => false, :code => 0, :info => "Мнение помечено на удаление т.к. не удалось загрузить изображение" }
 			end

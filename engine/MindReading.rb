@@ -36,7 +36,7 @@ class MindReading
 			end
 			if read_request.to_s == request_previous then break else request_previous = read_request.to_s end
 
-			minds_data = $mind.find( read_request, :sort => [:_id, -1] ).limit( @limit_read_minds )
+			minds_data = $mind.find( read_request, :sort => {:_id=> -1} ).limit( @limit_read_minds )
 			minds_data.each do |mind_temp|
 				mindid = mind_temp['_id'].to_s
 				if @mindid_end == mindid then break else @mindid_end = mindid end
@@ -106,7 +106,7 @@ class MindReading
 
 		loop do
 			rr = (word.nil? ? request : request.merge(word))
-			minds_data = $mind.find( rr, :sort => [:_id,-1]).limit(@limit_read_minds_for_mix).to_a
+			minds_data = $mind.find( rr, :sort => {:_id=>-1}).limit(@limit_read_minds_for_mix).to_a
 			break if minds_data.nil? or minds_data[0].nil?
 			@endtime   = minds_data[minds_data.size-1]['_id'].to_s
 			minds_data = minds_data.sort_by { rand }
