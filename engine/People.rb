@@ -32,6 +32,43 @@ class People
     } 
   end
   def search_people
+    users = Hash.new
+
+    words = @env.client_data['user_name'].split(" ")
+    words.each_with_index do |(word),index|
+      words[index] = /^#{UnicodeUtils.downcase(word)}/u
+    end
+
+    index = 0      
+    
+    request = @env.client_data['last_user_id'].nil? ? { :q => {:$in => words} } : { :_id => BSON::ObjectId(@env.client_data['last_user_id']), :q => {:$in => words} }
+
+    $authn.find(request).limit($limit_people_search).each_with_index do |(user),index|
+      puts "Finded: #{user} for req: #{request}"
+      users[index] = NewUser.get_user( @usercookie_id,nil,user )
+    end
+
+    return { :bool => false, :code => 0, :info => 'Нет найденных пользователей'} unless users.has_key?(0)
+
+    last = true
+
+    if users.has_key?($limit_people_search)
+      last_user_id = users.delete($limit_people_search)
+      last = false
+    end
+
+    {
+      :bool => true,
+      :code => 0,
+      :action => 'search_people',
+      :last => last,
+      :last_user_id => last_user_id,
+      :count => index,
+      :users => users
+    }
+  end
+
+  def search_people_old
     obj = QuantumSearch.new('authn',{
         :amount  => 12,
         :word    => @env.client_data['user_name'],

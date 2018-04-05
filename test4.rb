@@ -1,35 +1,31 @@
 # encoding: UTF-8
+require 'unicode_utils'
 
-class Success
-	attr_accessor :a
+=begin
+require 'benchmark'
+ 
+Benchmark.bm do |bm|
+ 
+    bm.report do
+      a = "Саша Грищин".downcase
+      p UnicodeUtils.downcase(a)
+    end
+    
+    bm.report do
+      b = "Sasha Grishin".downcase
+      p b
+    end
+    bm.report do
+      c = "Саша Грищин".downcase
+      p UnicodeUtils.downcase(c)
+    end
 end
+=end
 
-class Rrr
-	def initialize
-		@success = Success.new()
-		@success.a = 'tenis'
-	end
-	
-	def run
-		task(@success,@success.a,boby)
-	end
+      c = "Саша Грищин".downcase
 
-	def task(success,a,null_data)
-		puts success.a
-		puts a
-	end
-	
-	def boby
-		@success.a='box'
-		true
-	end
-end
+      c = UnicodeUtils.downcase(c)
 
-obj = Rrr.new()
-obj.run
+      c = c.split("")
+      puts c
 
-a = {:action =>'aaaa',:ig => 'seter'}
-b = {:action =>'bbbb',:name=>425432}
-
-a.merge!(b)
-p a

@@ -16,8 +16,9 @@ class SimpleUploadB64
     @dir       = '~/'
     @filename  = '~/'
     @extention = 'jpg'
-    @size      =  { 'o800' => 800, 'r450x450' => 450, 'r200x200' => 200 }
+    @size      =  { 'o800' => {:x => 800, :y => 800 }, 'r400x400' => {:x => 400, :y => 400 }, 'r200x200' => {:x => 200, :y => 200 } }
   end
+
   def upload(base64_code)
     if base64_code =~ /^data:image\/jpeg;base64/ then
       save(base64_code)
@@ -42,8 +43,8 @@ private
   end
   def correct_and_write(img,filename,filename_ext)
     @size.map{ |key,sz|
-      small_fit  = img.resize_to_fill(sz,sz)
-      small_fill = small_fit.resize_to_fit(sz,sz)
+      small_fit  = img.resize_to_fill(sz[:x],sz[:y])
+      small_fill = small_fit.resize_to_fit(sz[:x],sz[:y])
       small_fill.write("#{filename}_#{key}.#{@extention}")
     }
   end
@@ -87,7 +88,8 @@ class UploadAva
     obj.filename = BSON::ObjectId.new()
 
     obj.dir = "public/img/upload/#{usercookie_id}"
-    obj.size = { 'o800' => 800, 'r100x100' => 100, 'r40x40' => 40 }
+    #obj.size = { 'o800' => 800, 'r100x100' => 100, 'r40x40' => 40 }
+    obj.size = { 'o800' => {:x => 800, :y => 800 }, 'r100x100' => {:x => 100, :y => 100 }, 'r40x40' => {:x => 40, :y => 40 } }
 
     obj.upload(base64_code)
     @data = obj.success

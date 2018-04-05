@@ -238,7 +238,7 @@ private
                 end
                 @stop = true
             end
-        end      
+        end
     end
 
     def enjy_down(ex='no error')

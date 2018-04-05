@@ -17,7 +17,7 @@ var lp = {
 		mind = page[2];
 		page = page[1];
 
-		if( page=='mind' ){
+		if( page=='poll' ){
 			data['mind'] = mind;
 		}
 
@@ -51,20 +51,20 @@ var lp = {
 
 									var html_comment = constructor.listComments(data['content']['m_id'], data['content']); 
 	         
-									$(html_comment).css("opacity","0.1").prependTo(".new .mindComments").animate({
+									$(html_comment).css("opacity","0.1").prependTo(".active .mindComments").animate({
 										opacity: 1
 									});
 								// Если мы находимся на cтранице уведомлений
 								}else if(page == "notice"){
 									if(data['content']['action'] != 'online'){ 
 										var html_notice = constructor.listNotice(data['content']);
-							            $(html_notice).css("opacity","0.1").prependTo(".page.new").animate({
+							            $(html_notice).css("opacity","0.1").prependTo(".active .pageBox").animate({
 											opacity: 1
 										});
 						        	}
 								// Если мы находимся на любой странице
 								}else{
-									if(data['content']['action'] != 'online'){ 
+									if(data['content']['action'] != 'online' && data['content']['u_im']){ 
 										if($(".navBarIteam.notice .count").length) {
 											var value = parseFloat($(".navBarIteam.notice .count").text())+1;
 											$(".navBarIteam.notice .count").text(value);
@@ -75,23 +75,25 @@ var lp = {
 								}
 
 								//Отдельно считаем пользователей онлайн
-								if(page = 'mind' && data['content']['m_online']){
-									    var html_online = '';
-									    var online_count = 0;
-									    if(data['content']['m_online']){
-										    $.each(data['content']['m_online'], function(i, online) {
-										     	var ava ="";
-											   	if(online['u_photo']){
-											   		ava = "<img src='/"+online['u_photo']+"_r40x40.jpg' width='25' title='' alt=''/>";
-											   	}else{
-											   		ava = "<img src='/public/img/ico-online.png' width='25' title='' alt=''/>";
-											   	}
-										      html_online += '<a href="/'+online['u_nickname']+'" onclick="return nav.go(this)" class="mindOnlineIteam">'+ava+'<span>@'+online['u_nickname']+'</span></a>';
-										      online_count++;
-										    });
-										    $(".mindOnlineBox").html(html_online);
-										    $(".mindOnlineH b").html(online_count);
-									    }
+								if(page = 'poll' && data['content']['m_online']){
+									var html_online = '';
+								    var onlint_c = 0;
+									$.each(data['content']['m_online'], function(i, online) {
+										var ava ="";
+										if(online['u_photo']){
+											ava = "<img src='/"+online['u_photo']+"_r40x40.jpg' width='40' title='' alt=''/>";
+										}else{
+											ava = "<img src='/public/img/ico-online.png' width='40' title='' alt=''/>";
+										}
+										if(online['u_im']){
+											html_online += '<a href="/'+online['u_nickname']+'" onclick="return nav.go(this, \'page\')" class="pollCardOnlineIteam">'+ava+'<span></span></a>';
+										}else{
+											html_online += '<a href="/'+online['u_nickname']+'" onclick="return nav.go(this, \'overlay\')" class="pollCardOnlineIteam">'+ava+'<span></span></a>';
+										}
+								      	onlint_c++;
+								    });
+									$(".pollCardBox.online .boxContent").html(html_online);
+									$(".pollCardBox.online .boxCount").html(onlint_c);
 								}
 
 								break;
@@ -102,7 +104,7 @@ var lp = {
 					}
 				},
 				error: function(){
-           			system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
+					//lp.listen(true);
 				}
 			});
 	},

@@ -1,4 +1,29 @@
-﻿$(document).on("touchstart touchmove touchend", ".refreshed", function(event) {
+﻿//Запрещаем меногократный вызов страницы
+sync = {
+   id: 0,
+   active: false,
+   action: function(){
+      clearTimeout( this.id );
+      sync.push();
+   },
+   delay: function(delay){
+      this.id = setTimeout( this.action, delay );
+   },
+   push: function (){
+      clearTimeout( this.id );
+      this.active = false;
+   },
+   pop: function (){
+      if ( this.active == false ){
+         this.active = true;
+         return true;
+      }
+      return false;
+   }
+}
+
+
+/*$(document).on("touchstart touchmove touchend", ".refreshed", function(event) {
             var touch;
             switch (event.type) {
                 case "touchstart": 
@@ -58,67 +83,38 @@
             }
     //event.preventDefault();
 });
+*/
 $(document).ready(function(){
-        //Генерируем айди вкладки
-        window.guid = lp.guid_();
 
-        //Запускаем ЛП
-        lp.listen(true);
+        nav.goto(location.pathname, 'refresh');
 
-        //Подготавливаем данные для сервера
-        var ju = new Object();
-            ju['j'] = 2;
-            ju['refresh'] = true;
-            ju['guid'] = window.guid;
-        var jjj = JSON.stringify(ju);
+  			setInterval(function() {
+  				$(".active .need_update").each(function(i){
+  					var time = $(this).attr("time");
+  					$(this).text(system.datetime(time));
+  				});
+  			}, 30000);
 
-
-        $.ajax({
-          type: "POST",
-          cache: false,
-          data: jjj,
-          url: location.pathname,
-          success: function(data){
-            system.loading(false);
-            nav.page(data, location.pathname, true);
-          },
-          beforeSend: function(){
-            system.loading(true);
-          },
-          error: function(data){
-            system.loading(false);
-            system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
+        window.onpopstate = function(event) {
+          if($("section").is(".pageOver")){
+            nav.back(document.location.pathname, event.state, 0);
           }
-        });
-
-      
-			setInterval(function() {
-				$(".new .need_update").each(function(i){
-					var time = $(this).attr("time");
-					$(this).text(system.datetime(time));
-				});
-			}, 30000);
-
-      //setInterval("nav.checkUrl()",50);
-      window.onpopstate = function(event) {
-        nav.goback(document.location.pathname);
-      };
+        };
 });
-$(document).on('change','#imagefile',function(){
-  alert("Changed!");
+
+$(window).on('scroll',function(e){
+    var scrolled = $(window).scrollTop();
+    $('.table').css('transform','translateY('+(scrolled*.2)+'px)');
+    $('.table_left').css('transform','translateX('+(-scrolled*.13)+'px)');
+    $('.table_right').css('transform','translateX('+(scrolled*.13)+'px)');
+    $('.pollSlider').css('transform','translateY('+(scrolled*.08)+'px)');
+    $('.indexHeader').css('transform','translateY('+(scrolled*.2)+'px)');
+    $('.statistik').css('transform','translateY('+(-scrolled*.09)+'px)');
+    $('.arrows').css('transform','translateY('+(-scrolled*0.09)+'px)');
+    $('.background').css('transform','translateY('+(scrolled*.50)+'px)');
 });
 
 var system = {
-  show: function(it){
-    var obj = $('.new .mindOnlineBox');
-    var height = obj.height();
-    obj.toggle();
-   // if(height>0){
-   //   obj.fadeOut(300);
-   // }else{
-   //   obj.fadeIn(300);
-   // }
-  },
 	//Сообщение
 	message: function(textarea, type, delay){
 		//alert(textarea);
@@ -309,22 +305,37 @@ var system = {
     cases = [2, 0, 1, 1, 1, 2];  
     return titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];  
   },
-  formAlert: function(it, action){
-      var button = $(it).attr('class');
-        switch(action){
-            case 'on':
-                  $("div."+button).fadeIn(300);
-               break;
-            case 'off': //Вопрос
-                  $("div."+button).fadeOut(100);
-                break;
-        }
+  resizeArea: function(text_id){
+     var area = document.getElementById(text_id);
+     var nowt = area.value.split('\n');
+     var area_hidden = document.getElementById(text_id + "_hidden");
+     var text = '';
+
+      $.each(nowt, function(s, opa) {
+                console.log(opa);
+        text = text + '<div>' + opa + '</div>'+"\n";
+      })
+
+     area_hidden.innerHTML = text;
+     var height = area_hidden.offsetHeight;
+
+     if(height>180){
+      area.style.height = '200px';
+     }else if(height<20){
+      area.style.height = '20px';
+     }else{
+      area.style.height = height + 'px';
+     }
+
+
+     $('.pollCardTextCount').text(area.value.length);
+     if(area.value.length>160){
+        $('#'+text_id).val(area.value.substr(0, 160));
+     }
   },
-  checkit: function(it){
-       $('.mindval div').removeClass("active");
-       $(it).addClass("active");
-  },
-  touchDistance: function (p1, p2) {
-  return (Math.sqrt(Math.pow((p1.clientX - p2.clientX), 2) + Math.pow((p1.clientY - p2.clientY), 2)));
+  textKilo: function(n,d){
+    x=(''+n).length,p=Math.pow,d=p(10,d)
+    x-=x%3
+    return Math.round(n*d/p(10,x))/d+" тмGTPE"[x/3]
   }
 }

@@ -1,6 +1,6 @@
 ﻿//НАВИГАЦИЯ
 var nav = {
-  page: function(data, link, action){
+  page: function(data, link){
       //Разбиваем УРЛ на части, чтобы произвести навигацию
       var page_l = link.split("/");
       var subsubpage = decodeURI(page_l[3]);
@@ -45,7 +45,7 @@ var nav = {
               default:
                     link = '/';
                     title = "o4em Вы?"; 
-                    html = constructor.indexPage();
+                    html = constructor.indexPage(content);
                  break;
           }
       }else{
@@ -57,37 +57,52 @@ var nav = {
             case 'profile':
                   title = "Редактировать";
                   html = constructor.userpageedit(content);
-                  back = false;
               break;
 
-            case 'mind': 
-              if(subsubpage && subsubpage!='undefined'){
-                title = "#"+subsubpage;
-                html = constructor.pageMindsRandom(content, subsubpage);
-                back = false;
-              }else{
-                if(subpage=="random"){
-                  title = "Случайные мнения";
-                  html = constructor.pageMindsRandom(content, false);
-                  back = false;
+            case 'feed': 
+                if(subpage=="all"){
+                  title = "Лента";
+                  html = constructor.pageFeed(content, subpage, false);
                   active = 'aboutwhat';
-                }else{
-                  if(content){
-                    title = content['u_m']['m_1']['m_text'];
-                    html = constructor.pageMind(content['u_m']['m_1'], true);
-                    back = true;
-                  }else{
-                    title = "Мнение удалено";
-                    html = '<div class="nothing">Мнение удалено</div>';
-                    back = true;
-                  }
+
+                }else if(subpage=="hot"){
+                  title = "Интересное";
+                  html = constructor.pageFeed(content, subpage, false);
+                  active = 'aboutwhat';
+
+                }else if(subpage=="my"){
+                  title = "Мое";
+                  html = constructor.pageFeed(content, subpage, false);
+                  active = 'aboutwhat';
+
+                }else if(subpage=="search"){
+                  title = "Поиск по тегу";
+                  html = constructor.pageFeed(content, subpage, subsubpage);
+                  active = 'aboutwhat';
                 }
-              }
               break;
 
-            case 'addmind':
+            case 'poll': 
+                if(content){
+                  title = content['u_m']['m_1']['m_text'];
+                  html = constructor.pagePoll(content['u_m']['m_1'], true);
+                }else{
+                  title = "Мнение удалено";
+                  html = '<div class="nothing">Мнение удалено</div>';
+                }
+              break;
+
+            case 'minds': 
+                if(content){
+                  title = "Лента";
+                  html = constructor.pageUser(content, 'minds');
+                  subactive = 'minds';
+                }
+              break;
+
+            case 'addpoll':
                 title = "Добавить мнение";
-                html = constructor.pageAddMind();
+                html = constructor.pageAddPoll();
                 active = 'addmind';
                 break;
 
@@ -101,30 +116,20 @@ var nav = {
                 active = 'notice';
                 $('.notice .count').remove();
               break;
-
+              
             case 'people':
                 title = "Пользователи";
-                html = constructor.pageUsers(content);
+                html = constructor.pageSearch(content);
                 active = 'users';
               break;
 
             case 'followers': 
-                if(content['u_im']){
-                  back = false;
-                }else{
-                  back = true;
-                }
                 title = "Подписки";
                 html = constructor.pageUser(content, 'followers');
                 subactive = 'followers';
               break;
 
             case 'following': 
-                if(content['u_im']){
-                  back = false;
-                }else{
-                  back = true;
-                }
                 title = "Подписчики";
                 html = constructor.pageUser(content, 'following');
                 subactive = 'following';
@@ -135,70 +140,35 @@ var nav = {
                 if(content['u_nickname']){
                   if(content['u_im']){
                     title = "Я";
-                    back = false;
                     active = 'im';
                   }else{
                     title = content['u_name']+"@"+content['u_nickname'];
-                    back = true;
                   }
                   link = '/'+content['u_nickname'];
-                  html = constructor.pageUser(content, 'minds');
-                  subactive = 'minds';
+                  html = constructor.pageUser(content, 'polls');
+                  subactive = 'polls';
                 }else{
                   html = "<div class='error404'>Вы свернули не туда... Страница не найдена!</div>";
                   title = "Ошибка";
-                  back = false;
                 }
               }else{
                 html = "<div class='error404'>Вы свернули не туда... Страница не найдена!</div>";
                 title = "Ошибка";
-                back = false;
               }
           }
     }
-    if(back && $('#pages').html() != ''){
-        var top = $(window).scrollTop();
-        $('.page').removeClass('new').addClass('old');
-
-        $('.navBarBack').removeClass('new').addClass('old');
-        $('.navBar').prepend('<div class="navBarBack new">'
-                              +'<a class="navBarIteam back" onclick="actions.back(\''+location.pathname+'\', \''+$("title").text()+'\', '+top+');"><div class="ico"></div></a>'
-                              +'<a class="navBarIteam aboutwhat" href="/mind/random" onclick="return nav.go(this)"><div class="ico"></div></a>'
-                           +'</div>');
-
-        $('#pages').append('<section class="page new">'+html+'</section>');
-    }else{
-        $('#pages').html('<section class="page new">'+html+'</section>');
-        $('.navBarBack').remove();
-        if(back){     
-           $('.navBar').prepend('<div class="navBarBack new">'
-                              +'<a class="navBarIteam back" onclick="nav.goto(\'/\');"><div class="ico"></div></a>'
-                              +'<a class="navBarIteam aboutwhat" href="/mind/random" onclick="return nav.go(this)"><div class="ico"></div></a>'
-                           +'</div>');
-        }
-    }
-
-    $("title").text(title);
-
-    if(subactive){
-      $('.new .userPageStatistic a').removeClass('active');
-      $('.new .userPageStatistic a#'+subactive).addClass('active');
-    }
-    if(active){
-      $('.navBarIteam').removeClass('active');
-      $('.navBarIteam.'+active).addClass('active');
-    }
-
-    if(action){
-      $(window).scrollTop(0);
-      window.history.pushState(title, title, link); 
-      window.history.replaceState(title, title, link);
-    }
+    return [html, title, active, subactive, link];
   },
-  goto: function(link) {
+  goto: function(link, back) {
+        var pages = $('#pages');
+        var navbar = $('.navBar');
+        // back = refresh / back /none
         var ju = new Object();
         ju['j'] = 2;
         ju['guid'] = window.guid;
+        if(back == 'refresh'){
+          ju['refresh'] = true;
+        }
         var jjj = JSON.stringify(ju);
 
         $.ajax({
@@ -208,47 +178,99 @@ var nav = {
           url: link,
           success: function(data){
             system.loading(false);
-            nav.page(data, link, true);
-          },
-          beforeSend: function(){
-            system.loading(true);
-          },
-          error: function(data){
-            system.loading(false);
-            system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
-          }
-        });
-  },
-  goback: function(link) {
-       var ju = new Object();
-        ju['j'] = 2;
-        ju['guid'] = window.guid;
-        var jjj = JSON.stringify(ju);
+            var out = nav.page(data, link, true);
+            var html = out[0];
+            var title = out[1];
+            var active = out[2];
+            var subactive = out[3];
+                link = out[4];
 
-        $.ajax({
-          type: "POST",
-          cache: false,
-          data: jjj,
-          url: link,
-          success: function(data){
-            system.loading(false);
-            nav.page(data, link, false);
-          },
+            //скроллим наверх
+            $(window).scrollTop(0);
+
+            pages.addClass('animation');
+
+            $("title").text(title);
+            $('.active .pageBox').html(html);
+
+            if(subactive){
+              $('.active .userPageStatistic a').removeClass('active');
+              $('.active .userPageStatistic a#'+subactive).addClass('active');
+            }
+
+            if(active){
+              $('.navBarIteam').removeClass('active');
+              $('.navBarIteam.'+active).addClass('active');
+            }
+            
+            window.history.pushState(title, title, link); 
+            window.history.replaceState(title, title, link);
+
+            if(back == 'refresh'){
+                //Генерируем айди вкладки
+                window.guid = lp.guid_();
+
+                //Запускаем ЛП
+                lp.listen(true);
+            }
+
+            },
           beforeSend: function(){
-            system.loading(true);
+              switch(back){
+                    case 'overlay': 
+                        pages.removeClass('animation');
+                        navbar.prepend('<div class="navBarBoxBack">'
+                              +'<a class="navBarIteam aboutwhat" href="/feed/all" onclick="return nav.go(this, \'page\')"><div class="ico"></div></a>'
+                              +'<a class="navBarIteam close" onclick="return nav.back(\''+document.location.pathname+'\',\''+$("title").text()+'\',\''+$(window).scrollTop()+'\')"><div class="ico"></div></a>'
+                            +'</div>');
+
+                        $('.pageOver').removeClass('active').addClass('deactive');
+                        $('.pageMain').removeClass('active').addClass('deactive');
+
+                        pages.append('<section class="pageOver active"><div class="pageBox"></div></section>');
+                        break;
+                    case 'none': 
+
+                        break;
+                    default:
+                        pages.removeClass('animation');
+                        $('.navBarBoxBack').remove();
+                        pages.html('<section class="pageMain active"><div class="pageBox"></div></section>');
+                        break;
+                }
+              system.loading(true);
           },
           error: function(data){
-            system.loading(false);
-            system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
+              system.loading(false);
+              system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
           }
         });
+  },
+  go: function(it, back) {
+      if ( sync.pop() ){
+        var link = $(it).attr("href");
+        nav.goto(link, back);
+        sync.delay(500);
+      }
     return false;
   },
-  go: function(it) {
-    var link = $(it).attr("href");
-    nav.goto(link);
+  back: function(link, title, scroll){
+    $("title").text(title);
+
+    $('.pageOver.active').remove();
+    $('.navBarBoxBack:first-child').remove();
+    if($("section").is(".pageOver")){
+      $('.pageOver:last-child').removeClass('deactive').addClass('active');
+    }else{
+      $('.pageMain').removeClass('deactive').addClass('active');
+    }
+
+    $(window).scrollTop(scroll);
+
+    window.history.replaceState(title, title, link);
+
     return false;
-  },
+  },  
   img: function(it,action) {
      var link = $(it).attr("href");
      switch(action){
@@ -264,13 +286,4 @@ var nav = {
   
     return false;
   },
-  checkUrl: function(){
-    var hash = window.location.pathname;  //if no parameter is provided, use the hash value from the current address
-
-    if(hash != o4em.lasturl) // if the hash value has changed
-    {
-        o4em.lasturl=hash; //update the current hash
-        nav.goto(hash); // and load the new page
-    }
-  }
 }

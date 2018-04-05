@@ -1,5 +1,8 @@
 # encoding: UTF-8
 
+require 'securerandom'
+require 'pp'
+
 require './VD0.3.rb'
 
 require './pool/router.rb'
@@ -7,6 +10,7 @@ require './pool/router.rb'
 require './engine/HopPage.rb'
 require './engine/MindLike.rb'
 require './engine/MindReading.rb'
+require './engine/MindReadN.rb'
 require './engine/MindAdd.rb'
 require './engine/MindRemove.rb'
 require './engine/UploadSimpleB64.rb'
@@ -20,10 +24,12 @@ require './engine/QuantumSearch.rb'
 require './engine/Profile.rb'
 require './engine/Agregator.rb'
 require './engine/People.rb'
+require './engine/FieldState.rb'
 
 require './engine/MetaController.rb'
 
-require 'securerandom'
+
+
 
 ###########################################################################################################################################
 module RenderPage
@@ -61,7 +67,6 @@ class MegaController
 		@env  = Environment.new(env)
 		@meta = MetaController.new( @env )
 	end
-
 	def agregator
 		if @env.client_json_bool
 			obj = Agregator.new({
@@ -164,7 +169,7 @@ class MegaController
 	end
 	
 	def lp
-		puts "Client_data #{@env.client_data}" if $log_console
+		#puts "Client_data #{@env.client_data}" if $log_console
 
 		case @env.client_action
 		when 'lp_send'
@@ -204,7 +209,7 @@ class MegaController
 				},
 				:headers => headers
 			})
-		when 'lp_send', 'online'
+		when 'lp_send', 'online', 'hi_man'
 			data = RouteLongPool.route(@env.pool)
 		else
 			data = { :bool => true, :code => 0, :action => 'lp_noaction' }
@@ -216,16 +221,75 @@ class MegaController
 		render_page({:static => true})
 	end
 
+	def field_users(nickname=nil)
+
+		if nickname.nil?
+			userid = @env.client_data['u_id']
+			last_part = @env.client_data['f_last_part'].to_i if @env.client_data['f_last_part']
+			last_position = @env.client_data['f_last_position'].to_i if @env.client_data['f_last_position']
+			user_data = @env.client_current_profile
+		else
+			user_data=nickname==(@env.client_cookie_nickname)?(@env.client_current_profile):NewUser.get_user( @env.client_cookie_id, nil, nil, nickname )
+			@env.client_action = 'field_users'
+			userid = user_data[:u_id]
+			last_part = nil
+			last_position = nil
+		end
+
+		options = {
+      :table         => 'field_users',
+      :key           => userid,
+      :last_part     => last_part,
+      :last_position => last_position,
+      :amount        => 13,
+
+			:usercookie_id => @env.client_cookie_id,
+			:current_profile => @env.client_current_profile
+    }
+
+    data = FieldStateRead.new(options).read.merge ({ :action => 'field_users' })
+    data[:user] = user_data
+
+		render_page({
+			:data => data,
+			:static => !@env.client_data_bool # не обязательно
+		})
+	end
+
+	def minding(action=nil)
+		@env.client_action = action if not action.nil?
+
+		minds = MindReadN.new(@env)
+		# @env.client_action
+		render_page({
+			:data => minds.minds_read_top( @env.client_data['m_last_id'] ),
+			:static => !@env.client_data_bool # не обязательно
+		})
+	end
+
 	def mind(action=nil, word=nil)
 		@env.client_action = action if not action.nil?
 
-		minds = MindReading.new({
-			:usercookie_id_other => @env.client_data['u_id'],
-			:usercookie_id       => @env.client_cookie_id,
-			:current_profile     => @env.client_current_profile,
-			:endtime             => @env.client_data['m_last_id'],
-			:mindid              => @env.client_data['m_id']
-		},@env.pool)
+		if @env.client_noauth_bool
+			minds = MindReading.new({
+				:usercookie_id_other => nil,
+				:usercookie_id       => nil,
+				:current_profile     => nil,
+				:endtime             => nil, # @env.client_data['m_last_id'],
+				:mindid              => nil  # @env.client_data['m_id']
+			},@env.pool)
+
+		else
+			minds = MindReading.new({
+				:usercookie_id_other => @env.client_data['u_id'],
+				:usercookie_id       => @env.client_cookie_id,
+				:current_profile     => @env.client_current_profile,
+				:endtime             => @env.client_data['m_last_id'],
+				:mindid              => @env.client_data['m_id'],
+				:last_part           => (@env.client_data['last_part'].to_i if @env.client_data['last_part']),
+				:last_position       => (@env.client_data['last_position'].to_i if @env.client_data['last_position'])
+			},@env.pool)
+		end
 
 		case @env.client_action
 		when 'minds_read'
@@ -236,7 +300,8 @@ class MegaController
 			@meta.mind_one(data)
 		when 'mind_random'
 			data = minds.random(word)
-			@meta.mind_one(data)
+			data[:top_tags] = Tags.new(@env.client_data).top
+			#@meta.mind_one(data)
 		when 'mind_liked'
 			data = minds.liked(
 				@env.client_data['amount'],
@@ -288,13 +353,51 @@ class MegaController
 			data = comments_read
 		when 'comment_remove'
 			data = comment_remove
+		when 'minded'
+			
+		when 'field_check'
+
+			obj1 = FieldState.new({
+				:table  => 'field_minds',
+				:userid => @env.client_cookie_id,
+				:mindid => @env.client_data['mindid'], 
+				:field  => @env.client_data['field'] 
+			})
+			obj1.add
+			obj2 = FieldState.new({
+				:table  => 'field_users',
+				:userid => @env.client_data['mindid'], # < \
+																							 #     = - поменяли местами чтобы сведения о состояние были и у мнений и у пользователей 
+				:mindid => @env.client_cookie_id,      # < /
+				:field  => @env.client_data['field']
+			})
+			obj2.add 
+
+			#puts "r1: #{obj1.result} r2: #{obj2.result}"
+			if obj1.result[:bool] and obj2.result[:bool]
+				@meta.field_add(obj1.result)
+							
+				if obj1.result[:status] == -1
+					my_field = -1
+				else
+					my_field = @env.client_data['field']
+				end
+
+				data = { :bool => true, :code => 0, :info => 'Успех - состояние учтенно', :action => 'field_check', :mind => @meta.result,  :my_field => my_field }
+			else
+				data = { :bool => false, :code => 0, :info => 'Ошибка - состояние не учтенно' }
+			end
 		end
 		render_page({ :data => data	})
 	end
-	def tags
+	def tags(action=nil)
+		@env.client_action = action unless action.nil?
+		
 		case @env.client_action
 		when 'add'
 			data = Tags.new(@env.client_data).add
+		when 'top'
+			data = Tags.new(@env.client_data).top 
 		else
 			data = { :bool => true, :code => 0, :action =>'tags_default', :user => @env.client_current_profile }
 		end
@@ -337,6 +440,33 @@ class MegaController
 			data = { :bool => true, :code => 0, :action =>'profile_default', :user => @env.client_current_profile }
 		end
 		render_page({ :data => data })
+	end
+	
+	def pool
+		if @env.client_cookie_id == @env.client_data['u_id']
+			render_page({ :data => { :bool => false, :code => 0, :info => 'Себе же подмигнуть не получиться' }})
+		else
+			notice = {
+				:action => 'hi_man',
+				'u_id_who' => @env.client_cookie_id,
+				'u_id_to' => @env.client_data['u_id'],
+				'hi_text' => @env.client_data['hi_text'],
+				'hi_time' => Time.now
+			}
+
+			HashWrite.new({
+				:table       => 'notices',
+				:key         => @env.client_data['u_id'],
+				:inserted    => notice,
+				:write_limit => 12
+			}).add
+			
+			@env.pool.control.destination = @env.client_data['u_id']
+			@env.pool.control.msg = notice
+			@env.pool.send
+
+			render_page({ :data => { :bool => true, :action => 'hi_man_im', :info => 'Совершена попытка подмигнуть'}	})
+		end
 	end
 
 	def follow(action=nil,user=false)
@@ -402,6 +532,17 @@ class MegaController
 			:last_position => (@env.client_data['n_last_position'].to_i if @env.client_data['n_last_position']),
 			:amount        => @env.client_data['amount']
 		}).read
+
+		render_page({ :data => data	})
+	end
+	def notice_mind_added
+		@env.client_action = 'notices'
+		data = NoticeMindAdded.new({
+			:key           => @env.client_cookie_id,
+			:last_part     => (@env.client_data['n_last_part'].to_i if @env.client_data['n_last_part']),
+			:last_position => (@env.client_data['n_last_position'].to_i if @env.client_data['n_last_position']),
+			:amount        => @env.client_data['amount']
+		}).read
 		render_page({ :data => data	})
 	end
 	def route_user(nickname)
@@ -426,7 +567,22 @@ class MegaController
 			:static => !@env.client_data_bool
 		})
 	end
+	
+	def info
+		data = MindReading.new({}).read(true)
+		tags = Tags.new(@env.client_data).top
+		count = $meta.find({ :counter => { :$exists => true }}).first
+
+		return { :bool => true,  :action => 'info_page', :info => 'minds for index page', :mind_count => count['m'], :authn_count => count['u'], :comment_count => count['c'], :answer_count => count['o'], :minds => data[:minds],:tags => tags } if data[:bool]
+		return { :bool => false, :info => 'no minds for index page'}
+	end
+
 	def error(message)
+		if @env.client_noauth_bool
+			data = info
+			message.merge!(data) if data[:bool]
+		end
+
 		render_page({ 
 			:data   => message,
 			:static => !@env.client_data_bool	

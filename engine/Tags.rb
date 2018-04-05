@@ -2,7 +2,7 @@
 
 class Tags
 	def initialize(option)
-		@limit = 50
+		@limit = 12
 		@tags  = {}
 		@word    = option['word']
 		@endrate = option['endrate']
@@ -12,11 +12,15 @@ class Tags
 	end
 
 	#выводит все хеши от: bl... (нужно сделать оптимизированный вывод по длине от меньшего)
-	def search
-		data = hash_tag
+	def top
+		search({}).merge({:action=>'top_tags'})
+	end
+
+	def search(request=nil)
+		request = marker(hash_tag) if request.nil?
 
 		# Дальше ищем по рейтингу
-		r = @table_.find(marker(data),:sort => [:r,-1]).limit(@limit)
+		r = @table_.find(request,:sort => [:r,-1]).limit(@limit)
 		if r.nil? then
 			send
 		else
@@ -86,5 +90,14 @@ class Tags
 			data[:r] = { '$lt' => @endrate }
 			data
 		end
+	end
+end
+
+class TagsTop
+	def initialize
+		@table = $db_o4em['tags']
+	end
+	def read
+		@table.find()
 	end
 end

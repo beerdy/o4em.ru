@@ -9,7 +9,7 @@ else
     host, port = '127.0.0.1', '2111'
 end
 
-$console_log = false
+$console_log = true
 
 class Enjy
   def initialize(host,port)

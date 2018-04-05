@@ -11,6 +11,7 @@ module RouteValidator
 			'mind_add',
 			'comment_add',
 			'comment_get',
+			'field_check',
 			'auth_sign',
 			'agregate_comments',
 			'agregate_minds',
@@ -123,13 +124,21 @@ class Validator
 		{ :bool => true }
 	end
 	def mind_add
-		error = { :bool => false, :code => 460, :info => "Ошибка данных tags или статуса мнения" }
+		return { :bool => false, :code => 4601, :info => "Ошибка добавления счетчик вариантов" } if @data['f_count'].nil?
+		f_count = @data['f_count'].to_i
+		return { :bool => false, :code => 4602, :info => "Ошибка данных оснований для спора должно быть не меньше 2 и не больше #{$limit_filed}" } if f_count > $limit_filed or f_count < 2
+
+		1.upto(f_count) do |i|
+			r = string( @data["f_text#{i}"], 512, 'Неверный формат основания спора',1 )
+			return r if not r[:bool]
+		end
+
 		return error if @data['t1'].nil?
 		return error if @data['kt'].nil?
 		kt = @data['kt'].to_i
 		return error if kt < 1 or kt > 5
-		st = @data['status'].to_i
-		return error if st < 1 or st > 5
+#		st = @data['status'].to_i
+#		return error if st < 1 or st > 5
 		1.upto(kt) do |i|
 			r = tag(@data["t#{i}"],'Неверный формат tags')
 			return r if not r[:bool]
@@ -139,6 +148,11 @@ class Validator
 		#return r if not r[:bool]
 
 		#string(@data['them'],128,'Неверный формат them')
+	end
+	def field_check
+		r = id(@data["mindid"],'Ошибка id при попытке проголосовать')
+		return r if not r[:bool]
+		{ :bool => true }
 	end
 ##
 	def comment_get
@@ -236,8 +250,8 @@ class Validator
 			{ :bool => false, :code => 459, :info => "Строка, тип - не валидный", :data => data}
 		end		
 	end
-	def string(str,n,data=nil)
-		if str.nil? or not (str.length < n and str.length > 1 and (str.match(%r{^\s+$})).nil? ) then
+	def string(str,n,data=nil,min=2)
+		if str.nil? or not (str.length < n and str.length >= min and (str.match(%r{^\s+$})).nil? ) then
 			{ :bool => false, :code => 454, :info => "text error #{n} symbols", :data => data}
 		else
 			{ :bool => true, :code => 553, :info => "text ok"}

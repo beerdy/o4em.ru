@@ -13,6 +13,9 @@ class MindReading
 		@usercookie_id   = options[:usercookie_id]
 		@usercookie_id   = options[:usercookie_id_other] if not options[:usercookie_id_other].nil?
 
+		@last_position = options[:last_position].to_i if options[:last_position] 
+		@last_part = options[:last_part].to_i if options[:last_part] 
+
 		@current_profile = options[:current_profile]
 
 		@endtime    = options[:endtime]
@@ -24,12 +27,14 @@ class MindReading
 		@limit_read_minds_random = 13
 	end
 	############
-	def read
+	def read(auth_false=false)
 		minds_readed = {}
 		minds_readed_count = 0
 		request_previous = {}
 		loop do
-			if @mindid_end.nil? 
+			if auth_false
+				read_request = {}
+			elsif @mindid_end.nil? 
 				read_request = { 'i' => @usercookie_id }
 			else
 				read_request = { 'i' => @usercookie_id, :_id => { '$lt' => BSON::ObjectId( @mindid_end ) } }
@@ -45,10 +50,16 @@ class MindReading
 				next if mind_temp['m'] == true
 
 				minds_readed_count += 1
-				
 				mind_temp[:m_online_c] = online_get( mindid, true )
-				mind_temp[:my_status] = LikeReadUser.new( 'likeUser', { :idmind => mindid, :usercookie_id => @usercookie_id }).like
 				
+				if auth_false
+					mind_temp[:user] = NewUser.get_user(nil,mind_temp['i'])
+				else
+					mind_temp[:mymind]=@usercookie_id==mind_temp['i']
+					mind_temp[:my_status]  = LikeReadUser.new( 'likeUser', { :idmind => mindid, :usercookie_id => @usercookie_id }).like
+					mind_temp[:user]       = mind_temp[:mymind]?@current_profile:NewUser.get_user(@usercookie_id,mind_temp['i'])
+				end
+
 				minds_readed["m#{minds_readed_count}"] = mind_temp
 				break if minds_readed_count == @limit_read_minds
 			end
@@ -77,19 +88,19 @@ class MindReading
 
 	def one
 		mind_data = $mind.find({ :_id => BSON::ObjectId(@mindid) }).first
+
 		return { :bool => false, :code => 0, :info => 'Мнения не существует' }  if mind_data.nil?
 		return { :bool => false, :code => 0, :info => 'Мнение удалено' }        if mind_data['m']
+
 		mind_data[:mymind]=@usercookie_id==mind_data['i']
-		mind_data[:my_status] = LikeReadUser.new( 'likeUser', {
-			:idmind        => @mindid,
-			:usercookie_id => @usercookie_id
-		}).like
 
 		user_data=mind_data[:mymind]?@current_profile:NewUser.get_user(@usercookie_id,mind_data['i'])
 		
 		mind_data[:comments] = comments_get( @mindid )
 		mind_data[:m_online] = online_get( @mindid )
-	
+		mind_data[:my_field] = get_my_field( @usercookie_id, @mindid )
+		
+		$mind.update({ :_id => BSON::ObjectId(@mindid) }, {:$inc => {:position => 1, :g => 1} }) # счетчик просмотров, увеличим рейтинг просмотра
 		{
 			:bool => true,
 			:code => 0,
@@ -99,7 +110,9 @@ class MindReading
 			:minds  => { 'm1' => mind_data, :count => 1 }
 		}
 	end
-	def random(word=nil, one=false )
+
+	# рандом по умолчанию выключен
+	def random(word=nil, one=false, rand=false )
 		limit = one ? 1 : @limit_read_minds_random
 		@random_minds = {}
 		@random_minds[:count] = 0
@@ -109,7 +122,7 @@ class MindReading
 			minds_data = $mind.find( rr, :sort => [:_id,-1]).limit(@limit_read_minds_for_mix).to_a
 			break if minds_data.nil? or minds_data[0].nil?
 			@endtime   = minds_data[minds_data.size-1]['_id'].to_s
-			minds_data = minds_data.sort_by { rand }
+			minds_data = minds_data.sort_by { rand } if rand
 			minds_data.each do |mind_data|
 				next if mind_data['i'] == @usercookie_id or mind_data['m'] or mind_data['i'].nil?
 				idmind = mind_data['_id'].to_s
@@ -144,6 +157,7 @@ class MindReading
 		end
 
 	end
+
 	def liked(amount,endpart,endcount)
 		MindMyLiked.new( 'likeUser', {
 			:usercookie_id => @usercookie_id,
@@ -180,6 +194,12 @@ protected
 		
 		return users if count > 0
 		return {}
+	end
+	def get_my_field(userid,mindid)
+    key_c_id = "hash.#{mindid}"
+    result = $db_o4em[:field_users].find({ 'key' => userid, "hash.#{mindid}" => { :$exists => true } }).first
+    return result["hash"]["#{mindid}"]["field"] unless result.nil?
+    return false
 	end
 
 private

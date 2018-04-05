@@ -30,23 +30,26 @@
 html{
     width:100vw;
     height:100%;
-    -webkit-overflow-scrolling: touch !important;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 body{
+	position: relative;
 	width:100%;
 	height:100%;
-	min-height:100%;
 	min-width:320px;
-	min-height:480px;
 	margin:0 auto;
 	padding:0;
 	font-family: 'PT Sans', Arial, sans-serif;
 	font-size:100%;
-	color:#353535;
+	color:#777777;
 	background:#E8E8E8;
 	overflow-x:hidden;
+	-webkit-overflow-scrolling: touch;
+}
+.noscroll{
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
 }
 a, a:visited{
 	color:#00b294;
@@ -63,6 +66,12 @@ h2{
 	font-size: 18px;
 	margin:0 0 10px 0;
 }
+h3{
+
+		font-size: 20px;
+		font-weight: bold;
+		margin-left:5px;
+}
 p{
 	margin:5px 0 10px 0;
 }
@@ -70,18 +79,20 @@ input[type=text], input[type=password], textarea, select{
 	outline: none;
     width: 100%;
     height: 40px;
-    font-size: 18px;
+    font-size: 16px;
     padding: 5px;
     box-sizing: border-box;
     overflow: hidden;
     display: block;
-    border:0px;
-    border-bottom: 3px solid #dfdfdf;
+    border:1px solid #E8E8E8;
     border-radius: 3px;
     color:#999;
     font-weight: normal;
-    text-align: center;
+    text-align: left;
     resize: 0;
+}
+textarea{
+    height: 80px;
 }
 input:-webkit-autofill {
     -webkit-box-shadow: inset 0 0 0 50px #C7FFF4 !important; /* Цвет фона */
@@ -91,6 +102,7 @@ input:-webkit-autofill {
 input[type="submit"], a.submitBtn{
 	display:block;
 	width:100%;
+	max-width: 450px;
 	height:40px;
 	line-height: 40px;
 	border-radius:3px;
@@ -99,8 +111,10 @@ input[type="submit"], a.submitBtn{
 	font-weight:bold;
 	text-decoration: none;
 	border-bottom:3px solid #009679;
+	text-shadow:0 1px 0 #009679;
 	cursor: pointer;
 	text-align: center;
+	margin:auto;
 }
 input[type="submit"]:hover, a.submitBtn:hover{
 	background:#00C6A0;
@@ -118,109 +132,389 @@ input[type="submit"]:active, a.submitBtn:active{
 	background:#00B294;
 	z-index: 999;
 }
-.indexPage{
-	position: fixed;
-	width: 100%;
-	height: 100%;
+#loading{
+	position:fixed;
 	top:0;
 	left:0;
+	width:100%;
+	height:100%;
+	z-index: 8;
+}
+.indexPage{
+	padding:20px 0 0 0;
+	width:100%;
+	height:2665px;
 	z-index: 99;
 	text-align: center;
-	background:#4d4c4a url('../img/index_bg.jpg') no-repeat center;
+	background:#e8e8e8;
 	background-size: cover;
+	overflow: hidden;
+	background-image:url('../img/home.jpg');
+	background-position: top center;
 }
-	.indexPage:before {
-		content: '';
-		display: inline-block;
-		height: 100%; 
-		vertical-align: middle;
-		margin-right: -0.25em; /* Adjusts for spacing */
-	 }
-		.indexPage .indexPageBox{
-			position: relative;
-		    width: 100%;
-		    max-width: 350px;
-		    height:100%;
-		    min-height: 350px;
-		    max-height: 500px;
-			display: inline-block;
-			vertical-align: middle;
-			margin: auto;
-			padding: 10px;
+	.indexPageBox{
+		padding:50px 10px 0 10px;
+		position: relative;
+		z-index: 2;
+	}
+
+	.indexPage .background, .indexPageOff .background{
+		position: absolute;
+		top:0;
+		left:0;
+		width:100%;
+		height:600px;
+		background-image:url('../img/bg.png');
+		background-position: top center;
+		background-repeat: no-repeat;
+		z-index: 1;
+	}
+	.indexPage .indexLines{
+		position:absolute;
+		top:400px;
+		left:0;
+		width:100%;
+		height:2000px;
+		background-image:url('../img/home_line.png');
+		background-size:1118px auto; 
+		background-position: top 400px center;
+		background-repeat: no-repeat;
+		z-index: 10;
+	}
+	.indexPage .table{
+		position:absolute; 
+		top:400px;
+		left:0;
+		width: 100%;
+		height: 500px;
+		text-align: center;
+		background-size: auto 500px;
+		background-image:url('../img/home_table.png');
+		background-position: bottom center;
+		background-repeat: no-repeat;
+		z-index: 9;
+	}
+
+	.indexPage .indexHeader, .indexPageOff .indexHeader{
+		position: relative;
+		max-width: 900px;
+		height: 205px;
+		margin:0px auto 0;
+		top:0;
+		left:0;
+		z-index: 99;
+		text-align: center;
+		background-size: cover;
+	}
+		.indexPage .indexHeader .indexMenu{
+			position: absolute;
+			left:0;
+			overflow: hidden;
+			padding:0 0 0 5px;
 		}
-			.indexPage .indexPageBox .indexPageBoxCenter{
+		@media (max-width: 550px) {
+		.indexPage .indexHeader .indexMenu{
+			width:150px;
+			float:left;
+			overflow: hidden;
+		}
+		}
+		.indexPage .indexHeader .indexMenu a{
+			display: block;
+			float:left;
+			font-size: 16px;
+			font-weight: bold;
+			height: 40px;
+			line-height: 40px;
+			margin:0 30px 0 0;
+		}
+		.indexPage .indexAuthMenu{
+			width:200px;
+			margin:40px auto;
+			overflow: hidden;
+		}
+		.indexPage .indexAuthMenu a{
+			display: block;
+			float:right;
+			font-size: 16px;
+			font-weight: bold;
+			height: 40px;
+			line-height: 40px;
+			margin:0;
+			text-decoration: underline;
+		}
+		.indexPage .indexAuthMenu a.reg{
+			width:125px;
+			margin:0 0 0 30px;
+			text-decoration: none;
+		}
+		.indexPage .indexHeader a.indexLogo, .indexPageOff .indexHeader a.indexLogo{
+			display: block;
+			width: 155px;
+			height: 205px;
+			position: absolute;
+			top:0;
+			left:50%;
+			margin-left: -77.5px;
+			z-index: 99;
+			text-align: center;
+			background-image:url('../img/home_logo@2.png');
+			background-size: cover;
+		}
+
+	.indexPage .indexSlide1{
+		position: relative;
+		z-index: 99;
+	}
+		.indexPage .indexSlide1 .text{
+			text-align: center;
+			overflow: hidden;
+		}
+			.indexPage .indexSlide1 .text h1{
+				font-size:30px;
+				color:#00b294;
+				font-weight: bold;
+				margin:50px 0 10px 0;
+			}
+			.indexPage .indexSlide1 .text strong{
+				display: block;
+				max-width: 500px;
+				margin:auto;
+				font-size:16px;
+				line-height: 18px;
+				color:#404040;
+			}
+			.indexPage .indexSlide1 .text .join, .indexPage .indexSlide4 .join{
+				display: block;
+				width:155px;
+				margin: 0px auto 0;
 				position: absolute;
-				top:15%;
+				bottom:0;
+			}
+		.indexPage .indexSlide1 .info{
+			position: relative;
+			height: 400px;
+			z-index: 99;
+		}
+			.indexPage .indexSlide1 .parallax_img{
+				position:absolute; 
+				top:0;
+				left:0;
 				width: 100%;
-				padding:0 0 0px 0;
-			 }
-				.indexPage .indexPageBox .indexPageLogo{
-					display:block;
-					width:130px;
-					height:130px;
-					margin:auto;
-					background:url('../img/logo_130@2.png') no-repeat center;
-				    background-size: cover;
+				height: 390px;
+				text-align: center;
+				background-size: cover;
+				background-position: bottom center;
+				overflow: hidden;
+			}
+				.indexPage .indexSlide1 .parallax_img .table_left{
+					position:absolute; 
+					top:0;
+					right:50%;
+					margin-right: -275px;
+					width: 562px;
+					height: 305.5px;
+					text-align: center;
+					background-size: auto 305.5px;
+					background-image:url('../img/hand_left.png');
+					background-position: bottom center;
 				}
-				.indexPage .indexPageBox h1{
-					position:relative;
-					font-size:22px;
-					font-weight: bold;
-					color:#E8E8E8;
-					margin:20px 0 10px 0;
+				.indexPage .indexSlide1 .parallax_img .table_right{
+					position:absolute; 
+					top:120px;
+					left:50%;
+					margin-left: 50px;
+					width: 225px;
+					height: 212px;
+					text-align: center;
+					background-size: auto 212px;
+					background-image:url('../img/hand_right.png');
+					background-position: bottom center;
 				}
-				.indexPage .indexPageBox h2{
-					position:relative;
-					font-size:14px;
-					color:#E8E8E8;
-					margin:10px 0 10px 0;
-				}
-				.indexPage .indexPageBox .icoAll{
-					width:129px;
-					height:32px;
-					background:url('../img/ico-all.png') no-repeat;
-					background-size: 128px 31px;
-					margin:5px auto 0;
-				}
-			.indexPage .indexPageBox .indexPageBoxBottom{
-				position: absolute;
-				bottom: 10px;
-				left: 0;
-				width: 100%;
-				padding: 0 10px 0 10px;
+			.indexPage .indexSlide1 .statistik{
+				position: relative;
+				top:290px;
+				max-width: 1000px;
+				height: 110px;
+				margin:0px auto 0;
+				background:#404040;
+				border-radius: 3px;
+				border-top:5px solid #00b294;
+				overflow: hidden;
+			}
+			.indexPage .indexSlide1 .statistik .s_col{
+				width:25%;
 				color:#E8E8E8;
-		 	}
+				font-size: 36px;
+				font-weight: bold;
+				float: left;
+				text-align: center;
+				padding: 25px 0 25px 0
+			}
+				.indexPage .indexSlide1 .statistik .s_col small{
+					display: block;
+					font-size: 13px;
+					text-align: center;
+					font-weight: normal;
+					color: #00B294;
+
+				}
+
+	.indexPage .indexSlide2{
+		position: relative;
+		margin:25px 0 0 0;
+		z-index: 99;
+		overflow: hidden;
+	}
+		.indexPage .indexSlide2 .arrows{
+			position: absolute;
+			top:250px;
+			left:0;
+			width:100%;
+			height:505px;
+			padding: 30px 0 0 0;
+			background-size: auto 505px;
+			background-image:url('../img/home_arrow@2.png');
+			background-position: top center;
+			background-repeat: no-repeat;
+		}	
+		.indexPage .indexSlide2 .text{
+			padding: 30px 0 30px 0;
+			background-size: 100px 20px;
+			background-image:url('../img/home_stars@2.png');
+			background-position: center top;
+			background-repeat: no-repeat;
+		}		
+			.indexPage .indexSlide2 .text h2{
+				font-size:24px;
+				color:#404040;
+				font-weight: bold;
+				margin:0;
+			}
+			.indexPage .indexSlide2 .text em{
+				font-size:18px;
+				color:#00b294;
+			}
+		.indexPage .indexSlide2 .pollSlider{
+			margin:0px auto 0;
+			max-width:285px;
+			height:460px;
+			background:#fff;
+		}				
+
+	.indexPage .indexSlide3{
+		margin:130px auto 0;
+	}
+		.indexPage .indexSlide3 h2{
+			font-size:25px;
+			color:#4d4a48;
+			font-weight: bold;
+			margin:0;
+		}
+		.indexPage .indexSlide3 h2 span{
+			color:#00b294;
+		}
+		.hashTags{
+			width:100%;
+			max-width: 600px;
+			margin: auto;
+			overflow: hidden;
+		}
+
+		.tag{
+			background: #f4f4f4;
+			padding: 10px;
+			margin:3px;
+			display: block;
+			float:left;
+		}
+
+	.indexPage .indexSlide4{
+		max-width: 1058px;
+		margin:20px auto 75px;
+		height:453px;
+		background-image:url('../img/and.png');
+		background-position: center top;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+		
+	.indexPage .footer{
+		width:100%;
+		height: 50px;
+		background:#424143;
+	}
+		.indexPage .footer .footerWrapper{
+			max-width:900px;
+			height: 110px;
+			margin:auto;
+		}
+			.indexPage .footer a.logo{
+				width:110px;
+				height: 50px;
+				padding: 20px;
+				background:#424143;
+				float:right;
+				background-image:url('../img/footer_logo.png');
+				background-position: center top;
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+
+			.indexPage .footer .copy{
+				width:205px;
+				height: 50px;
+				line-height: 50px;
+				float:left;
+				color:#fff;
+				text-align: left;
+				padding:0 0 0 5px;
+			}
+
+.inputBox{
+	width: 100%;
+	max-width: 450px;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 3px;
+	margin:0 auto 10px;
+	font-size:13px;
+	color:#999;
+	text-align: left;
+}
 
 /* - ШАПКА - */
 #header{
+	position:fixed;
+	top:0px;
 	width:100vw;
-	z-index: 9;
+	overflow: hidden;
+	z-index: 10;
 }
-	#header .navBar{
-		position:fixed;
-		top:0px;
-		width:100vw;
+	.navBar{
+		width:100%;
 		height:46px;
 		background:#4c4c4c;
 		z-index: 9;
 		overflow: hidden;
 	}
-		#header .navBar .navBarBorder{
+		.navBar .navBarBorder{
 			position:absolute;
 			bottom:0px;
-			width:100vw;
+			width:100%;
 			height:3px;
 			background:#373737;
 			z-index: 1;
 		}
-		#header .navBar .navBarBox, #header .navBar .navBarBack{  
+		.navBar .navBarBox, .navBar .navBarBoxBack{  
 			position:relative;
 			width:100%;
-			max-width:900px;
+			max-width:1000px;
 			margin:auto;
 			overflow: hidden;
 		}
-			#header .navBar .navBarIteam{   
+			.navBarBox .navBarIteam{   
 				float:left;
 				width:20%;
 				text-align:center;
@@ -233,7 +527,25 @@ input[type="submit"]:active, a.submitBtn:active{
 				cursor: pointer;
 				z-index: 2;
 			}
-				#header .navBar .navBarIteam .count{
+			.navBarBoxBack .navBarIteam{   
+				float:left;
+				width:20%;
+				text-align:center;
+				font-size:0.65em;
+				color:#fff;
+				text-decoration: none;
+				padding:3px 0 3px 0;
+				height:46px;
+				position: relative;
+				cursor: pointer;
+				z-index: 2;
+				margin-left:20%;
+			}
+			.navBarBoxBack .navBarIteam.aboutwhat{   
+				margin-left:40%;
+			}
+
+				.navBar .navBarIteam .count{
 					position:absolute;
 					top:5px;
 					right:5px;
@@ -243,7 +555,7 @@ input[type="submit"]:active, a.submitBtn:active{
 					padding:3px;
 					border-radius:3px;
 				}
-				#header .navBar .navBarIteam .ico{
+				.navBar .navBarIteam .ico, .navBarBoxBack .navBarIteam .ico{
 					width:30px;
 					height:30px;
 					margin:4px auto 6px;
@@ -252,85 +564,117 @@ input[type="submit"]:active, a.submitBtn:active{
 				     -o-background-size: cover;
 				    background-size: cover;
 				}
-				#header .navBar .navBarIteam.im .ico{
+				.navBar .navBarIteam.im .ico{
 					background-image:url('../img/nav_im_30@2.png');
 				}
-				#header .navBar .navBarIteam.notice .ico{
+				.navBar .navBarIteam.notice .ico{
 					background-image:url('../img/nav_notice_30@2.png');
 				}
-				#header .navBar .navBarIteam.tags .ico{
+				.navBar .navBarIteam.tags .ico{
 					background-image:url('../img/ico-tag.png');
 				}
-				#header .navBar .navBarIteam.users .ico{
+				.navBar .navBarIteam.users .ico{
 					background-image:url('../img/nav_search_30@2.png');
 				}
-				#header .navBar .navBarIteam.back .ico{
-					background-image:url('../img/nav_back_30@2.png');
-					float:left;
+				.navBarBoxBack .navBarIteam.close .ico{
+					background-image:url('../img/ico-close.png');
 				}
 
-			#header .navBar .navBarIteam.active{
+			.navBar .navBarIteam.active{
 				background:#373737;
 			}
-			#header .navBar .navBarIteam.back{   
-				float:left;
-				width:40%;
-				text-align:center;
-				font-size:0.65em;
-				color:#fff;
-				text-decoration: none;
-				padding:3px 0 3px 0;
-				height:46px;
-				position: relative;
-			}
 
-			#header .navBar .navBarIteam.addmind{
+			.navBar .navBarIteam.addmind{
 				background-color: #00B294;
 				border-bottom:3px solid #009679;
 			}
-			#header .navBar .navBarIteam.addmind.active{
+			.navBar .navBarIteam.addmind.active{
 				background-color: #009679;
 			}
-				#header .navBar .navBarIteam.addmind .ico{
+				.navBar .navBarIteam.addmind .ico{
 					background-image:url('../img/nav_add_30@2.png');
 				}
 
-			#header .navBar .navBarIteam.aboutwhat{
+			.navBar .navBarIteam.aboutwhat, .navBarBoxBack .navBarIteam.aboutwhat{
 				padding:2px 0 4px 0;
 			}
-				#header .navBar .navBarIteam.aboutwhat .ico{
+				.navBar .navBarIteam.aboutwhat .ico, .navBarBoxBack .navBarIteam.aboutwhat .ico{
 					margin:0px auto 0px;
 					width:40px;
 					height:40px;
 					background: url('../img/logo_80@2.png') no-repeat center right;
 					background-size: 80px 40px;
 				}
-				#header .navBar .navBarIteam.aboutwhat .ico.sleep, #header .navBar .navBarIteam.aboutwhat .ico:active{
+				.navBarIteam.aboutwhat .ico.sleep, .navBarIteam.aboutwhat .ico:active{
 					background: url('../img/logo_80@2.png') no-repeat center left;
 					background-size: 80px 40px;
 				}
 
 /* - СТРАНИЦЫ - */
+#pages.animation .pageMain, #pages.animation .pageOver, #pages.animation .pageBox, #pages.animation{
+	-webkit-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+	-moz-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+    -ms-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+     -o-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+        transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); /* easeInOutQuart */
+
+	-webkit-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+	-moz-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+    -ms-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+     -o-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+    	transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); /* easeInOutQuart */
+
+    -webkit-animation-iteration-count: 1; /* Safari 4.0 - 8.0 */
+    animation-iteration-count: 1;
+}
 #pages{
-	overflow:hidden;
-    width:100%;
-    min-height: 100%;
-	margin:auto;
-	padding:46px 5px 0px 5px;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 9;
 }
-#pages .page{
-	width:100%;
-	max-width: 900px;
-	margin:auto;
-	z-index: 1;
-	padding:0px 0 5px 0;
-}
-#pages .page.old{
-	position:absolute;
-	top:0;
-	left:0;
-	display:none;
-}
+
+	#pages .pageMain, #pages .pageOver{
+		width:100%;
+		min-height: 100%;
+    	background: #E8E8E8;
+    	z-index: 1;
+	}
+
+	#pages .pageMain.active{
+		opacity: 0;
+		transform: translateY(-15px);
+	}
+	#pages .pageOver.active{
+		opacity: 0;
+	}
+	#pages.animation .pageMain.active{
+		opacity: 1;
+		transform: translateY(0px);
+	}
+	#pages.animation .pageOver.active{
+		opacity: 1;
+	}
+
+		#pages .pageOver.active .pageBox{
+			opacity: 0;
+		    -webkit-transform: scale(1.2);
+		    -ms-transform: scale(1.2);   
+		    -moz-transform: scale(1.2);
+		    	transform: scale(1.2);
+
+		}
+		#pages.animation .pageOver.active .pageBox{
+			opacity: 1;
+		    -webkit-transform: scale(1);
+		    -ms-transform: scale(1);   
+		    -moz-transform: scale(1);
+		    	transform: scale(1);
+		}
+
+	#pages .pageMain.deactive, #pages .pageOver.deactive{
+		display: none;
+	}
 
 #pages .pageOverflow{
 	position:absolute;
@@ -461,22 +805,8 @@ input[type="submit"]:active, a.submitBtn:active{
 	line-height: 25px;
 	margin:0 0 0 3px;
 }
-.mindCommentInput{
-	position: relative;
-	display:block;
-	overflow: hidden;
-	margin:40px 0 0 0;
-	border-radius: 3px;
-}
-.mindCommentInput .mindCommentInputText{
-	padding:5px 85px 5px 5px;
-}
-input[type="submit"].mindCommentInputBtn{
-	position: absolute;
-	width:80px;
-	top:0;
-	right:0;
-}
+
+
 .page .mindLeftBox .mindPhoto:before {
 	content: "";
 	padding-top: 100%;
@@ -609,55 +939,117 @@ input[type="submit"].mindCommentInputBtn{
 	top:0;
 	right:-5px;
 }
+.userPageSettings{
+	position:relative;
+	overflow:hidden;
+	width:100%;
+	margin:60px auto 10px;
+	max-width: 450px;
+}
+	.userPageSettings .settingsBox{
+		position:relative;
+		overflow:hidden;
+		width:100%;
+		margin:0 auto 12.5px;
+		background: #f4f4f4;
+		padding: 10px;
+		background-size: cover;
+		background-position:center;
+	}
+		.settingsBox .inputHeader{
+			font-size:18px;
+			font-weight: bold;
+			max-width: 450px;
+		    width: 100%;
+		    margin:0px auto 10px;
+		    text-align: center;
+		    border-bottom:2px solid #E8E8E8;
+		    padding:0 0 10px 0;
+		}
+		.settingsBox .inputBox{
+			width: 100%;
+			max-width: 450px;
+		    position: relative;
+		    display: block;
+		    overflow: hidden;
+		    border-radius: 3px;
+			margin:0 auto 10px;
+			font-size:13px;
+			color:#999;
+			text-align: left;
+		}
+			.settingsBox .inputBox label{
+				float:left;
+				width:30%;
+				line-height: 40px;
+				text-align: right;
+				padding: 0 5px 0 0;
+			}
+
+			.settingsBox .inputBox input, .settingsBox .inputBox textarea, .settingsBox .inputBox select{
+				float:right;
+				width:70%;
+				margin: 0;
+			}
+
 
 .userPageInfo{
 	position:relative;
 	overflow:hidden;
 	width:100%;
-	padding:0 0 0 0;
+	margin:auto;
+	padding:71px 0 0 0;
+	background: #f7f7f7;
 	background-size: cover;
 	background-position:center;
-}
-
-.userPageStatistic{
-	position:relative;
-	overflow:hidden;
-	width:100%;
-	margin:0 0 10px 0;
-	z-index: 2;
-}
-.userPageStatistic a{
-	display:block;
-	float:left;
-	width:33.3%;
-	padding:10px 0 10px 0;
-	text-decoration:none;
-	font-size:13px;
 	text-align: center;
 }
-.userPageStatistic a span{
-	display:block;
-	font-family: 'PT Sans Narrow', sans-serif;
-	font-size:24px;
-	font-weight: bold;
-	color:#353535;
-}
-.userPageStatistic a:hover{
-	border-radius:3px;
-	text-decoration:none;
-	color:#00b294;
-}
-.userPageStatistic a.active{
-	border-radius:3px;
-	text-decoration:none;
-	border-bottom: 3px solid #dfdfdf;
-	background:#f7f7f7;
-}
+
+	.userPageStatistic{
+		position:relative;
+		overflow:hidden;
+		width:100%;
+		margin:25px 0 0px 0;
+		z-index: 2;
+		background:#dfdfdf;
+	}
+		.userPageStatisticBox{
+			max-width: 1000px;
+			margin: auto;
+
+		}
+			.userPageStatistic a{
+				display:block;
+				float:left;
+				width:25%;
+				padding:10px 0 10px 0;
+				text-decoration:none;
+				font-size:13px;
+				text-align: center;
+				color:#999;
+			}
+			.userPageStatistic a span{
+				display:block;
+				font-family: 'PT Sans Narrow', sans-serif;
+				font-size:24px;
+				font-weight: bold;
+				color:#00B294;
+			}
+
+	.userPageStatistic a:hover{
+		text-decoration:none;
+		color:#00b294;
+	}
+	.userPageStatistic a.active{
+		text-decoration:none;
+		border-bottom: 3px solid #dfdfdf;
+		background:#f7f7f7;
+	}
 .userPagePhoto{
 	position:relative;
 	width:100px;
 	height:100px;
-	margin:0 auto 0;
+	margin:0 auto 5px;
 	border-radius:100%;
 	background: #D3D3D3;
 }
@@ -696,7 +1088,7 @@ input[type="submit"].mindCommentInputBtn{
 	font-size:23px;
 	text-align:center;
 	overflow:hidden;
-	margin: 5px auto 0px;
+	margin: 0 auto 0;
 	color:#00b294;
 	font-weight:600;
 	text-align:center;
@@ -713,6 +1105,31 @@ input[type="submit"].mindCommentInputBtn{
 	font-weight:bold;
 	z-index: 2;
 }
+.userPageAge{
+	display: inline-block;
+	font-size:16px;
+	line-height: 20px;
+	color:#999;
+	margin:auto;
+	text-align: center;
+	z-index: 2;
+	padding:0 20px 0 0;
+	background-size: 18px;
+	background-position: right;
+	background-repeat: no-repeat;
+} 
+	.userPageAge.male{
+		margin: 5px 0 0 0;
+		height: 18px;
+		background-image: url('../img/ico-male.png');
+
+	} 
+	.userPageAge.female{
+		margin: 5px 0 0 0;
+		height: 18px;
+		background-image: url('../img/ico-female.png');
+	} 
+
 .userPageDescription{
 	position:relative;
 	font-size:15px;
@@ -759,326 +1176,913 @@ input[type="submit"].mindCommentInputBtn{
   	filter: alpha(opacity=0);
   	opacity: 0;
 }
-.userPageInfo .userPageButtons{
-	position:absolute;
-	left:50%;
-	width:140px;
-	margin-left:35px;
-	top:105px;
-	height: 30px;
-	z-index: 2;
-}
-.userPageInfo .userPageButtons .logout{
-	position: relative;
-	display:block;
-	width:30px;
-	height:30px;
-	background:#F15A29 url('../img/ico-logout.png') no-repeat center;
-	background-size: 20px 20px;
-	margin:0 0 0 3px;
-	overflow:hidden;
-	float:left;
-	border-radius: 3px;
-	color:#fff;
-	font-size:13px;
-	line-height: 30px;
-	text-align: center;
-	text-decoration: none;
-	z-index: 2;
-	cursor: pointer;
-	border-bottom: 3px solid #c9461e;
-}
-.userPageInfo .userPageButtons .logout:hover, .logout:active{
-	background-color: #c9461e;
-}
-.userPageInfo .userPageButtons .settings{
-	position: relative;
-	display:block;
-	width:30px;
-	height:30px;
-	background:#00b294 url('../img/ico-settings.png') no-repeat center;
-	background-size: 20px 20px;
-	margin:auto;
-	overflow:hidden;
-	float:left;
-	border-radius: 3px;
-	color:#fff;
-	line-height: 30px;
-	text-decoration: none;
-	z-index: 2;
-	border-bottom: 3px solid #009679;
-}
-.userPageInfo .userPageButtons .settings:hover, .settings:active{
-	background-color: #009679;
-}
-.userPageInfo .userPageButtons .follow, .follow:visited{
-	position: relative;
-	display:block;
-	width:30px;
-	height:30px;
-	background:#00b294 url('../img/ico-add.png') no-repeat center;
-	background-size: 15px 15px;
-	margin:auto;
-	overflow:hidden;
-	float:left;
-	border-radius: 3px;
-	color:#fff;
-	line-height: 30px;
-	text-decoration: none;
-	z-index: 2;
-	cursor:pointer;
-	border-bottom: 3px solid #009679;
-}
-.userPageInfo .userPageButtons .follow:hover{
-	background-color: #009679;
-}
-.userPageInfo .userPageButtons .unfollow, .unfollow:visited{
-	position: relative;
-	display:block;
-	width:30px;
-	height:30px;
-	background:#F15A29 url('../img/ico-remove.png') no-repeat center;
-	background-size: 15px 15px;
-	margin:auto;
-	overflow:hidden;
-	float:left;
-	border-radius: 3px;
-	color:#fff;
-	line-height: 30px;
-	text-decoration: none;
-	z-index: 2;
-	cursor:pointer;
-	border-bottom: 3px solid #c9461e;
-}
-.userPageInfo .userPageButtons .unfollow:hover{
-	background-color:#c9461e;
-}
-.inputBox{
-	width: 100%;
-	max-width: 450px;
-    position: relative;
-    display: block;
-    overflow: hidden;
-    border-radius: 3px;
-	margin:0 auto 10px;
-	font-size:13px;
-	color:#999;
-	text-align: left;
-}
-.inputHeader{
-	font-size:18px;
-	max-width: 450px;
-    width: 100%;
-    margin:20px auto 10px;
-}
-.editBtn {
-	display: block;
-    width: 100%;
-    max-width: 450px;
-    height: 32px;
-    padding: 2px;
-    border-radius: 3px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    margin: 5px auto 0;
-    background: #00B294;
-    cursor: pointer;
-}
-.editBtn:hover{
-    background: #545554;
-}
-/* СПИСОК БЛОКАМИ */
-.iteamsBlock{
-	max-width:880px;
-	margin:auto;
-	overflow:hidden;
-	padding:5px 0 5px 0;
-}
-.iteamsBlock .iteamBox{
-	display:block;
-	position:relative;
-  	width: 22.5%;
-  	min-height: 110px;
-	float:left;
-	text-decoration:none;
-	margin:1.25%;
-}
-.iteamsBlock .iteamBox .u_buttons{
-	height: 25px;
-	margin:10px 0px 10px 0;
-}
-.iteamsBlock .iteamBox a{
-	text-decoration:none;
-}
-.iteamsBlock .iteamBox .photo{
-	position:relative;
-	overflow:hidden;
-	width:100%;
-	max-width: 200px;
-	min-width: 100px;
-	height:auto;
-	display:block;
-	border-radius: 3px;
-	margin-top: 0px;
- }
-.iteamsBlock .iteamBox .photo:before {
-    content: "";
-    padding-top: 100%;
-    float: left;
-}
-.iteamsBlock .iteamBox .photo img{
-	position:relative;
-	width:100%;
-	max-width: 200px;
-	min-width: 100px;
-	height:auto;
-	display:block;
-	border-radius: 3px;
-	margin-top: 0px;
-}   
-.iteamsBlock .iteamBox .avatar{
-	position:relative;
-	width:80px;
-	height: 80px;
-	display:block;
-	margin: auto;
-	border-radius: 100%;
-	background: #D3D3D3;
-} 
-.iteamsBlock .iteamBox .avatar .onlineIco{
-	position: absolute;
-	bottom: 5px;
-	right: 5px;
-	width:13px;
-	height:13px;
-	border-radius: 100%;
-	border:2px solid #fff;
-}
-.iteamsBlock .iteamBox .avatar img{
-	position:relative;
-	width:80px;
-	height: 80px;
-	display:block;
-	margin: auto;
-	border-radius: 100%;
-}   
-.iteamsBlock .iteamBox .name{
-	text-align:center;
-	font-weight: bold;
-}
-.iteamsBlock .iteamBox .nick{
-	font-size: 0.7em;
-    line-height: 1.1em;
-    text-align: center;
-    overflow: hidden;
-    margin: 0 auto 0;
-    color: #999;
-} 
-.iteamsBlock .iteamBox.mind:after {
-    content: "";
-    position: absolute;
-    right: 0px;
-    left: 0px;
-    bottom: 40px;
-    height:30%;
-    background: -webkit-linear-gradient(top, rgba(057,063,070,0), rgba(057,063,070,0.8) 100%);
-    background: -moz-linear-gradient(top, rgba(057,063,070,0), rgba(057,063,070,0.8) 100%);
-    background: -o-linear-gradient(top, rgba(057,063,070,0), rgba(057,063,070,0.8) 100%);
-    background: linear-gradient(to bottom, rgba(057,063,070,0), rgba(057,063,070,0.8) 100%);
-    z-index: 1;
-    border-radius:3px 3px 0 0;
-}
-.iteamsBlock .iteamBox .text{
-	position:absolute;
-	bottom:44px;
-	left:5px;
-  	z-index:3;
-  	overflow:hidden;
-}
-.iteamsBlock .iteamBox .text span{
-	display:inline;
-	line-height:14px;
-	font-size:14px;
-	color:#fff;
-	font-family: 'PT Sans Narrow', sans-serif;
-	font-weight: bold;
-  	overflow:hidden;
-  	text-shadow:1px 1px 1px #393f46;
-  	word-wrap: break-word;
-  	/* box-shadow: 5px 0 0 #fff, -5px 0 0 #fff; */
-}
-.iteamsBlock .iteamBox .iteamBoxStatistic{
-	position:absolute;
-	bottom:0px;
-	left:0px;
-	width:100%;
-	height:40px;
-	z-index: 4;
-	overflow:hidden;
-	border-top:3px solid #00b294;
-	background: #f7f7f7;
-	border-bottom: 3px solid #dfdfdf;
-}
-.iteamsBlock .iteamBox .iteamBoxStatistic li{
-	position:relative;
-	float:left;
-	color:#5e5e5e;
-	font-size:12px;
-	line-height: 24px;
-	height:24px;
-	padding:0 0 0 20px;
-	margin:5px;
-}
-.iteamsBlock .iteamBox .iteamBoxStatistic li.raiting{
-	float:right;
-}
-.iteamsBlock .iteamBox .iteamBoxStatistic .ico{
-	position:absolute;
-	left:0;
-	top:0;
-	background-size: cover;
-	width:20px;
-	height:20px;
-	margin:2px 0 2px 0;
-}
-.iteamsBlock .iteamBox .iteamBoxStatistic .online .ico{
-	background-image:url('../img/ico-online.png');
-}
-.iteamsBlock .iteamBox .iteamBoxStatistic .comments .ico{
-	background-image:url('../img/ico-comments.png');
-}
-.iteamsBlock .iteamBox .iteamBoxStatistic .raiting .ico{
-	background-image:url('../img/ico-raiting.png');
-}
-.iteamsBlock .iteamBox .status{
-	width:50px;
-	height:50px;
-	position:absolute;
-	background-size: 50px 50px;
-	background-position: center;
-	background-repeat: no-repeat;
-	top:-15px;
-	right:-15px;
-}
+	.userPageInfo .userPageButtons{
+		max-width: 280px;
+		height: 30px;
+		z-index: 2;
+		margin:auto;
+	}
+		.userPageInfo .userPageButtons a{
+			display:block;
+			width:130px;
+			height:30px;
+			background-size: 16px 16px;
+			background-repeat: no-repeat;
+			background-position: left 10px center;
+			margin:0 5px 0 5px;
+			overflow:hidden;
+			float:left;
+			border-radius: 3px;
+			color:#fff;
+			line-height: 26px;
+			padding-left: 20px;
+			text-align: center;
+			text-decoration: none;
+			z-index: 2;
+			cursor: pointer;
+			text-shadow:0 1px 0 rgba(0,0,0,0.3);
+			font-weight: bold;
+			font-size: 14px;
+		}
+			.userPageInfo .userPageButtons a.logout{
+				background-color: #F15A29;
+				background-image: url('../img/ico-logout.png');
+				border-bottom: 3px solid #c9461e;
+			}
+				.userPageInfo .userPageButtons a.logout:hover, a.logout:active{
+					background-color: #c9461e;
+				}
 
+			.userPageInfo .userPageButtons a.settings{
+				background-color: #00b294;
+				background-image: url('../img/ico-settings.png');
+				border-bottom: 3px solid #009679;
+			}
+				.userPageInfo .userPageButtons a.settings:hover, a.settings:active{
+					background-color: #009679;
+				}
+
+			.userPageInfo .userPageButtons .follow, .follow:visited{
+				background-color: #00b294;
+				background-image: url('../img/ico-add.png');
+				border-bottom: 3px solid #009679;
+			}
+				.userPageInfo .userPageButtons .follow:hover{
+					background-color: #009679;
+				}
+
+			.userPageInfo .userPageButtons .unfollow, .unfollow:visited{
+				background-color: #F15A29;
+				background-image: url('../img/ico-remove.png');
+				border-bottom: 3px solid #c9461e;
+			}
+				.userPageInfo .userPageButtons .unfollow:hover{
+					background-color:#c9461e;
+				}
+
+			.userPageInfo .userPageButtons a.wink{
+				background-image: url('../img/ico-wink.png');
+				background-color: #4c4c4c;
+				border-bottom: 3px solid #373737;
+			}
+				.userPageInfo .userPageButtons a.wink:hover, a.wink:active{
+					background-color: #373737;
+				}
+
+/* Список опросов */
+.iteamsPoll{
+	overflow:hidden;
+	margin:auto;
+	width:100%;
+	max-width: 1000px;
+}
+.feedBox{
+	overflow:hidden;
+	margin:auto;
+	width:100%;
+	max-width: 1000px;
+}
+	.feedIteams{
+		overflow:hidden;
+		margin:auto;
+		width:100%;
+		float:left;
+	}
+
+		.feedTagsBox{
+		    display: block;
+		    position: relative;
+		    width: 275px;
+		    height: 300px;
+		    float: left;
+		    text-decoration: none;
+		    background: #f4f4f4;
+		    border-radius: 3px;
+		    box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+		    padding: 12.5px;
+		    margin: 29px;
+		    cursor: pointer;
+		}
+
+		.feedTagsBox .tag{
+			background:#fff;
+		}
+
+
+
+.iteamPoll{
+	display: block;
+	position:relative;
+  	width: 275px;
+	float:left;
+	text-decoration:none;
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+	padding: 0;
+	margin: 29px;
+	cursor: pointer;
+}
+	.iteamPoll .iteamPollHeader{
+		position: absolute;
+		width:100%;
+		height:16px;
+		bottom:-20px;
+		left:0;
+		z-index: 99;
+	}
+		.iteamPoll .iteamPollHeader .iteamPollHeaderUser{
+			width:175px;
+			height:16px;
+			float:left;
+			margin:0 0 0 10px;
+		}
+			.iteamPoll .iteamPollHeader .iteamPollHeaderUser .userAvatar{
+				width:16px;
+				height:16px;
+				float:left;
+				margin:0 5px 0 0;
+				background:#4c4c4c;
+				border-radius:100%;
+				overflow: hidden;
+			}
+			.iteamPoll .iteamPollHeader .iteamPollHeaderUser .userName{
+				display: block;
+				width:150px;
+				height:16px;
+				line-height: 16px;
+				float:left;
+				font-size: 14px;
+				color:#00b394;
+				overflow:hidden;
+				text-align: left;
+			}
+
+		.iteamPoll .iteamPollHeader .iteamPollHeaderTime{
+			width:75px;
+			height:16px;
+			line-height: 16px;
+			float:right;
+			color: #999;
+			font-size: 14px;
+			margin:0 10px 0 0;
+			text-align: right;
+		}
+
+	.iteamPoll .iteamPollImg:before{
+	    content: "";
+	    padding-top: 100%;
+	    float: left;
+	}
+	.iteamPoll .iteamPollImg{
+		position:relative;
+		overflow:hidden;
+		width: 275px;
+		height: 180px;
+		display:block;
+		margin-top: 0px;
+		background-color: #4c4c4c;
+		float:left;
+		border-radius: 3px 3px 0 0;
+		clear:both;
+	 }
+		.iteamPoll .iteamPollImg img{
+			margin-top:-35px;
+		}
+
+		.iteamPoll .iteamPollImg .iteamPollText{
+			position:absolute;
+			width:100%;
+			height: 100%;
+			top:0;
+			left:0;
+			padding:0px 10px 0px 10px;
+			color:#fff;
+			font-weight: bold;
+			font-size: 18px;
+			line-height: 16x;
+			background: -webkit-linear-gradient(top, rgba(0,0,0,0.7), rgba(0,0,0,0.3) 100%);
+		    background: -moz-linear-gradient(top, rgba(76,76,76,0.4), rgba(76,76,76,0) 100%);
+		    background: -o-linear-gradient(top, rgba(76,76,76,0.4), rgba(76,76,76,0) 100%);
+		    background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.3) 100%);
+		    text-shadow: 0 2px 0 rgba(0,0,0,0.3);
+		    text-align: center;
+		    display: table;
+    		vertical-align: middle;
+		 }
+		 	.iteamPoll .iteamPollImg .iteamPollText span{
+		    	display: table-cell;
+    			vertical-align: inherit;
+    		}
+
+		 .iteamPoll .iteamPollMenu{
+			width:100%;
+			bottom:0;
+			left:0;
+			font-weight: bold;
+			font-size: 14px;
+			line-height: 12px;	
+		 }
+		 .iteamPoll .iteamPollMenu span{
+			display:block;
+			width:33.333%;
+			height:40px;
+			float:left;
+			line-height: 40px;
+			padding:0 10px 0 10px;
+			text-align:center;
+			color: #999;
+		 }
+		 	.iteamPoll .iteamPollMenu span i{
+		 		display: block;
+		 		float: left;
+				width:18px;
+				height:18px;
+				background-size:18px 18px;
+				margin:12px 0 14px 5px;
+				background-position: top right;
+			 }
+		 	 .iteamPoll .iteamPollMenu span.poll i{
+				background-image: url('../img/ico-poll_silver_18@2.png');
+			 }
+			 .iteamPoll .iteamPollMenu span.online i{
+				background-image: url('../img/ico-online_silver_18@2.png');
+			 }
+			 .iteamPoll .iteamPollMenu span.comments i{
+				background-image:url('../img/ico-comments_silver_18@2.png');
+			 }
+
+		.iteamPoll .iteamPollLines{
+			position:relative;
+			overflow:hidden;
+			width: 100%;
+			height: 80px;
+			background: #f4f4f4;
+			padding:0 2px 0 2px;
+			clear:both;
+		}
+
+			.iteamPoll .iteamPollLines:after{
+			    content: "";
+			    position: absolute;
+			    right: 0px;
+			    left: 0px;
+			    bottom: 0px;
+			    height:5px;
+			    background: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.2) 100%);
+			    background: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.2) 100%);
+			    background: -o-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.2) 100%);
+			  	background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.2) 100%);
+			    z-index: 9;	
+			    opacity: 0.7;
+	    	}
+		.iteamPoll .iteamPollLines .pollLine{
+			position: relative;
+			width:100%;
+			height:33px;
+			overflow: hidden;
+			margin: 2px 0 0 0;
+		}
+			.iteamPoll .iteamPollLines .pollLine .linePercent{
+				position: absolute;
+				top:0;
+				left:0;
+				height:33px;
+				float:left;
+				z-index: 1;
+				padding:0 0 0 10px;
+				border-radius: 3px;
+			}
+
+			.iteamPoll .iteamPollLines .pollLine .lineText{
+				width: 100%;
+				height:30px;
+				padding: 0 50px 0 5px;
+				position: relative;
+				z-index: 2;
+				float:left;
+				font-size: 14px;
+				line-height:13px;
+				color:#000;
+				text-align: left;
+				display: table; 
+				vertical-align: middle;
+				font-weight: bold;
+				  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+				  filter: alpha(opacity=50);
+				  -moz-opacity: 0.5;
+				  -khtml-opacity: 0.5;
+				  opacity: 0.5;
+			}
+
+			.iteamPoll .iteamPollLines .pollLine .lineText span:before{
+				display:-moz-inline-box;
+			    display:inline-block;
+			    vertical-align:middle;
+			    height:100%;
+			    width:0px;
+			    zoom:1;
+			}
+			.iteamPoll .iteamPollLines .pollLine .lineText span{
+	   			display: table-cell; 
+	   			vertical-align: inherit;
+			}
+			.iteamPoll .iteamPollLines .pollLine .lineTextP{
+				position: absolute;
+				top:0;
+				right:0;
+				width: 70px;
+				height:34px;
+				font-size: 18px;
+				font-weight: bold;
+				line-height:34px;
+				padding:0 5px 0 5px;
+				z-index: 2;
+				text-align: right;
+				display: table; 
+			}
+
+/* -СТРАНИЦА ОПРОСА- */
+.pollCard{
+	position: relative;
+	margin:auto;
+	max-width: 740px;
+	overflow: hidden;
+	border-radius: 3px;
+	margin-top: 46px;
+}
+	.pollCard .pollCardHeader{
+		width:100%;
+		height:52px;
+	}
+	.pollCard .pollCardHeaderEmpty{
+		width:100%;
+		height:52px;
+	}
+		.pollCard .pollCardHeader .pollCardHeaderUser{
+			width:220px;
+			height:52px;
+			float:left;
+		}
+			.pollCard .pollCardHeader .pollCardHeaderUser .userAvatar{
+				width:40px;
+				height:40px;
+				float:left;
+				margin:6px 6px 6px 0px;
+				background:#4c4c4c;
+				border-radius:100%;
+				overflow: hidden;
+			}
+			.pollCard .pollCardHeader .pollCardHeaderUser .userName{
+				width:160px;
+				height:36px;
+				line-height: 52px;
+				float:left;
+				font-size: 14px;
+				font-weight: bold;
+				color:#00b394;
+				overflow:hidden;
+			}
+
+		.pollCard .pollCardHeader .pollCardHeaderTime{
+			width:85px;
+			height:52px;
+			line-height: 52px;
+			float:right;
+			color: #999;
+			font-size: 14px;
+			margin:0 10px 0 0;
+			text-align: right;
+		}
+
+	.pollCard .pollCardImg:before{
+	    content: "";
+	    padding-top: 75%;
+	    float: left;
+	}
+	.pollCard .pollCardImg{
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		max-width: 440px;
+		height: auto;
+		display:block;
+		margin-bottom: 10px;
+		float:left;
+		background: #fff;
+		border-radius: 3px;
+	 }
+ 		.pollCard .pollCardImg:before {
+		  content: "";
+		  padding-top: 100%;
+		  float: left;
+		}
+			 .pollCard .pollCardImg img{
+			 	position: absolute;
+			 	top: 0;
+			 	left: 0;
+				width: 100%;
+				height: auto;
+				float:left;
+			 }
+			  .pollCard .pollCardTextCount{
+			 	position: absolute;
+				width:100px;
+				height: 20px;
+				top:0;
+				right:0;
+				margin:10px 10px 0 0;
+				color:#fff;
+				font-size: 14px;
+				line-height: 20px;
+				text-align: right;
+				z-index: 3;
+			 }
+			 .pollCard .pollCardText{
+			 	position: absolute;
+				width:100%;
+				height: 100%;
+				top:0;
+				left:0;
+				padding:15px 10px 20px 10px;
+				color:#fff;
+				font-weight: bold;
+				font-size: 20px;
+				line-height: 20px;
+				background: -webkit-linear-gradient(top, rgba(0,0,0,0.7), rgba(0,0,0,0.3) 100%);
+			    background: -moz-linear-gradient(top, rgba(0,0,0,0.7), rgba(0,0,0,0.3) 100%);
+			    background: -o-linear-gradient(top, rgba(0,0,0,0.7), rgba(0,0,0,0.3) 100%);
+			    background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.3) 100%);
+			    text-shadow: 0 2px 0 rgba(0,0,0,0.3);
+			    text-align: center;
+			 }
+				.pollCard .pollCardText span{
+				 	display: inline-block;
+					vertical-align: middle;
+				}
+				.pollCard .pollCardText:before { /* для IE8+ */
+					content: "";
+					display: inline-block;
+					min-height: inherit;
+					height: 100%;
+					vertical-align: middle;
+				}
+
+			 
+	.pollCard .pollCardContent{
+		overflow:hidden;
+		width: 100%;
+		max-width: 265px;
+		float:right;
+
+	 }
+		.pollCard .pollCardContent .pollCardBox{
+			width: 100%;
+			background:#f4f4f4;
+			padding:5px;
+			border-radius:3px;
+		}
+		.pollCard .pollCardContent .pollCardBox.online, .pollCard .pollCardContent .pollCardBox.addBtn, .pollCard .pollCardContent .pollCardTags{
+			margin-top:25px;
+		}
+			.pollCard .pollCardContent .pollCardBox .boxHeader{
+				width: 100%;
+				height:30px;
+			}
+				.pollCard .pollCardContent .pollCardBox .boxHeader .boxCount{
+					width: 70px;
+					height:30px;
+					padding:0 0 0 30px;
+					font-size: 16px;
+					font-weight: bold;
+					color:#b0b0b0;
+					float: left;
+					line-height: 30px;
+					background-repeat: no-repeat;
+					background-position: left center;
+					background-size: 18px 18px;
+					
+				}
+					.pollCard .pollCardContent .pollCardBox.lines .boxHeader .boxCount{
+						background-image: url('../img/ico-poll_silver_18@2.png');
+					}
+
+					.pollCard .pollCardContent .pollCardBox.online .boxHeader .boxCount{
+						background-image: url('../img/ico-online_silver_18@2.png');
+					}
+
+				.pollCard .pollCardContent .pollCardBox .boxHeader .boxHide{
+					width: 70px;
+					height:30px;
+					float:right;
+					text-align: right;
+					line-height: 30px;
+					font-size: 14px;
+					color:#b0b0b0;
+				}
+
+			.pollCard .pollCardContent .pollCardTags{
+				width: 100%;
+				overflow: hidden;
+			}		
+
+			.pollCard .pollCardContent .pollCardBox .boxContent{
+				width: 100%;
+				overflow: hidden;
+			}
+				.boxContent .pollCardOnlineIteam{
+					display: block;
+					float: left;
+					width: 40px;
+					height:40px;
+					overflow: hidden;
+					border-radius:100%;
+					margin: 5px;
+				}	
+
+		.pollCardLines{
+			width: 100%;
+		}
+
+		.pollCardLines .pollLine{
+			position: relative;
+			width:100%;
+			min-height:33px;
+			overflow: hidden;
+			margin: 0 0 2px 0;
+			border-radius: 3px;
+			cursor:pointer;
+		}
+			.pollCardLines .pollLine .linePercent{
+				position: absolute;
+				top:0;
+				left:0;
+				width:65%;
+				height: 100%;
+				min-height:33px;
+				float:left;
+				z-index: 1;
+				padding:0 0 0 10px;
+				border-radius:3px;
+					-webkit-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+					   -moz-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+				        -ms-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+				         -o-transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+				            transition: all 300ms cubic-bezier(0.40, 0.000, 0.175, 1.000); /* easeInOutQuart */
+
+					-webkit-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+					   -moz-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+				        -ms-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+				         -o-transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); 
+				    	    transition-timing-function: cubic-bezier(0.40, 0.000, 0.175, 1.000); /* easeInOutQuart */
+
+				    -webkit-animation-iteration-count: 1; /* Safari 4.0 - 8.0 */
+				    animation-iteration-count: 1;
+			}
+
+				.p0 .linePercent{
+					background-color: #f15a2a;
+					border-bottom:3px solid #ca4c23;
+				}
+					.p0 .lineTextP{
+						color:#ca4c23;
+					}
+
+				.p1 .linePercent{
+					background-color: #f16e2a;
+					border-bottom:3px solid #ca5c23;
+				}
+					.p1 .lineTextP{
+						color:#ca5c23;
+					}
+
+				.p2 .linePercent{
+					background-color: #f1802a;
+					border-bottom:3px solid #ca6b23;
+				}
+					.p2 .lineTextP{
+						color:#f1802a;
+					}
+
+				.p3 .linePercent{
+					background-color: #f1932a;
+					border-bottom:3px solid #ca7b23;
+				}
+					.p3 .lineTextP{
+						color:#ca7b23;
+					}
+
+				.p4 .linePercent{
+					background-color: #e6a42a;
+					border-bottom:3px solid #c18a23;
+				}
+					.p4 .lineTextP{
+						color:#c18a23;
+					}
+
+				.p5 .linePercent{
+					background-color: #cfae30;
+					border-bottom:3px solid #ae9228;
+				}
+					.p5 .lineTextP{
+						color:#ae9228;
+					}
+
+				.p6 .linePercent{
+					background-color: #a7b343;
+					border-bottom:3px solid #8c9638;
+				}	
+					.p6 .lineTextP{
+						color:#8c9638;
+					}		
+
+				.p7 .linePercent{
+					background-color: #74b35c;
+					border-bottom:3px solid #61964d;
+				}
+					.p7 .lineTextP{
+						color:#61964d;
+					}
+
+				.p8 .linePercent{
+					background-color: #3bb377;
+					border-bottom:3px solid #329664;
+				}
+					.p8 .lineTextP{
+						color:#329664;
+					}
+
+				.p9 .linePercent{
+					background-color: #3ab7a1;
+					border-bottom:3px solid #319a87;
+				}
+					.p9 .lineTextP{
+						color:#319a87;
+					}
+
+			.pollCardLines .pollLine .lineText{
+				position: relative;
+				width: 100%;
+				height:33px;
+				padding: 0 55px 0 15px;
+				z-index: 2;
+				font-size: 14px;
+				line-height:13px;
+				color:#000;
+				text-align: left;
+				display: table; 
+				font-weight:bold;
+				vertical-align: middle;
+				opacity:0.4;
+			}
+				.pollCardLines .pollLine.checked .lineText{
+					background: #e4e4e4 url('../img/ico-poll_checked_24@2.png') no-repeat right 53px center;
+					background-size: 12px;
+					opacity:0.4;
+					border-bottom: 3px solid #aeaeae;
+				}
+			.pollCardLines .pollLine .lineText span:before{
+				display:-moz-inline-box;
+			    display:inline-block;
+			    vertical-align:middle;
+			    height:100%;
+			    width:0px;
+			    zoom:1;
+			}
+			.pollCardLines .pollLine .lineText span{
+	   			display: table-cell; 
+	   			vertical-align: inherit;
+			}
+			.pollCardLines .pollLine .lineTextP{
+				position: absolute;
+				top:0;
+				right:0;
+				width: 70px;
+				height:34px;
+				font-size: 18px;
+				font-weight: bold;
+				line-height:34px;
+				padding:0 5px 0 5px;
+				z-index: 1;
+				text-align: right;
+				display: table; 
+			}
+
+	 .pollCard .pollCardComments{
+		position:relative;
+		overflow:hidden;
+		width: 100%;
+		max-width: 440px;
+		display:block;
+		float:left;
+	 }
+			 .pollCard .pollCardContentBox .pollCardContentOnline{
+				position:relative;
+				overflow:hidden;
+				width: 100%;
+				max-width: 450px;
+				display:block;
+			 }
+			 .pollCard .pollCardContentBox .pollCardContentComments{
+				position:relative;
+				overflow:hidden;
+				width: 33.333%;
+				max-width: 450px;
+				display:block;
+			 }
+
+				.commentInput{
+					position: relative;
+					display:block;
+					overflow: hidden;
+					margin:0;
+					border-radius: 3px;
+					background: #f4f4f4;
+					padding:5px;
+				}
+					.commentInput .commentInputText{
+						float:left;
+						text-align: left;
+						width:80%;
+						margin:0;
+					}
+					input[type="submit"].commentInputBtn{
+						float:right;
+						width:18%;
+						margin:0 0 0 2px;
+						font-size: 14px;
+
+					}
+
+
+/* -ДАЛЬШЕ- */
 .more{
-	  display:block;
-	  width:100%;
-	  font-family: 0.9em;
-	  text-align:center;
-	  padding:5px 0 5px 0;
-	  color:#999;
-	  margin:5px 0 10px 0;
-	  font-weight:600;
-	  border-radius:3px;
-	  cursor: pointer;
-	  clear:both;
-	  background: #D3D3D3;
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 3px;
+    background: #00B294;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: 3px solid #009679;
+    cursor: pointer;
+    text-align: center;
+    margin: 10px auto 10px;
 }
-.more:hover, .more:active{
-	  text-decoration:none;
+	.more:hover, .more:active{
+		text-decoration:none;
+		background-color: #009679;
+	}
+
+/* -Список уведомлений- */
+.noticeIteam{
+	position: relative;
+	width:100%;
+	max-width: 1000px;
+	background: #f4f4f4;
+    margin:0 auto 12.5px;
+    border-radius: 3px;
+    overflow: hidden;
 }
+.noticeIteam:first-child{
+    margin:56px auto 12.5px;
+}
+	.noticeIteam .noticeType{
+		position: absolute;
+		top:0;
+		left: 0;
+		width: 50px;
+		min-height:100%;
+		background: #fff;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+		.noticeIteam .noticeTypeBg{
+			display: block;
+			position: absolute;
+			top:0;
+			left:0;
+			width: 100%;
+			min-height: 100%;
+			background-size: 25px;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+
+		.noticeIteam.st03 .noticeTypeBg{
+			background-image: url('../img/ico-add.png');
+			background-color: #00b294;
+		}
+		.noticeIteam.st04 .noticeTypeBg{
+			background-image: url('../img/ico-comment.png');
+			background-color: rgba(247,148,30,0.5);
+			background-color: rgba(0,0,0,0.5);
+			border-right:4px solid rgba(247,148,30,1);
+		}
+
+		.noticeIteam.st05 .noticeTypeBg{
+			background-image: url('../img/ico-add.png');
+			background-color: #00b294;
+		}
+		.noticeIteam.st06 .noticeTypeBg{
+			background-image: url('../img/ico-remove.png');
+			background-color: #F15A29;
+		}
+		.noticeIteam.st07 .noticeTypeBg{
+			background-image: url('../img/ico-wink.png');
+			background-color: #4c4c4c;
+		}
+		.noticeIteam.st08 .noticeTypeBg{
+			background-image: url('../img/ico-poll.png');
+			background-color: rgba(0,0,0,0.5);
+			border-right:4px solid rgba(0,178,148, 1);
+		}
+
+	.noticeIteam .noticeContent{
+		width: 100%;
+		padding:5px 5px 5px 60px;
+		overflow: hidden;
+	}
+		.noticeIteam .noticeContent .avatar{
+			position:relative;
+			width:40px;
+			height:40px;
+			float:left;
+			border-radius:100%;
+			margin:0 10px 0 0;
+			background: #D3D3D3;
+		}
+		.noticeIteam .noticeContent .avatar img{
+			width:40px;
+			height:40px;
+			border-radius:100%;
+		}
+		.noticeIteam .noticeContent .userName{
+			color:#00b294;
+			font-size:14px;
+			font-weight:bold;
+			white-space: nowrap;
+		}
+		.noticeIteam .noticeText{
+		    line-height: 16px;
+		    font-size: 14px;
+		    padding: 5px;
+		}
+			.noticeIteam .noticeText span{
+				display: block;
+			    padding:10px;
+			    margin:10px 0 0 0;
+			    border-left:3px solid #dfdfdf;
+			}
+
+			.noticeIteam .noticeText span.pollLine {
+			    background: #e4e4e4 url(../img/ico-poll_checked_24@2.png) no-repeat right 53px center;
+			    background-size: 12px;
+			    opacity: 0.4;
+			    border-bottom: 3px solid #aeaeae;
+			    color:#111;
+			    border-radius: 3px;
+			}
+
+	.noticeIteam .noticeTime{
+		position: absolute;
+		top:0;
+		right: 0;
+	    width: 75px;
+	    line-height: 16px;
+	    float: right;
+	    color: #999;
+	    font-size: 14px;
+	    text-align: right;
+	    padding: 5px;
+	}
+
+
+
 .iteamList {
 	position:relative;
 	max-width:900px;
@@ -1092,7 +2096,7 @@ input[type="submit"].mindCommentInputBtn{
 	font-size: 14px;
     color: #777;
 }
-.iteamList .iteamListDel{
+.iteamList:hover .iteamListDel{
 	position:absolute;
 	bottom:0;
 	right:0;
@@ -1105,6 +2109,10 @@ input[type="submit"].mindCommentInputBtn{
     text-align: center;
     cursor:pointer;
     border-radius: 3px;
+	background-image:url('../img/ico-close.png');
+	background-size: 18px 18px;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 .iteamList .iteamListLeft {
 	position:absolute;
@@ -1149,7 +2157,7 @@ input[type="submit"].mindCommentInputBtn{
 }
 .iteamList .iteamListCenter {
 	width:100%;
-	padding:0 55px 0 55px;
+	padding:0 60px 0 55px;
 	border-radius:3px;
 	overflow:hidden;
 	white-space: pre-wrap;
@@ -1228,126 +2236,183 @@ input[type="submit"].mindCommentInputBtn{
 	background-position: center;
 	border-radius: 3px;
 }
-.iteamList .iteamListMindStatus.st01{
-	background-image:url('../img/yes.png');
-}
-.iteamList .iteamListMindStatus.st02{
-	background-image:url('../img/no.png');
-}
-.iteamList .iteamListMindStatus.st00, .iteamList .iteamListMindStatus.st03{
-	display:none;
-}
-.iteamList .iteamListMindStatus.st04{
-	background-image:url('../img/comment_add.png');
-}
-.iteamList .iteamListMindStatus.st05{
-	background-image: url('../img/ico-add.png');
-	background-color: #00B294;
-	background-size: 7px 7px;
-}
-.iteamList .iteamListMindStatus.st06{
-	background-image:url('../img/ico-remove.png');
-	background-color: #F15A29;
-	background-size: 7px 7px;
-}
+
 .searchInput{
-	position: relative;
 	display:block;
 	overflow: hidden;
-	margin:5px 0 10px 0;
+	margin:0;
 	border-radius: 3px;
+	padding:10px;
+	background: #f7f7f7;
 }
-input[type=text].searchInputText{
-	padding:5px 85px 5px 5px;
-}
-input[type="submit"].searchInputBtn{
-	position: absolute;
-	width:80px;
-	top:0;
-	right: 0;
-}
+	.searchInputBox{
+		position: relative;
+		max-width: 1200px;
+		margin:auto;
+	}
+		input[type=text].searchInputText{
+			padding:5px 85px 5px 5px;
+		}
+		input[type="submit"].searchInputBtn{
+			position: absolute;
+			width:80px;
+			top:0;
+			right: 0;
+		}
 .searchInputBtn:hover{
 	background: #545554;
 }
 
-/*Добавление мнения*/
-.addMind{
-	width: 100%;
-    max-width: 450px;
-	margin:5px auto;
-}
-.addMind .addMindPhoto{
+.feedMenu{
 	position:relative;
-	width: 100%;
-	max-width: 450px;
-	height:auto;
-	max-height: 450px;
-	border-radius:3px;
-	background-color: #D3D3D3;
-	background-image:url('../img/ico-add.png');
-	background-size: 70px 70px;
-	background-repeat: no-repeat;
-	background-position: center;
-	margin:auto;
 	overflow:hidden;
-	border:5px dashed #999;
-}
-.addMind .addMindPhoto:before {
-  content: "";
-  padding-top: 100%;
-  float: left;
-}
-.addMind .addMindPhoto .addMindPhotoText{
-	z-index: 1;
 	width:100%;
-	position:absolute;
-	top:50%;
-	left:0;
-	cursor:pointer;
+	max-width: 1000px;
+	margin: 60px auto 0;
+	padding: 0;
+	z-index: 2;
+}
+	.feedMenu h2{
+		font-size: 24px;
+		font-weight: bold;
+		margin-left:5px;
+	}
+	.feedMenuBox{
+		background:#dfdfdf;
+		overflow: hidden;
+	}
+		.feedMenu a{
+			display:block;
+			float:left;
+			width:33.3%;
+			padding:10px 0 10px 0;
+			text-decoration:none;
+			font-size:13px;
+			text-align: center;
+			font-weight: bold;
+			color:#999;
+		}
+		.feedMenu a span{
+			display:block;
+			font-family: 'PT Sans Narrow', sans-serif;
+			font-size:24px;
+			font-weight: bold;
+			color:#00B294;
+		}
+
+.feedMenu a:hover{
+	text-decoration:none;
+	color:#00b294;
+}
+.feedMenu a.active{
+	text-decoration:none;
+	border-bottom: 3px solid #dfdfdf;
+	background:#f7f7f7;
+}
+
+
+/*Добавление мнения*/
+.pollCard .addText{
+	width:100%;
+	height: 20px;
 	text-align: center;
-	padding:50px;
 	font-weight: bold;
 	color:#FFF;
+	width: 100%;
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 20px;
+    z-index: 2;
+    background:transparent;
+    border-top: none;
+    border-radius: 0;
+    padding: 0;
+    resize: auto;
+    text-align: center;
+	resize: none;
+	word-break: break-all;
+	border:none;
 }
-.addMind .addMindBox{
-    position: relative;
-    display: block;
-    overflow: hidden;
-    margin: 5px 0 0 0;
-    border-radius: 3px;
+.pollCard .addTextBox{
+	position: relative;
+	width: 100%;
+	display: inline-block;
+	vertical-align: middle;
 }
-.addMind .addMindBox small{
-    color:#999;
-    font-size: 12px;
-    padding:0 0 0 5px;
+.pollCard .addTextBox .addText_hidden{
+       position: relative;
 }
-.addMind .addMindPhotoBtn{
+.pollCard .addTextBox #addText_hidden{
+       visibility:hidden;
+       position: absolute;
+       word-break: break-all;
+}
+.pollCard .addTextBox #addText_hidden div{
+      line-height: 20px;
+      font-size: 20px;
+}
+
+	.pollCard .addText::-webkit-input-placeholder {color:#fff;opacity: 0.6;}
+	.pollCard .addText::-moz-placeholder          {color:#fff;opacity: 0.6;}/* Firefox 19+ */
+	.pollCard .addText:-moz-placeholder           {color:#fff;opacity: 0.6;}/* Firefox 18- */
+	.pollCard .addText:-ms-input-placeholder      {color:#fff;opacity: 0.6;}
+
+	.pollCard .addText small{
+	    color:#999;
+	    font-size: 12px;
+	    padding:0 0 0 5px;
+	}
+	.pollCard .pollRow{
+	    text-align: left;
+	    margin-bottom: 2px;
+	}
+	.pollCard .addLine{
+	    width: 100%;
+	    height: 33px;
+	    padding: 0 55px 0 15px;
+	    z-index: 2;
+	    font-size: 14px;
+	    line-height: 33px;
+	    color: #000;
+	    text-align: left;
+	    display: table;
+	    font-weight: bold;
+	    vertical-align: middle;
+	    background: #e4e4e4;
+	    background-size: 12px;
+	    opacity: 0.4;
+	    border-bottom: 3px solid #aeaeae;
+	    margin-bottom: 2px;
+	    cursor:pointer;
+	}
+
+.pollCard .addPhoto{
 	position: absolute;
-	top:0;
-	left:0;
-	width:100%;
-	height:100%;
-    max-width: 450px;
+	bottom:15px;
+	width:120px;
+	height:40px;
+	line-height: 40px;
     border-radius: 3px;
     color: #fff;
     font-size: 14px;
     font-weight: bold;
-    margin:0;
+    margin:0 auto 0;
     background: #00B294;
     cursor: pointer;
-    background-color: #353535;
-    background-image: url('../img/ico-add.png');
     background-repeat: no-repeat;
-    z-index: 99;
+    z-index: 1;
+    overflow: hidden;
+    text-align: center;
 }
-.addMind .addMindPhoto input{
+.pollCard .addPhoto input{
 	width:100%;
 	height:100%;
 	position:absolute;
 	top:0;
 	left:0;
 	cursor:pointer;
-	z-index: 3;
+	z-index: 0;
 	text-align: center;
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   	filter: alpha(opacity=0);
@@ -1374,39 +2439,50 @@ input[type="submit"].searchInputBtn{
 	color:#fff;
 	border-radius: 3px;
 }
-.mindval{
-	width:100%;
-	height:45px;
-	z-index: 2;
+
+
+.iteamUser{
+    display: block;
+    position: relative;
+    width: 275px;
+    float: left;
+    text-decoration: none;
+    border-radius: 3px;
+    padding: 12.5px;
+    margin: 29px;
+    cursor: pointer;
+    text-decoration: none;
 }
-.mindval div{
-	width:20%;
-	height:50px;
-	float:left;
-	border-radius:3px;
-	background-size: 40px 40px;
-	background-position: center;
-	background-repeat: no-repeat;
-	cursor:pointer;
+.iteamUser:hover{
+    text-decoration: none;
 }
-.mindval div.active{
-	background-color: #fff;
-}
-.f_ck, .st1{
-	background-image:url('../img/ico-f_ck.png');
-}
-.dislike, .st2{
-	background-image:url('../img/ico-dislike.png');
-}
-.like, .st3{
-	background-image:url('../img/ico-peace.png');
-}
-.peace, .st4{
-	background-image:url('../img/ico-like.png');
-}
-.rock, .st5{
-	background-image:url('../img/ico-rock.png');
-}
+	.iteamUser .avatar{
+		width:100px;
+		height: 100px;
+		margin: auto;
+		border-radius: 100%;
+		overflow: hidden;
+	}
+		.iteamUser .avatar img{
+			width:100px;
+			height: 100px;
+		}
+
+	.iteamUser .name{
+		font-size:18px;
+		font-weight: bold;
+		text-align: center;
+	}
+	.iteamUser .nick{
+	    font-size: 14px;
+	    line-height: 14px;
+	    text-align: center;
+	    overflow: hidden;
+	    margin: 0 auto 0;
+	    color: #999;	
+	}
+
+
 #systemMessage{
 	width:100vw;
 	min-height:0px;
@@ -1502,7 +2578,7 @@ input[type="submit"].searchInputBtn{
 }
 a.vk{
 	display:block;
-	width:100px;
+	max-width:450px;
 	text-align: center;
 	background:#507299;
 	color:#fff;
@@ -1529,7 +2605,6 @@ a.vk:active{
 	margin-right: -0.25em; /* Adjusts for spacing */
  }
 .photoEditor{
-	display:none;
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -1538,11 +2613,12 @@ a.vk:active{
 	background: #000;
 	z-index: 99;
 	text-align: center;
+	background:#000 url('../img/loading.png') no-repeat center;
 }
 .photoEditorCropper{
 	position: relative;
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
 	display: inline-block;
 	vertical-align: middle;
     border: 1px solid rgb(102, 102, 102);
@@ -1624,42 +2700,65 @@ a.vk:active{
 .error404{
 	text-align: center;
 	padding:10px 0 10px 0;
+	margin: 60px 0 0 0;
+}
+
+@media (max-width: 1000px) { 
+	.iteamsPoll, .feedBox{
+		width:900px;	
+	}
+	.iteamPoll, .feedSidebar .feedSidebarBox, .iteamUser, .feedTagsBox{
+		margin: 12.5px 12.5px 26px 12.5px;
+	}
+}
+@media (max-width: 900px) { 
+	.iteamsPoll, .feedBox{
+		width:666px;		
+	}
+	.iteamPoll, .feedSidebar .feedSidebarBox, .iteamUser, .feedTagsBox{
+		margin: 29px;
+	}
 }
 @media (max-width: 720px) {
-	.page .mindLeftBox .mindOnlineBox{
-		display:none;
+	.pollCard .pollCardContent, .pollCard .pollCardImg, .pollCard .pollCardComments, .pollCard .pollCardHeader{
+	    overflow: hidden;
+	    width: 100%;
+	    max-width: 440px;
+	    float: none;
+	    margin:auto;
 	}
-	.page .mindIteam {
-    width: 100%;
-    max-width: 400px;
-    margin:auto;
+	.pollCard .pollCardContent .pollCardBox.online, .pollCard .pollCardContent .pollCardBox.addBtn, .pollCard .pollCardContent .pollCardTags{
+		margin:10px 0 10px 0;
 	}
-	.page .mindLeftBox, .page .mindRightBox{
-		width:100%;
-		padding:5px 0 0 0;
-		margin:auto;
-		float: none;
-	} 
-	.iteamsBlock{
-		max-width:600px;
+	.iteamsPoll, .feedBox{
+		width:666px;	
 	}
-	.iteamsBlock .iteamBox{
-	  	width: 30%;
-		margin:1.65%;
-	}
-	.mindCommentInput {
-	    margin: 0;
+	.iteamPoll, .feedSidebar .feedSidebarBox, .iteamUser, .feedTagsBox{
+		margin: 29px;
 	}
 }
-@media (max-width: 520px) { 
-	.indexPage .indexPageBox{
-	    max-height: 100%;
+@media (max-width: 666px) { 
+	.iteamsPoll, .feedBox{
+		width:333px;	
 	}
-	.iteamsBlock{
-		max-width:400px;
+	.iteamPoll, .feedSidebar .feedSidebarBox, .iteamUser, .feedTagsBox{
+		margin: 29px;
 	}
-	.iteamsBlock .iteamBox{
-	  	width: 44%;
-		margin:3%;
+	.feedIteams{
+		width:100%;
+	}
+	.feedSidebar{
+		display:none;
+	}
+	.pollCard .pollCardHeaderEmpty{
+		height:10px;
+	}
+}
+@media (max-width: 333px) { 
+	.iteamsPoll, .feedBox{
+		width:320px;	
+	}
+	.iteamPoll, .feedSidebar .feedSidebarBox, .iteamUser, .feedTagsBox{
+		margin: 22px;
 	}
 }

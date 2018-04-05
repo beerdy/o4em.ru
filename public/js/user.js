@@ -5,10 +5,15 @@ var user = {
 
 		prof_data_tosrv['action'] = 'shareinfo_change';
 		
-		prof_data_tosrv['name']    = $('.new #namemy_ed').val();
-		prof_data_tosrv['about']   = $('.new #aboutmy_ed').val();
-		prof_data_tosrv['country'] = $('.new #countrymy_ed').val();
-		prof_data_tosrv['city']    = $('.new #citymy_ed').val();
+		prof_data_tosrv['name']    = $('.active #namemy_ed').val();
+		prof_data_tosrv['about']   = $('.active #aboutmy_ed').val();
+		prof_data_tosrv['country'] = $('.active #countrymy_ed').val();
+		prof_data_tosrv['city']    = $('.active #citymy_ed').val();
+		prof_data_tosrv['male'] = $('.active #male_ed  option:selected').val();
+		prof_data_tosrv['age']    = $('.active #age_ed').val();
+		prof_data_tosrv['vk_social'] = $('.active #vk_social_ed').val();
+		prof_data_tosrv['instagramm_social'] = $('.active #instagramm_social_ed').val();
+		prof_data_tosrv['twitter_social'] = $('.active #twitter_social_ed').val();
 
 		$.ajax({
 			type: "POST",
@@ -39,8 +44,8 @@ var user = {
 
 		prof_data_tosrv['action'] = 'password_change';
 		
-		if( $('.new #pswrd1').val() ==  $('.new #pswrd2').val()){
-			prof_data_tosrv['password']   = $('.new #pswrd1').val();
+		if( $('.active #pswrd1').val() ==  $('.active #pswrd2').val()){
+			prof_data_tosrv['password']   = $('.active #pswrd1').val();
 		}else{
 			system.message("Пароли не совпадают", "error", 1);
 			return false;
@@ -61,26 +66,41 @@ var user = {
 				}
 			},
 			beforeSend: function(){
-				system.loading(true);
-            	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
+				system.loading(true)
+			},
+			error: function(){
+				system.loading(false);
+				system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
 			}
 		});
 	},
 	signUserInVkontakte: function(it) {
 		system.loading(true);
 		window.open('http://api.vk.com/oauth/authorize?client_id=5163786&redirect_uri=http://'+window.location.hostname+'/vkauth/'+window.guid+'/&display=page');
+		$('#pages').html('<section class="pageMain active"><div class="pageBox"></div></section>');
 		return false;
 	},
 	signUserInModule: function(data){
-		console.log(data);
 		data_r = JSON.parse(data);
 		if(data_r['bool']==true){
 				system.loading(false);
-				if(data_r['content']['u_first_mind']){
-					var need_last = '<div id="overlay" onclick="return nav.img(this, \'off\')"><div class="warning"><h2>Добро пожаловать на O4EM.RU!</h2><p>Чтобы создать свое первое мнение, нажмите на кнопку "Добавить"</p><a href="/addmind" class="submitBtn" onclick="return nav.go(this)">Добавить</a><a href="">Напомнить позже</a></div></div>';
-					$('body').append(need_last);
-				}
-				nav.page(data, "/"+data_r['content']['u_nickname'], true);
+				$('#pages').html('<section class="pageMain active"><div class="pageBox"></div></section>');
+
+				var out = nav.page(data, "/"+data_r['content']['u_nickname'], true);
+
+	            var html = out[0];
+	            var title = out[1];
+	            var active = out[2];
+	            var subactive = out[3];
+	            	link = out[4];
+
+				$("title").text(title);
+
+	            $('.active .pageBox').html(html);
+
+				window.guid = lp.guid_();
+				window.history.replaceState(title, title, link);
+            	
 		} else {
 			system.loading(false);
 			system.message('Ошибка авторизации. Неверный логин или пароль', 'error', 1);
@@ -101,7 +121,7 @@ var user = {
 			},
 			error: function(data){
 				system.loading(false);
-            	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
+            	system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error', 1);
 			}
 		});
 		return false;
@@ -109,9 +129,9 @@ var user = {
 	signUserReg: function(e){
 		var form = new FormData();
 		form.append('action', 'auth_sign');
-		form.append('username', $('.new .formName').val());
-		form.append('email', $('.new .formEmail').val());
-		form.append('password', $('.new .formPswrd').val());
+		form.append('username', $('.active .formName').val());
+		form.append('email', $('.active .formEmail').val());
+		form.append('password', $('.active .formPswrd').val());
 	
 		$.ajax( {
 			url: '/auth',
@@ -125,7 +145,7 @@ var user = {
 				var errorText = 'Что-то пошло не так...';
 				if(data_r['bool']==true){
 					nav.page(data, "/"+data_r['content']['u_nickname'], true);
-					var need_last = '<div id="overlay" onclick="return nav.img(this, \'off\')"><div class="warning"><h2>Добро пожаловать на O4EM.RU!</h2><p>На Ваш E-mail было выслано письмо с авторизационными данными.</p><p>Чтобы создать свое первое мнение, нажмите на кнопку "Добавить"</p><a href="/addmind" class="submitBtn" onclick="return nav.go(this)">Добавить</a><a href="">Напомнить позже</a></div></div>';
+					var need_last = '<div id="overlay" onclick="return nav.img(this, \'off\')"><div class="warning"><h2>Добро пожаловать на O4EM.RU!</h2><p>На Ваш E-mail было выслано письмо с авторизационными данными.</p><p>Чтобы создать свое первое мнение, нажмите на кнопку "Добавить"</p><a href="/addpoll" class="submitBtn" onclick="return nav.go(this, \'page\')">Добавить</a><a href="">Напомнить позже</a></div></div>';
 					$('body').append(need_last);
 					//$('.indexPageBox').html('<h2>Регистрация прошла успешно! На Ваш E-mail было выслано письмо с ключем подтверждения.</h2><a href="/'+data['content']['u_nickname']+'" class="submitBtn" onclick="return nav.go(this)">Войти</a>');
 				} else {
@@ -155,7 +175,7 @@ var user = {
 				system.loading(false);
 				if(data['bool']==true){
 					//system.message('На Ваш E-mail было выслано письмо с кодом подтверждения', 'ok', 1);
-					$('.indexPageBox').html('<h2>На Ваш E-mail было выслано письмо с кодом подтверждения</h2><a href="/login" class="submitBtn" onclick="return nav.go(this)">Войти</a>');
+					$('.indexPageBox').html('<h2>На Ваш E-mail было выслано письмо с кодом подтверждения</h2><a href="/login" class="submitBtn" onclick="return nav.go(this, \'page\')">Войти</a>');
 				} else {
 					system.message('Ошибка '+data['code']+': '+system.errorType(data['code']), 'error', 1);
 				}
@@ -182,7 +202,7 @@ var user = {
 				console.log(data);
 				system.loading(false);
 				if(data['bool']==true){
-					$('.indexPageBox').html('<h2>Вы успешно сменили пароль. Новый пароль был выслан на Вашу почту</h2><a href="/login" class="submitBtn" onclick="return nav.go(this)">Войти</a>');
+					$('.indexPageBox').html('<h2>Вы успешно сменили пароль. Новый пароль был выслан на Вашу почту</h2><a href="/login" class="submitBtn" onclick="return nav.go(this, \'page\')">Войти</a>');
 				} else {
 					console.log(data);
 					system.message('Ошибка '+data['code']+': '+system.errorType(data['code']), 'error', 1);
@@ -199,6 +219,7 @@ var user = {
 		return false;
 	},
 	uploadUserAvaPreview: function(it){
+		$('body').append(constructor.photoEditor());
 		var reader = new FileReader();
         reader.onload = function(e) {
         	var options = {};
@@ -265,7 +286,7 @@ var user = {
 					system.loading(false);
 					data = JSON.parse(data);
 					if(data['bool']){
-						follow = '<a class="unfollow" onclick="return user.unfollow(this, \''+u_id+'\')"></a>';
+						follow = '<a class="unfollow" onclick="return user.unfollow(this, \''+u_id+'\')">отписаться</a>';
 						var objFollowers = $('.new #followers span');
 						var count = parseFloat(objFollowers.text());
 						objFollowers.text(count+1);
@@ -302,7 +323,7 @@ var user = {
 					system.loading(false);
 					data = JSON.parse(data);
 					if(data['bool']){
-						follow = '<a class="follow" onclick="return user.follow(this, \''+u_id+'\')"></a>';
+						follow = '<a class="follow" onclick="return user.follow(this, \''+u_id+'\')">подписаться</a>';
 						var objFollowers = $('.new #followers span');
 						var count = parseFloat(objFollowers.text());
 						objFollowers.text(count-1);
@@ -320,6 +341,41 @@ var user = {
 				}
 			});
 		return false;
+	},	
+	wink: function(it, u_id){
+		var mind_data_tosrv = new Object();
+
+		mind_data_tosrv['action'] = 'hi_man';
+		mind_data_tosrv['u_id'] = u_id;
+		//mind_data_tosrv['hi_text'] = '';
+
+		var btn = $(it).parent();
+
+			$.ajax({
+				type: "POST",
+				url: "/pool",
+				contentType: "application/json; charset=UTF-8",
+				data: JSON.stringify(mind_data_tosrv),
+				success: function(data){
+					system.loading(false);
+					data = JSON.parse(data);
+					if(data['bool']){
+						system.message('Вы подмигнули ;)', 'ok', 1);
+						console.log(data);
+					}else{
+						system.message('Ошибка!', 'error', 1);
+					}
+
+				},
+				beforeSend: function(){
+					system.loading(true);
+				},
+				error: function(){
+					system.loading(false);
+		            system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);
+				}
+			});
+		return false;
 	},
 	logout: function(){
 		var data_tosrv = new Object();
@@ -331,9 +387,16 @@ var user = {
 				contentType: "application/json; charset=UTF-8",
 				data: JSON.stringify(data_tosrv),
 				success: function(data){
-					nav.page(data, '/', true);
-					window.guid = lp.guid_();
-				},
+					data = JSON.parse(data);
+
+					if(data['bool']){
+						window.guid = lp.guid_();
+						nav.goto('/', 'page');
+					}else{
+						system.message('Ошибка!', 'error', 1);
+					}
+
+				},	
 				error: function(data){
 					system.loading(false);
             		system.message('С нашим сервером что-то не так... попробуйте обновить страницу','error',1);

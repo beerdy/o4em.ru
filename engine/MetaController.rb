@@ -1,6 +1,8 @@
 # encoding: UTF-8
 
 class MetaController
+	attr_reader :result
+
 	def initialize(env)
 		@env = env
 
@@ -8,6 +10,7 @@ class MetaController
 	end
 
 	def mind_one(data)
+		puts "data for meta: #{data}"
 		if data[:bool] and @env.client_data['refresh'].nil?
 			@env.pool.control.mindid = data[:minds]['m1']['_id'].to_s
 			@env.pool.control.action = 'whois'
@@ -15,9 +18,78 @@ class MetaController
 		end
 	end
 
-	def comment_add(data)
-		data[:action] = 'comment_add'
+	def field_add(data)
+		$meta.update({:counter => { :$exists => true }},{:$inc => {:o => 1}})
+		case data[:status]
+		when 1
+			@result = $mind.find_and_modify({
+				:query  => { :_id => BSON::ObjectId( @env.client_data['mindid']) },
+				:update => { :$inc => { "f.f_count#{@env.client_data['field']}" => 1, :g => 1 }},
+				:new    => true
+			})
+			$authn.update({:_id => BSON::ObjectId(@env.client_cookie_id)},{:$inc => {'в'=> 1}})
+			#$mind.update({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ :$inc => { "f.f_count#{@env.client_data['field']}" => 1 }} )
+		when 0
+			@result = $mind.find_and_modify({
+				:query  => { :_id => BSON::ObjectId( @env.client_data['mindid']) },
+				:update => { :$inc => { "f.f_count#{data[:field]}" => -1,"f.f_count#{@env.client_data['field']}" => 1, }},
+				:new    => true
+			})
+
+			#$mind.update({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ :$inc => { "f.f_count#{data[:field]}" => -1,"f.f_count#{@env.client_data['field']}" => 1, }} )
+		when -1
+			@result = $mind.find_and_modify({
+				:query  => { :_id => BSON::ObjectId( @env.client_data['mindid']) },
+				:update => { :$inc => { "f.f_count#{@env.client_data['field']}" => -1, :g => -1 }},
+				:new    => true
+			})
+
+			$authn.update({:_id => BSON::ObjectId(@env.client_cookie_id)},{:$inc => {'в'=> -1}})
+			#$mind.update({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ :$inc => { "f.f_count#{@env.client_data['field']}" => -1 }} )
+		end
 		
+		field_number_selected = @env.client_data['field'][1..-1]
+		text_field_selected = @result['f']["f_text#{field_number_selected}"]
+
+		if data.has_key?(:field)
+			field_number_changed = data[:field][1..-1]
+			text_field_changed  = @result['f']["f_text#{field_number_changed}"]
+		end
+
+		notice = {
+			:action     => 'field_add',
+
+			'u_id'      => @env.client_cookie_id,                     # пользователь
+
+			'f_time'    => Time.now.to_i,                             # время чека поля
+			'f_status'  => data[:status],                             # какой статус
+			'f_text'    => text_field_selected,
+			'f_change'  => text_field_changed,
+
+			'm_id'      => @env.client_data['mindid'],
+			'm_u_id'    => @result['i'],
+			'm_tags'    => @result['h'],
+			'm_text'    => @result['x']
+		}
+
+		HashWrite.new({
+			:table       => 'notices',
+			:key         => @result['i'],
+			:inserted    => notice,
+			:write_limit => @limit_notice
+		}).add unless @result['i'] == @env.client_cookie_id
+
+		@env.pool.control.destination = @result['i']
+		@env.pool.control.mindid = @env.client_data['mindid']
+		@env.pool.control.msg = notice
+		@env.pool.send
+	end
+
+	def comment_add(data)
+		#$meta.update({:counter => { :$exists => true }},{:$inc => {:c => 1}})
+
+		data[:action] = 'comment_add'
+
 		HashWrite.new({
 			:table       => 'notices',
 			:key         => data['m_u_id'],
@@ -36,9 +108,11 @@ class MetaController
 	end
 
 	def mind_add(data)
+		$meta.update({:counter => { :$exists => true }},{:$inc => {:m => 1}})
+
 		#counter
 		if @env.client_current_profile[:u_first_mind]
-				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1}, :$set => { 'а' => 1000 } })
+				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1}, :$set => { 'ж' => false } })
 		else
 				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
 		end
@@ -64,15 +138,15 @@ class MetaController
 			data[:notice][:action] = 'mind_add'
 			
 			HashWrite.new({
-				:table       => 'notices',
+				:table       => 'noticesMindAdded',
 				:key         => element,
 				:inserted    => data[:notice],
 				:write_limit => @limit_notice
 			}).add unless element == @env.client_cookie_id if element
 
-			@env.pool.control.destination = element
-			@env.pool.control.msg = data[:notice]
-			@env.pool.send
+			#@env.pool.control.destination = element
+			#@env.pool.control.msg = data[:notice]
+			#@env.pool.send
 		end
 	end
 	def mind_remove(data)
@@ -140,5 +214,8 @@ class MetaController
 		@env.pool.control.destination = data[:notice][:m_u_id]
 		@env.pool.control.msg = data[:notice]
 		@env.pool.send
+	end
+	def authn(data)
+		$meta.update({:counter => { :$exists => true }},{:$inc => {:u => 1}})
 	end
 end

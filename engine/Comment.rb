@@ -7,17 +7,17 @@ class CommentsRead < HashRead
 	def initialize(options,usercookie_id='nil')
 		@usercookie_id = usercookie_id
 		options[:table]  = 'comments'
-		options[:amount] = 12
+		options[:amount] = 13
 		super(options)
 	end
 	def extra(hash,key=nil)
 		return { :bool => false, :code => 0, :info => 'No comments' } if hash.nil?
 		hash['c_id'] = key
 		hash['c_my'] = hash['u_id']==@usercookie_id
-		hash['m_like'] = LikeReadUser.new( 'likeUser', {
-			:idmind        => hash['m_id'],
-			:usercookie_id => hash['u_id']
-		}).like if hash['u_id'] and hash['m_id']
+		#hash['m_like'] = LikeReadUser.new( 'likeUser', {
+		#	:idmind        => hash['m_id'],
+		#	:usercookie_id => hash['u_id']
+		#}).like if hash['u_id'] and hash['m_id']
 		NewUser.get_user(nil,hash['u_id']).merge hash
 	end
 	def exception(data_position)
@@ -33,7 +33,7 @@ module Comment
 				:_id => BSON::ObjectId(@env.client_data['m_id'])
 			},
 			:update => { 
-				:$inc => { :c => 1}
+				:$inc => { :c => 1, :g => 1 } # увеличиваем рейтинг и коментов
 			},
 			:upsert => true
 		})
@@ -84,13 +84,14 @@ module Comment
 			:query => {
 				'key' => @env.client_data['m_id'],
 				"hash.#{@env.client_data['c_id']}" => { :$exists => true },
-				:$or => [
+				:$or => [ 
 					{ "#{key_c_id}.u_id"   => @env.client_cookie_id },
 					{ "#{key_c_id}.m_u_id" => @env.client_cookie_id }
-				]
+				] # Если комментарий твой или мнение твое то можеш удалить комментарий
 			},
 			:update => {
-				:$set => { "#{key_c_id}.c_deleted" => true }
+				:$set => { "#{key_c_id}.c_deleted" => true },
+				:$inc => { :c => -1, :g => -1 }
 			},
 			:new => true
 		})

@@ -3,6 +3,8 @@
 #require '../db.rb'
 
 class HashWrite
+  attr_writer :bson # ВНИМАНИЕ КЛЮЧ ПО УМОЛЧАНИЮ ГЕНЕРИРУЕТСЯ САМ!!!
+
   def initialize(options)
     # Эксперементально - необъходимо будет расчитать оптимальный документ для записи
     @table             = options[:table]
@@ -12,14 +14,15 @@ class HashWrite
     @table_read_amount = options[:amount]
   end
   def add
-    bson = BSON::ObjectId.new()
+    @bson = BSON::ObjectId.new() if @bson.nil?
+
     data = $db_o4em[@table].find_and_modify({
       :query  => {
         :anchor => 1,
         :key => @key 
       },
       :update => {
-        :$set => { "hash.#{bson}" => @inserted },
+        :$set => { "hash.#{@bson}" => @inserted },
         :$inc => { :counter => 1}
       },
       :upsert => true
@@ -28,6 +31,7 @@ class HashWrite
     if data['counter'] >= @table_write_limit
       data[:inserted] = @inserted 
       data[:table]    = @table
+      data[:bson]    = @bson
       HashTransfer.new(data).rewrite
     end if data
 
@@ -35,16 +39,17 @@ class HashWrite
       :bool => true, 
       :code => 0, 
       :info => 'Попытка добавления записи в блок хэша',
-      :id   => bson.to_s
+      :id   => @bson.to_s
     }
   end
 end
 
 class HashTransfer
   def initialize(options)
-    @table         = options[:table]
+    @table    = options[:table]
+    @inserted = options[:inserted]
+    @bson     = options[:bson]
     @fragmentation = options['fragmentation']
-    @inserted      = options[:inserted]
     @part = options['part'].nil? ? 1 : options['part']+1  
     @hash = options['hash']
     @key  = options['key']
@@ -65,7 +70,7 @@ class HashTransfer
       :part    => @part, # meta part
       :anchor  => 1,
       :counter => 1,
-      :hash    => { "#{BSON::ObjectId.new()}" => @inserted } # наш hash в первый элемент в якорь
+      :hash    => { "#{@bson}" => @inserted } # наш hash в первый элемент в якорь
     })
   end
 
@@ -84,9 +89,9 @@ class HashRead
 
     @table = options[:table]
     @key   = options[:key]
-    @table_read_amount = options[:amount] if options[:amount]
+    @table_read_amount = options[:amount]
 
-    @last_position = options[:last_position] if options[:last_position]
+    @last_position = options[:last_position]
 
     unless options[:last_part].nil?
       @request = { :key => @key, :part => options[:last_part], :anchor => { :$exists => false } }

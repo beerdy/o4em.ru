@@ -14,7 +14,7 @@ module RouteLongPool
         :code => 800,
         :info => 'No message-action for pool route'
       }
-    when 'comment_add', 'mind_add'
+    when 'comment_add', 'mind_add', 'field_add'
       data = {
         :bool   => true,
         :pool   => true,
@@ -22,6 +22,14 @@ module RouteLongPool
         :code   => 0,
         :notice => success.received_message,
         :user   => NewUser.get_user( nil, success.received_message['u_id'] )
+      }
+    when 'hi_man'
+      data = {
+        :bool => true,
+        :code => 0,
+        :action => success.action_message,
+        :notice => success.received_message,
+        :user => NewUser.get_user( nil, success.received_message['u_id_who'] )
       }
     when 'follow'
       data = {
@@ -58,7 +66,9 @@ module RouteLongPool
         :action => 'online',
       }
     end
+    puts "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH for #{mindid}"
     unless mindid == 'all'
+
       data[:m_online] = NewUser.get_online( success.received_message_online['users'] )
       data[:m_id] = mindid
     end
