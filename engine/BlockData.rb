@@ -48,7 +48,7 @@ class DataBlockMetaWrite
 		{ :key => @key }
 	end
 	def metaUpdate
-		$db_o4em[@table].update( request, { :$set =>{
+		$db_o4em[@table].update_one( request, { '$set' =>{
 			:part => @part,
 			:position => @position
 		}},
@@ -79,7 +79,7 @@ class DataBlockWriter
 		}	
 	end
 	def insertNewDoc
-		$db_o4em[@nameBlock].insert({
+		$db_o4em[@nameBlock].insert_one({
 			:key => @key,
 			:part => @part,
 			@position.to_s => @hashToSet

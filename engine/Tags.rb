@@ -20,7 +20,7 @@ class Tags
 		request = marker(hash_tag) if request.nil?
 
 		# Дальше ищем по рейтингу
-		r = @table_.find(request,:sort => [:r,-1]).limit(@limit)
+		r = @table_.find(request,:sort => {:r=>-1}).limit(@limit)
 		if r.nil? then
 			send
 		else
@@ -38,7 +38,7 @@ class Tags
 		r = @table_.find(data).first
 		if r.nil?
 			data[:r] = 0
-			@table_.insert(data)
+			@table_.insert_one(data)
 		else
 			# Обновим рейтинг тега
 			@table_.update(data,{:$inc => {:r => 1}})

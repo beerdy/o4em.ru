@@ -16,17 +16,17 @@ class HashWrite
   def add
     @bson = BSON::ObjectId.new() if @bson.nil?
 
-    data = $db_o4em[@table].find_and_modify({
-      :query  => {
+    data = $db_o4em[@table].find_and_modify(
+      {
         :anchor => 1,
         :key => @key 
       },
-      :update => {
-        :$set => { "hash.#{@bson}" => @inserted },
-        :$inc => { :counter => 1}
+      {
+        '$set' => { "hash.#{@bson}" => @inserted },
+        '$inc' => { :counter => 1}
       },
       :upsert => true
-    })
+    )
 
     if data['counter'] >= @table_write_limit
       data[:inserted] = @inserted 
@@ -56,7 +56,7 @@ class HashTransfer
   end
 
   def rewrite
-    $db_o4em[@table].insert({
+    $db_o4em[@table].insert_one({
       :key   => @key, 
       :part  => @part,
       :hash  => @hash  # старый hash в новый part

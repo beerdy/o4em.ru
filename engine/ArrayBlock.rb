@@ -65,7 +65,7 @@ class ArrayTransfer
 	end
 
 	def rewrite
-		$db_o4em[@table_array].insert({
+		$db_o4em[@table_array].insert_one({
 			:key   => @key, 
 			:part  => @part,
 			:array => @array
