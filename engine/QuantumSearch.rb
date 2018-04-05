@@ -51,7 +51,7 @@ class QuantumSearch
 			@table_.insert_one(data)
 		else
 			# Обновим рейтинг слова
-			@table_.update(data,{:$inc => {:r => 1}})
+			@table_.update_one(data,{'$inc' => {:r => 1}})
 		end
 	end
 	def symbols_hash

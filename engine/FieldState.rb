@@ -67,30 +67,30 @@ class FieldState
 private
   def if_has_matches_remove
     key_c_id = "hash.#{@userid}"
-    result = $db_o4em[@table].find_and_modify({
-      :query => {
+    result = $db_o4em[@table].find_one_and_update(
+      {
         'key' => @mindid,
-        "hash.#{@userid}" => { :$exists => true }
+        "hash.#{@userid}" => { '$exists' => true }
 #        :$or => [ 
 #          { "#{key_c_id}.u_id"   => @env.client_cookie_id }, 
 #          { "#{key_c_id}.m_u_id" => @env.client_cookie_id }
 #        ] # см. комментарии
       },
-      :update => {
-        :$set => { "#{key_c_id}.field" => @field }
+      {
+        '$set' => { "#{key_c_id}.field" => @field }
       }#,
       #:new => true # не новую так как проверим сравнение то что было и то что стало если одинаково то удалим
-    })
+    )
     
     return false if result.nil?
 
     # Если найдено. И смотри что найдено
     case result["hash"]["#{@userid}"]["field"]
     when @field # Если мнение такое же как и из текущей таблицы. Ключ delete в -1 т.е. отменим предыдущие и все
-      $db_o4em[@table].update({ :key => @mindid, "hash.#{@userid}" => { :$exists => true }},  { :$set => { "#{key_c_id}.delete" => -1, "#{key_c_id}.field" => -1 }})
+      $db_o4em[@table].update_one({ :key => @mindid, "hash.#{@userid}" => { '$exists' => true }},  { '$set' => { "#{key_c_id}.delete" => -1, "#{key_c_id}.field" => -1 }})
       @result = { :bool => true, :code => 0, :info => 'Вы ранее выражали свое мнение в таком же духе - мнение отменено', :status => -1 }
     when -1 # Если было отменено
-      $db_o4em[@table].update({ :key => @mindid, "hash.#{@userid}" => { :$exists => true }},  { :$set => { "#{key_c_id}.field" => @field, "#{key_c_id}.delete" => 0 } })
+      $db_o4em[@table].update_one({ :key => @mindid, "hash.#{@userid}" => { '$exists' => true }},  { '$set' => { "#{key_c_id}.field" => @field, "#{key_c_id}.delete" => 0 } })
       @result = { :bool => true, :code => 0, :info => 'Вы ранее выражали свое мнение но удалили его - мнение учтено', :status => 1 }
     else
       # тут старое мнение высылается чтобы в мете минусануть его в счетчике

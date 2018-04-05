@@ -14,8 +14,8 @@ module TestMinds
           :action => 'minds_read_top',
           :info => 'info',
           :properties => {
-            :count => data.delete(:count)
-            :last  => data.delete(:last)
+            :count => data.delete_one(:count)
+            :last  => data.delete_one(:last)
           },
           :content => data[:content]
         } 

@@ -80,7 +80,7 @@ class UploadAva < SimpleUpload_
 		}
 	end
 	def way_db
-		$authn.update({ :_id => BSON::ObjectId(@data[:usercookie_id]) },{:$set => {'ф' => @result[0] }})
+		$authn.update_one({ :_id => BSON::ObjectId(@data[:usercookie_id]) },{'$set' => {'ф' => @result[0] }})
 	end
 end
 

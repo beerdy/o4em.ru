@@ -14,7 +14,7 @@ module MindAdd
 			@meta.mind_add(mind_data)
 			data = mind_data
 		else
-			$mind.update({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ "$set" => {:m=>true}} )
+			$mind.update_one({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ '$set' => {:m=>true}} )
 		end
 		return data
 	end

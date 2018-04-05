@@ -318,8 +318,8 @@ class MegaController
 				data = mind_data
 			else
 				# Удалим мнение если неудачная загрузка
-				$mind.update({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ :$set => {:m=>true}} )
-				#$mind.remove({ :_id => BSON::ObjectId( mind[:idmind]) })
+				$mind.update_one({ :_id => BSON::ObjectId( mind_data[:notice]['m_id'] ) },{ '$set' => {:m=>true}} )
+				#$mind.delete_one({ :_id => BSON::ObjectId( mind[:idmind]) })
 				data = { :bool => false, :code => 0, :info => "Мнение помечено на удаление т.к. не удалось загрузить изображение" }
 			end
 =end
@@ -571,7 +571,7 @@ class MegaController
 	def info
 		data = MindReading.new({}).read(true)
 		tags = Tags.new(@env.client_data).top
-		count = $meta.find({ :counter => { :$exists => true }}).first
+		count = $meta.find({ :counter => { '$exists' => true }}).first
 
 		return { :bool => true,  :action => 'info_page', :info => 'minds for index page', :mind_count => count['m'], :authn_count => count['u'], :comment_count => count['c'], :answer_count => count['o'], :minds => data[:minds],:tags => tags } if data[:bool]
 		return { :bool => false, :info => 'no minds for index page'}

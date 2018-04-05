@@ -94,7 +94,7 @@ class MindReadN
     if @minds.has_key?($minds_read_limit)
       @minds[:last] = false
       @minds[:count] = count-1
-      @minds.delete($minds_read_limit)
+      @minds.delete_one($minds_read_limit)
     else
       @minds[:last] = true
       @minds[:count] = count

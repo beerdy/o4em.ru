@@ -53,7 +53,7 @@ class People
     last = true
 
     if users.has_key?($limit_people_search)
-      last_user_id = users.delete($limit_people_search)
+      last_user_id = users.delete_one($limit_people_search)
       last = false
     end
 
@@ -84,7 +84,7 @@ class People
     data = obj.search
     if data[:bool]
       data[:action] = 'search_people'
-      data[:users]  = data.delete(:data)
+      data[:users]  = data.delete_one(:data)
     end
     data
   end

@@ -19,33 +19,33 @@ class MetaController
 	end
 
 	def field_add(data)
-		$meta.update({:counter => { :$exists => true }},{:$inc => {:o => 1}})
+		$meta.update_one({:counter => { '$exists' => true }},{'$inc' => {:o => 1}})
 		case data[:status]
 		when 1
-			@result = $mind.find_and_modify({
-				:query  => { :_id => BSON::ObjectId( @env.client_data['mindid']) },
-				:update => { :$inc => { "f.f_count#{@env.client_data['field']}" => 1, :g => 1 }},
-				:new    => true
-			})
-			$authn.update({:_id => BSON::ObjectId(@env.client_cookie_id)},{:$inc => {'в'=> 1}})
-			#$mind.update({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ :$inc => { "f.f_count#{@env.client_data['field']}" => 1 }} )
+			@result = $mind.find_one_and_update(
+				{ :_id => BSON::ObjectId( @env.client_data['mindid']) },
+				{ '$inc' => { "f.f_count#{@env.client_data['field']}" => 1, :g => 1 }},
+				:new => true
+			)
+			$authn.update_one({:_id => BSON::ObjectId(@env.client_cookie_id)},{'$inc'=> {'в'=> 1}})
+			#$mind.update_one({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ '$inc' => { "f.f_count#{@env.client_data['field']}" => 1 }} )
 		when 0
-			@result = $mind.find_and_modify({
-				:query  => { :_id => BSON::ObjectId( @env.client_data['mindid']) },
-				:update => { :$inc => { "f.f_count#{data[:field]}" => -1,"f.f_count#{@env.client_data['field']}" => 1, }},
-				:new    => true
-			})
+			@result = $mind.find_one_and_update(
+				{ :_id => BSON::ObjectId( @env.client_data['mindid']) },
+				{ '$inc' => { "f.f_count#{data[:field]}" => -1,"f.f_count#{@env.client_data['field']}" => 1, }},
+				:new => true
+			)
 
-			#$mind.update({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ :$inc => { "f.f_count#{data[:field]}" => -1,"f.f_count#{@env.client_data['field']}" => 1, }} )
+			#$mind.update_one({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ '$inc' => { "f.f_count#{data[:field]}" => -1,"f.f_count#{@env.client_data['field']}" => 1, }} )
 		when -1
-			@result = $mind.find_and_modify({
-				:query  => { :_id => BSON::ObjectId( @env.client_data['mindid']) },
-				:update => { :$inc => { "f.f_count#{@env.client_data['field']}" => -1, :g => -1 }},
+			@result = $mind.find_one_and_update(
+				{ :_id => BSON::ObjectId( @env.client_data['mindid']) },
+				{ '$inc' => { "f.f_count#{@env.client_data['field']}" => -1, :g => -1 }},
 				:new    => true
-			})
+			)
 
-			$authn.update({:_id => BSON::ObjectId(@env.client_cookie_id)},{:$inc => {'в'=> -1}})
-			#$mind.update({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ :$inc => { "f.f_count#{@env.client_data['field']}" => -1 }} )
+			$authn.update_one({:_id => BSON::ObjectId(@env.client_cookie_id)},{'$inc' => {'в'=> -1}})
+			#$mind.update_one({ :_id => BSON::ObjectId( @env.client_data['mindid']) },{ '$inc' => { "f.f_count#{@env.client_data['field']}" => -1 }} )
 		end
 		
 		field_number_selected = @env.client_data['field'][1..-1]
@@ -86,7 +86,7 @@ class MetaController
 	end
 
 	def comment_add(data)
-		#$meta.update({:counter => { :$exists => true }},{:$inc => {:c => 1}})
+		#$meta.update_one({:counter => { '$exists' => true }},{'$inc' => {:c => 1}})
 
 		data[:action] = 'comment_add'
 
@@ -104,17 +104,17 @@ class MetaController
 	end
 	
 	def comment_remove(data)
-		$mind.update( { :_id => BSON::ObjectId(@env.client_data['m_id']) }, { :$inc => { :c => -1} })
+		$mind.update_one( { :_id => BSON::ObjectId(@env.client_data['m_id']) }, { '$inc' => { :c => -1} })
 	end
 
 	def mind_add(data)
-		$meta.update({:counter => { :$exists => true }},{:$inc => {:m => 1}})
+		$meta.update_one({:counter => { '$exists' => true }},{'$inc' => {:m => 1}})
 
 		#counter
 		if @env.client_current_profile[:u_first_mind]
-				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1}, :$set => { 'ж' => false } })
+				$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1}, '$set' => { 'ж' => false } })
 		else
-				$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
+				$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id) },{ '$inc' => { 'м' => 1} })
 		end
 
 
@@ -150,7 +150,7 @@ class MetaController
 		end
 	end
 	def mind_remove(data)
-		$authn.update({ :_id => BSON::ObjectId( @env.client_cookie_id ) },{ :$inc => { 'м' => -1} })
+		$authn.update_one({ :_id => BSON::ObjectId( @env.client_cookie_id ) },{ '$inc' => { 'м' => -1} })
 	end
 	def follow(data)
 		puts "Мета информация для #{__method__}: #{data}" if $log_console
@@ -164,8 +164,8 @@ class MetaController
 			:write_limit => @limit_notice
 		}).add unless data[:notice][:key] == @env.client_cookie_id
 
-		$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id)},{ '$inc' => {'н' => 1} })
-		$authn.update({ :_id => BSON::ObjectId(data[:notice][:key])  },{ '$inc' => {'п' => 1,'б' => 1 } }) # Увеличиваем "п" подписчиков и "б" информацию для пула
+		$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id)},{ '$inc' => {'н' => 1} })
+		$authn.update_one({ :_id => BSON::ObjectId(data[:notice][:key])  },{ '$inc' => {'п' => 1,'б' => 1 } }) # Увеличиваем "п" подписчиков и "б" информацию для пула
 
 		@env.pool.control.destination = data[:notice][:key]
 		@env.pool.control.msg = data[:notice]
@@ -181,8 +181,8 @@ class MetaController
 			:write_limit => @limit_notice
 		}).add
 
-		$authn.update({ :_id => BSON::ObjectId(@env.client_cookie_id)  },{ '$inc' => {'н' => -1} })
-		$authn.update({ :_id => BSON::ObjectId(data[:notice][:removed])},{ '$inc' => {'п' => -1,'б' => 1} })
+		$authn.update_one({ :_id => BSON::ObjectId(@env.client_cookie_id)  },{ '$inc' => {'н' => -1} })
+		$authn.update_one({ :_id => BSON::ObjectId(data[:notice][:removed])},{ '$inc' => {'п' => -1,'б' => 1} })
 
 		@env.pool.control.destination = data[:notice][:removed]
 		@env.pool.control.msg = data[:notice]
@@ -216,6 +216,6 @@ class MetaController
 		@env.pool.send
 	end
 	def authn(data)
-		$meta.update({:counter => { :$exists => true }},{:$inc => {:u => 1}})
+		$meta.update_one({:counter => { '$exists' => true }},{'$inc' => {:u => 1}})
 	end
 end

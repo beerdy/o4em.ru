@@ -28,15 +28,15 @@ end
 
 module Comment
 	def comment_add
-		mind = $mind.find_and_modify({
-			:query  => {
+		mind = $mind.find_one_and_update(
+			{
 				:_id => BSON::ObjectId(@env.client_data['m_id'])
 			},
-			:update => { 
-				:$inc => { :c => 1, :g => 1 } # увеличиваем рейтинг и коментов
+			{
+				'$inc' => { :c => 1, :g => 1 } # увеличиваем рейтинг и коментов
 			},
 			:upsert => true
-		})
+		)
 
 		return { :bool => false, :code => 0, :info => 'Ошибка получения инормации о мнение'} if mind.nil?
 
@@ -80,21 +80,21 @@ module Comment
 	end
 	def comment_remove
 		key_c_id = "hash.#{@env.client_data['c_id']}"
-		result = $comment.find_and_modify({
-			:query => {
+		result = $comment.find_one_and_update(
+			{
 				'key' => @env.client_data['m_id'],
-				"hash.#{@env.client_data['c_id']}" => { :$exists => true },
-				:$or => [ 
+				"hash.#{@env.client_data['c_id']}" => { '$exists' => true },
+				'$or' => [ 
 					{ "#{key_c_id}.u_id"   => @env.client_cookie_id },
 					{ "#{key_c_id}.m_u_id" => @env.client_cookie_id }
 				] # Если комментарий твой или мнение твое то можеш удалить комментарий
 			},
-			:update => {
-				:$set => { "#{key_c_id}.c_deleted" => true },
-				:$inc => { :c => -1, :g => -1 }
+			{
+				'$set' => { "#{key_c_id}.c_deleted" => true },
+				'$inc' => { :c => -1, :g => -1 }
 			},
 			:new => true
-		})
+		)
 		
 
 		notice = {

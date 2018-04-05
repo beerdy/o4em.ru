@@ -16,7 +16,7 @@ class HashWrite
   def add
     @bson = BSON::ObjectId.new() if @bson.nil?
 
-    data = $db_o4em[@table].find_and_modify(
+    data = $db_o4em[@table].find_one_and_update(
       {
         :anchor => 1,
         :key => @key 
@@ -61,7 +61,7 @@ class HashTransfer
       :part  => @part,
       :hash  => @hash  # старый hash в новый part
     })
-    $db_o4em[@table].update({
+    $db_o4em[@table].update_one({
       :key     => @key,
       :anchor  => 1,
     },{
@@ -94,7 +94,7 @@ class HashRead
     @last_position = options[:last_position]
 
     unless options[:last_part].nil?
-      @request = { :key => @key, :part => options[:last_part], :anchor => { :$exists => false } }
+      @request = { :key => @key, :part => options[:last_part], :anchor => { '$exists' => false } }
       @part    = options[:last_part]
     else
       @request = { :key => @key, :anchor => 1 }
@@ -129,7 +129,7 @@ class HashRead
     end
 
     if @table_read_amount == position then
-      result.delete("h_#{position}")
+      result.delete_one("h_#{position}")
       result[:this_hash_poor] = false
       position -= 1
       result[:position] = history[position][:result_position]
@@ -146,7 +146,7 @@ class HashRead
         when nil
         else
           result[:part] -= 1 if result[:part]
-          result.delete(:position)
+          result.delete_one(:position)
         end
       else
         result[:position] -= 1
@@ -176,7 +176,7 @@ class HashRead
     data
   end
   def setRequest
-    @request = { :key => @key, :part => @part, :anchor => { :$exists => false }}
+    @request = { :key => @key, :part => @part, :anchor => { '$exists' => false }}
   end
   def setPosition(hash)
     if @last_position

@@ -10,17 +10,17 @@ class ArrayWrite
 		@inserted = options[:inserted]
 	end
 	def add
-		data = $db_o4em[@table_array].find_and_modify({
-			:query  => {
+		data = $db_o4em[@table_array].find_one_and_update(
+			{
 				:anchor => 1,
 				:key => @key 
 			},
-			:update => { 
-				:$push => {	'array'  => @inserted },
-				:$inc  => { :counter => 1}
+			{ 
+				'$push' => {	'array'  => @inserted },
+				'$inc'  => { :counter => 1}
 			},
 			:upsert => true
-		})
+		)
 		if data
 			data[:inserted] = @inserted 
 			data[:table] = @table_array
@@ -70,7 +70,7 @@ class ArrayTransfer
 			:part  => @part,
 			:array => @array
 		})
-		$db_o4em[@table_array].update({
+		$db_o4em[@table_array].update_one({
 			:key     => @key,
 			:anchor  => 1,
 		},{
@@ -189,9 +189,9 @@ class ArrayRead
 			data[:position] = history[position][:position]
 			data[:part]     = history[position][:part]
 			data[:last]     = false
-			data.delete(@amount)
+			data.delete_one(@amount)
 			data[:position] -= 1
-			data.delete(:position) if data[:position] < 0
+			data.delete_one(:position) if data[:position] < 0
 			return data
 		else
 			data[:last]	= true
@@ -199,7 +199,7 @@ class ArrayRead
 			data[:part]	= @previous_part
 			data[:position] -= 1
 			if data[:position] < 0
-				data.delete(:position)
+				data.delete_one(:position)
 				data[:part] -= 1 
 				return data if data[:part] <= 0
 			end
@@ -209,7 +209,7 @@ class ArrayRead
 	end
 
 	def next_request
-		@request  = { :key => @key, :part => @part, :anchor => { :$exists => false }}
+		@request  = { :key => @key, :part => @part, :anchor => { '$exists' => false }}
 	end
 
 	def extra(data)

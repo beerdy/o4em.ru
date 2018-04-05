@@ -86,7 +86,7 @@ class DataBlockWriter
 		})
 	end
 	def updateExistingDoc
-		$db_o4em[@nameBlock].update( { :key => @key, :part => @part },
+		$db_o4em[@nameBlock].update_one( { :key => @key, :part => @part },
 		{
 			"$set" => {
 				@position.to_s => @hashToSet

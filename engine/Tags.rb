@@ -41,7 +41,7 @@ class Tags
 			@table_.insert_one(data)
 		else
 			# Обновим рейтинг тега
-			@table_.update(data,{:$inc => {:r => 1}})
+			@table_.update_one(data,{'$inc' => {:r => 1}})
 		end
 	end
 	def hash_tag

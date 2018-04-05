@@ -257,18 +257,18 @@ class LikeUser < Like_
 		@new_like = bool
 		if !finded.nil? then
 			if finded['s'] == 0 and @status == 1 then
-				$mind.update_one( req_mind, { :$inc => { :l => 1}})
+				$mind.update_one( req_mind, { '$inc' => { :l => 1}})
 			elsif finded['s'] == 0 and @status == 2 then
-				$mind.update_one( req_mind, { :$inc => { :d => 1}})
+				$mind.update_one( req_mind, { '$inc' => { :d => 1}})
 			elsif finded['s'] == 2 and @status == 1 then
-				$mind.update_one( req_mind, { :$inc => { :l => 1, :d => -1} })
+				$mind.update_one( req_mind, { '$inc' => { :l => 1, :d => -1} })
 			elsif finded['s'] == 1 and @status == 2 then
-				$mind.update_one( req_mind, { :$inc => { :l => -1, :d => 1} })
+				$mind.update_one( req_mind, { '$inc' => { :l => -1, :d => 1} })
 			elsif finded['s'] == 1 and @status == 1 then
-				$mind.update_one( req_mind, { :$inc => { :l => -1}})
+				$mind.update_one( req_mind, { '$inc' => { :l => -1}})
 				@status = 0
 			elsif finded['s'] == 2 and @status == 2 then
-				$mind.update_one( req_mind, { :$inc => { :d => -1}})
+				$mind.update_one( req_mind, { '$inc' => { :d => -1}})
 				@status = 0
 			end
 		end
@@ -336,7 +336,7 @@ class LikeReadUser < LikeRead
 	end
 	def like
 		init
-		r = @table_.find({ :k => @key, @finded => {:$exists => true} }).first
+		r = @table_.find({ :k => @key, @finded => {'$exists' => true} }).first
 		if r.nil? then
 			puts "Найдено в userid: #{@key}, idmind: #{@finded}  status: <<3>>" if $log_console
 			return 3
