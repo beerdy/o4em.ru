@@ -572,8 +572,8 @@ class MegaController
 		data = MindReading.new({}).read(true)
 		tags = Tags.new(@env.client_data).top
 		count = $meta.find({ :counter => { '$exists' => true }}).first
-
-		return { :bool => true,  :action => 'info_page', :info => 'minds for index page', :mind_count => count['m'], :authn_count => count['u'], :comment_count => count['c'], :answer_count => count['o'], :minds => data[:minds],:tags => tags } if data[:bool]
+		puts "COUNT: #{count}"
+		return { :bool => true,  :action => 'info_page', :info => 'minds for index page', :mind_count => count['m'], :authn_count => count['u'], :comment_count => count['c'], :answer_count => count['o'], :minds => data[:minds],:tags => tags } if data[:bool] if count
 		return { :bool => false, :info => 'no minds for index page'}
 	end
 
